@@ -1,0 +1,205 @@
+[
+  {
+    "model": "user.taskcategory",
+    "pk": 1,
+    "fields": {
+      "name": "Mind Care",
+      "description": "Grounding and mental reset activities",
+      "icon": "🧠"
+    }
+  },
+  {
+    "model": "user.taskcategory",
+    "pk": 2,
+    "fields": {
+      "name": "Body Reset",
+      "description": "Physical regulation and movement",
+      "icon": "🌿"
+    }
+  },
+  {
+    "model": "user.taskcategory",
+    "pk": 3,
+    "fields": {
+      "name": "Productivity Boost",
+      "description": "Small wins to regain momentum",
+      "icon": "🚀"
+    }
+  },
+
+
+  
+
+  {
+    "model": "user.atomictask",
+    "pk": 1,
+    "fields": {
+      "title": "Sit in sunlight for 5 minutes",
+      "description": "Step outside or sit near a window and let natural light reach you.",
+      "mood": "low",
+      "category": 2,
+      "duration_minutes": 5,
+      "energy_level": "low",
+      "priority": 5,
+      "is_active": true
+    }
+  },
+  {
+    "model": "user.atomictask",
+    "pk": 2,
+    "fields": {
+      "title": "Write one thing you're grateful for",
+      "description": "It can be small. Just one thing.",
+      "mood": "low",
+      "category": 1,
+      "duration_minutes": 5,
+      "energy_level": "low",
+      "priority": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "user.atomictask",
+    "pk": 3,
+    "fields": {
+      "title": "Take a warm shower",
+      "description": "Reset your body and refresh your senses.",
+      "mood": "low",
+      "category": 2,
+      "duration_minutes": 10,
+      "energy_level": "low",
+      "priority": 3,
+      "is_active": true
+    }
+  },
+  {
+    "model": "user.atomictask",
+    "pk": 4,
+    "fields": {
+      "title": "Make your bed",
+      "description": "A small win to start regaining momentum.",
+      "mood": "low",
+      "category": 3,
+      "duration_minutes": 5,
+      "energy_level": "medium",
+      "priority": 3,
+      "is_active": true
+    }
+  },
+  {
+    "model": "user.atomictask",
+    "pk": 5,
+    "fields": {
+      "title": "10-minute gentle walk",
+      "description": "Move slowly and breathe deeply.",
+      "mood": "low",
+      "category": 2,
+      "duration_minutes": 10,
+      "energy_level": "medium",
+      "priority": 3,
+      "is_active": true
+    }
+  },
+  {
+    "model": "user.atomictask",
+    "pk": 6,
+    "fields": {
+      "title": "Clean one small drawer",
+      "description": "Focus on just one contained space.",
+      "mood": "low",
+      "category": 3,
+      "duration_minutes": 10,
+      "energy_level": "high",
+      "priority": 2,
+      "is_active": true
+    }
+  },
+
+ 
+  {
+    "model": "user.atomictask",
+    "pk": 7,
+    "fields": {
+      "title": "5-4-3-2-1 grounding exercise",
+      "description": "Name sensory details around you.",
+      "mood": "stressed",
+      "category": 1,
+      "duration_minutes": 5,
+      "energy_level": "low",
+      "priority": 5,
+      "is_active": true
+    }
+  },
+  {
+    "model": "user.atomictask",
+    "pk": 8,
+    "fields": {
+      "title": "Take 10 slow breaths",
+      "description": "Inhale 4 seconds, exhale 6 seconds.",
+      "mood": "stressed",
+      "category": 1,
+      "duration_minutes": 5,
+      "energy_level": "low",
+      "priority": 5,
+      "is_active": true
+    }
+  },
+  {
+    "model": "user.atomictask",
+    "pk": 9,
+    "fields": {
+      "title": "Stretch your neck and shoulders",
+      "description": "Release physical tension gently.",
+      "mood": "stressed",
+      "category": 2,
+      "duration_minutes": 5,
+      "energy_level": "low",
+      "priority": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "user.atomictask",
+    "pk": 10,
+    "fields": {
+      "title": "Short 10-minute walk",
+      "description": "Walk without your phone.",
+      "mood": "stressed",
+      "category": 2,
+      "duration_minutes": 10,
+      "energy_level": "medium",
+      "priority": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "user.atomictask",
+    "pk": 11,
+    "fields": {
+      "title": "Write down your top 3 stressors",
+      "description": "Clarity reduces overwhelm.",
+      "mood": "stressed",
+      "category": 1,
+      "duration_minutes": 10,
+      "energy_level": "medium",
+      "priority": 3,
+      "is_active": true
+    }
+  },
+  {
+    "model": "user.atomictask",
+    "pk": 12,
+    "fields": {
+      "title": "Organize your task list",
+      "description": "Reorder and remove unnecessary items.",
+      "mood": "stressed",
+      "category": 3,
+      "duration_minutes": 10,
+      "energy_level": "high",
+      "priority": 2,
+      "is_active": true
+    }
+  }
+
+
+]

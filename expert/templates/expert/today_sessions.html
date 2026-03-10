@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Today's Sessions - EmpathyQ Expert</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            border-radius: 20px;
+            padding: 25px 35px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header h1 i {
+            color: #6c63ff;
+            background: #f0f2ff;
+            padding: 12px;
+            border-radius: 12px;
+        }
+
+        .date-badge {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 40px;
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 25px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #6c63ff;
+            border: 2px solid #6c63ff;
+        }
+
+        .btn-secondary:hover {
+            background: #6c63ff;
+            color: white;
+        }
+
+        .btn-success {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn-danger {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #da190b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(244, 67, 54, 0.3);
+        }
+
+        .btn-warning {
+            background: #f39c12;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #e67e22;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(243, 156, 18, 0.3);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* Section Headers */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 30px 0 20px;
+        }
+
+        .section-header h2 {
+            color: white;
+            font-size: 24px;
+            font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .section-header .count-badge {
+            background: white;
+            color: #6c63ff;
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* Sessions Grid */
+        .sessions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .session-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            border-left: 5px solid transparent;
+        }
+
+        .session-card.confirmed {
+            border-left-color: #4CAF50;
+        }
+
+        .session-card.pending {
+            border-left-color: #f39c12;
+        }
+
+        .session-card.completed {
+            border-left-color: #2196F3;
+            opacity: 0.9;
+        }
+
+        .session-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .session-time {
+            background: #f0f2ff;
+            color: #6c63ff;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .session-user {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .session-user i {
+            color: #6c63ff;
+        }
+
+        .session-email {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .session-email i {
+            color: #6c63ff;
+            width: 20px;
+        }
+
+        .session-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .status-confirmed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-completed {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        /* Meeting Link Section - NEW */
+        .meeting-section {
+            margin: 15px 0;
+            padding: 20px;
+            background: #e8f5e9;
+            border-radius: 12px;
+            border: 2px dashed #4CAF50;
+        }
+
+        .meeting-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .meeting-header i {
+            font-size: 24px;
+            color: #4CAF50;
+        }
+
+        .meeting-header h3 {
+            color: #2e7d32;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .meeting-link-box {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid #c8e6c9;
+        }
+
+        .meeting-link-box a {
+            color: #1976d2;
+            text-decoration: none;
+            word-break: break-all;
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .meeting-link-box a:hover {
+            text-decoration: underline;
+        }
+
+        .copy-link-btn {
+            background: #e8f5e9;
+            border: none;
+            color: #4CAF50;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .copy-link-btn:hover {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .meeting-info {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            font-size: 13px;
+            color: #2e7d32;
+        }
+
+        .meeting-info span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .join-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .join-buttons .btn {
+            flex: 1;
+            justify-content: center;
+        }
+
+        .countdown-timer {
+            background: #fff3cd;
+            color: #856404;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .session-notes {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-size: 13px;
+            color: #666;
+            border-left: 3px solid #6c63ff;
+        }
+
+        .session-notes i {
+            color: #6c63ff;
+            margin-right: 8px;
+        }
+
+        .session-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #edf2f7;
+            flex-wrap: wrap;
+        }
+
+        .session-actions .btn {
+            flex: 1;
+            padding: 12px;
+            font-size: 14px;
+            justify-content: center;
+        }
+
+        .empty-state {
+            background: white;
+            border-radius: 20px;
+            padding: 60px 20px;
+            text-align: center;
+            grid-column: 1 / -1;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .empty-state i {
+            font-size: 60px;
+            color: #cbd5e1;
+            margin-bottom: 20px;
+        }
+
+        .empty-state h3 {
+            color: #333;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .back-links {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid rgba(255,255,255,0.2);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-link:hover {
+            background: rgba(255,255,255,0.25);
+            transform: translateX(-5px);
+        }
+
+        .alert {
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .alert-success { background: #d4edda; color: #155724; border-left: 4px solid #28a745; }
+        .alert-info { background: #d1ecf1; color: #0c5460; border-left: 4px solid #17a2b8; }
+        .alert-warning { background: #fff3cd; color: #856404; border-left: 4px solid #ffc107; }
+        .alert-error { background: #f8d7da; color: #721c24; border-left: 4px solid #dc3545; }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+                padding: 20px;
+            }
+
+            .nav-buttons {
+                width: 100%;
+                flex-direction: column;
+            }
+
+            .nav-buttons .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .sessions-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .session-actions {
+                flex-direction: column;
+            }
+
+            .session-actions .btn {
+                width: 100%;
+            }
+
+            .join-buttons {
+                flex-direction: column;
+            }
+
+            .back-links {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .back-link {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>
+                <i class="fas fa-calendar-day"></i>
+                Today's Schedule
+            </h1>
+            <span class="date-badge">
+                <i class="fas fa-calendar"></i> {{ today_date|date:"l, F j, Y" }}
+            </span>
+            <div class="nav-buttons">
+                <a href="{% url 'expert:session_requests' %}" class="btn btn-secondary">
+                    <i class="fas fa-calendar-alt"></i> All Requests
+                </a>
+                <a href="{% url 'expert:manage_availability' %}" class="btn btn-secondary">
+                    <i class="fas fa-clock"></i> Availability
+                </a>
+                <a href="{% url 'accounts:expert_dashboard' %}" class="btn btn-primary">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+            </div>
+        </div>
+
+        <!-- Messages -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-circle{% elif message.tags == 'warning' %}exclamation-triangle{% else %}info-circle{% endif %}"></i>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- Summary Stats -->
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px;">
+            <div style="background: white; border-radius: 12px; padding: 15px; text-align: center;">
+                <div style="font-size: 28px; font-weight: 700; color: #4CAF50;">{{ today_sessions|length }}</div>
+                <div style="color: #666;">Confirmed</div>
+            </div>
+            <div style="background: white; border-radius: 12px; padding: 15px; text-align: center;">
+                <div style="font-size: 28px; font-weight: 700; color: #f39c12;">{{ pending_today|length }}</div>
+                <div style="color: #666;">Pending</div>
+            </div>
+            <div style="background: white; border-radius: 12px; padding: 15px; text-align: center;">
+                <div style="font-size: 28px; font-weight: 700; color: #2196F3;">{{ total_today }}</div>
+                <div style="color: #666;">Total Today</div>
+            </div>
+        </div>
+
+        <!-- Confirmed Sessions Section -->
+        <div class="section-header">
+            <h2>
+                <i class="fas fa-check-circle" style="color: #4CAF50;"></i> 
+                Confirmed Sessions
+            </h2>
+            <span class="count-badge">{{ today_sessions|length }} session{{ today_sessions|length|pluralize }}</span>
+        </div>
+        
+        {% if today_sessions %}
+            <div class="sessions-grid">
+                {% for session in today_sessions %}
+                    <div class="session-card confirmed">
+                        <div class="session-time">
+                            <i class="fas fa-clock"></i> {{ session.booking_time|time:"g:i A" }} - {{ session.duration_minutes }} mins
+                        </div>
+                        <div class="session-user">
+                            <i class="fas fa-user-circle"></i> {{ session.user.get_full_name|default:session.user.username }}
+                        </div>
+                        <div class="session-email">
+                            <i class="fas fa-envelope"></i> {{ session.user.email }}
+                        </div>
+                        <div>
+                            <span class="session-status status-confirmed">
+                                <i class="fas fa-check-circle"></i>
+                                {{ session.get_status_display }}
+                            </span>
+                        </div>
+                        
+                        <!-- MEETING LINK SECTION - ENHANCED -->
+                        {% if session.meeting_link %}
+                            <div class="meeting-section">
+                                <div class="meeting-header">
+                                    <i class="fas fa-video"></i>
+                                    <h3>Meeting Link Ready</h3>
+                                </div>
+                                
+                                <div class="meeting-link-box">
+                                    <a href="{{ session.meeting_link }}" target="_blank" id="meeting-link-{{ session.id }}">
+                                        {{ session.meeting_link }}
+                                    </a>
+                                    <button class="copy-link-btn" onclick="copyMeetingLink('{{ session.id }}')" title="Copy link">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                                
+                                <div class="meeting-info">
+                                    <span><i class="fas fa-shield-alt"></i> Secure meeting</span>
+                                    <span><i class="fas fa-clock"></i> Share with client</span>
+                                    {% if session.meeting_platform %}
+                                        <span><i class="fas fa-globe"></i> {{ session.get_meeting_platform_display }}</span>
+                                    {% endif %}
+                                </div>
+
+                                <!-- Check if session can be joined now -->
+                                {% if session.can_join %}
+                                    <div class="join-buttons">
+                                        <a href="{{ session.meeting_link }}" target="_blank" class="btn btn-success">
+                                            <i class="fas fa-video"></i> Start Session Now
+                                        </a>
+                                        <a href="#" class="btn btn-secondary" onclick="copyMeetingLink('{{ session.id }}'); return false;">
+                                            <i class="fas fa-copy"></i> Copy Link
+                                        </a>
+                                    </div>
+                                {% else %}
+                                    <div class="countdown-timer">
+                                        <i class="fas fa-hourglass-half"></i>
+                                        {% if session.time_until_session %}
+                                            Session starts in: {{ session.time_until_session }}
+                                        {% else %}
+                                            You can join 15 minutes before the scheduled time
+                                        {% endif %}
+                                    </div>
+                                    <div class="join-buttons">
+                                        <button class="btn btn-secondary" disabled style="opacity: 0.5;">
+                                            <i class="fas fa-clock"></i> Join Unavailable
+                                        </button>
+                                        <a href="#" class="btn btn-secondary" onclick="copyMeetingLink('{{ session.id }}'); return false;">
+                                            <i class="fas fa-copy"></i> Copy Link
+                                        </a>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+
+                        {% if session.notes %}
+                            <div class="session-notes">
+                                <i class="fas fa-sticky-note"></i> 
+                                <strong>Client Notes:</strong> {{ session.notes }}
+                            </div>
+                        {% endif %}
+
+                        <div class="session-actions">
+                            {% if session.meeting_link %}
+                                <a href="{{ session.meeting_link }}" target="_blank" class="btn btn-success">
+                                    <i class="fas fa-video"></i> Join
+                                </a>
+                            {% endif %}
+                            <a href="{% url 'expert:complete_session' session.id %}" class="btn btn-primary" 
+                               onclick="return confirm('Mark this session as completed? This will update your earnings.')">
+                                <i class="fas fa-check-double"></i> Complete
+                            </a>
+                            <button class="btn btn-secondary" onclick="showClientInfo({{ session.user.id }})">
+                                <i class="fas fa-info-circle"></i> Client Info
+                            </button>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <i class="fas fa-calendar-check"></i>
+                <h3>No Confirmed Sessions Today</h3>
+                <p>You have no confirmed sessions scheduled for today.</p>
+                <a href="{% url 'expert:session_requests' %}" class="btn btn-primary">
+                    <i class="fas fa-calendar-alt"></i> View Pending Requests
+                </a>
+            </div>
+        {% endif %}
+
+        <!-- Pending Requests Section -->
+        <div class="section-header" style="margin-top: 40px;">
+            <h2>
+                <i class="fas fa-clock" style="color: #f39c12;"></i> 
+                Pending Requests
+            </h2>
+            <span class="count-badge">{{ pending_today|length }} request{{ pending_today|length|pluralize }}</span>
+        </div>
+        
+        {% if pending_today %}
+            <div class="sessions-grid">
+                {% for session in pending_today %}
+                    <div class="session-card pending">
+                        <div class="session-time">
+                            <i class="fas fa-clock"></i> {{ session.booking_time|time:"g:i A" }}
+                        </div>
+                        <div class="session-user">
+                            <i class="fas fa-user-circle"></i> {{ session.user.get_full_name|default:session.user.username }}
+                        </div>
+                        <div class="session-email">
+                            <i class="fas fa-envelope"></i> {{ session.user.email }}
+                        </div>
+                        <div>
+                            <span class="session-status status-pending">
+                                <i class="fas fa-hourglass-half"></i>
+                                {{ session.get_status_display }}
+                            </span>
+                        </div>
+
+                        {% if session.notes %}
+                            <div class="session-notes">
+                                <i class="fas fa-sticky-note"></i> 
+                                <strong>Client Notes:</strong> {{ session.notes }}
+                            </div>
+                        {% endif %}
+
+                        <div class="session-actions">
+                            <a href="{% url 'expert:approve_session' session.id %}" class="btn btn-success" 
+                               onclick="return confirm('Approve this session? A meeting link will be generated automatically.')">
+                                <i class="fas fa-check"></i> Approve
+                            </a>
+                            <a href="{% url 'expert:reject_session' session.id %}" class="btn btn-danger" 
+                               onclick="return confirm('Reject this session? The time slot will be released.')">
+                                <i class="fas fa-times"></i> Reject
+                            </a>
+                            <button class="btn btn-secondary" onclick="viewClientHistory({{ session.user.id }})">
+                                <i class="fas fa-history"></i> History
+                            </button>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <i class="fas fa-clock"></i>
+                <h3>No Pending Requests</h3>
+                <p>You have no pending session requests for today.</p>
+            </div>
+        {% endif %}
+
+        <!-- Navigation Links -->
+        <div class="back-links">
+            <a href="{% url 'expert:manage_availability' %}" class="back-link">
+                <i class="fas fa-arrow-left"></i> Manage Availability
+            </a>
+            <a href="{% url 'expert:session_requests' %}" class="back-link">
+                <i class="fas fa-calendar-alt"></i> All Session Requests
+            </a>
+            <a href="{% url 'accounts:expert_dashboard' %}" class="back-link">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+            <a href="{% url 'expert:analytics' %}" class="back-link">
+                <i class="fas fa-chart-line"></i> Analytics
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Copy meeting link to clipboard
+        function copyMeetingLink(sessionId) {
+            const linkElement = document.getElementById(`meeting-link-${sessionId}`);
+            if (!linkElement) return;
+            
+            const textArea = document.createElement('textarea');
+            textArea.value = linkElement.href;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            // Show success notification
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #4CAF50;
+                color: white;
+                padding: 12px 24px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 9999;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.innerHTML = '<i class="fas fa-check-circle"></i> Meeting link copied to clipboard!';
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Show client info
+        function showClientInfo(userId) {
+            alert('Client information feature coming soon!');
+        }
+
+        // View client history
+        function viewClientHistory(userId) {
+            alert('Client session history feature coming soon!');
+        }
+
+        // Auto-refresh page every 5 minutes to keep data current
+        // setTimeout(function() {
+        //     location.reload();
+        // }, 300000);
+
+        // Auto-hide messages after 5 seconds
+        setTimeout(function() {
+            document.querySelectorAll('.alert').forEach(function(alert) {
+                if (alert) {
+                    alert.style.transition = 'opacity 0.5s';
+                    alert.style.opacity = '0';
+                    setTimeout(() => alert.remove(), 500);
+                }
+            });
+        }, 5000);
+
+        // Check for new sessions every 30 seconds (lightweight)
+        setInterval(function() {
+            // You can implement AJAX call here to check for new sessions
+            console.log('Checking for updates...');
+        }, 30000);
+    </script>
+</body>
+</html>

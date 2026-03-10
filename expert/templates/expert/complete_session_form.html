@@ -1,0 +1,618 @@
+<!-- expert/templates/expert/complete_session_form.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Session - Add Notes - EmpathyQ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f2ff;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 32px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .header h1 i {
+            color: #6c63ff;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .session-summary {
+            background: linear-gradient(135deg, #f5f7ff, #f0f2ff);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border: 1px solid #6c63ff20;
+        }
+
+        .client-avatar {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #6c63ff, #5d5fef);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 28px;
+            font-weight: 600;
+            box-shadow: 0 10px 20px rgba(108, 99, 255, 0.2);
+        }
+
+        .client-info h3 {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .client-info p {
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 5px;
+        }
+
+        .client-info i {
+            color: #6c63ff;
+            width: 20px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            background: #f8f9fa;
+            padding: 8px;
+            border-radius: 50px;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px;
+            border-radius: 40px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+            border: none;
+            background: transparent;
+            min-width: 120px;
+        }
+
+        .tab.active {
+            background: #6c63ff;
+            color: white;
+            box-shadow: 0 4px 10px rgba(108, 99, 255, 0.2);
+        }
+
+        .tab i {
+            margin-right: 8px;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .form-group label i {
+            color: #6c63ff;
+            margin-right: 5px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: #6c63ff;
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.1);
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            margin-bottom: 0;
+            cursor: pointer;
+        }
+
+        .file-upload {
+            border: 2px dashed #6c63ff;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-upload:hover {
+            background: #f0f2ff;
+        }
+
+        .file-upload i {
+            font-size: 40px;
+            color: #6c63ff;
+            margin-bottom: 10px;
+        }
+
+        .file-upload p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .file-upload input {
+            display: none;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f2ff;
+        }
+
+        .btn {
+            padding: 14px 30px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            flex: 1;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6c63ff, #5d5fef);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(108, 99, 255, 0.3);
+        }
+
+        .btn-success {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #6c63ff;
+            color: #6c63ff;
+        }
+
+        .btn-outline:hover {
+            background: #6c63ff;
+            color: white;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #1976d2;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .info-box i {
+            color: #1976d2;
+            margin-right: 10px;
+        }
+
+        .existing-note {
+            background: #f0f2ff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .existing-note h4 {
+            color: #333;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .existing-note .note-content {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .form-card {
+                padding: 25px;
+            }
+            
+            .session-summary {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .row {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-card">
+            <div class="header">
+                <h1>
+                    <i class="fas fa-check-circle"></i>
+                    Complete Session
+                </h1>
+                <p>Add notes, prescriptions, or recommendations for {{ client_name }}</p>
+            </div>
+
+            <!-- Session Summary -->
+            <div class="session-summary">
+                <div class="client-avatar">
+                    {{ booking.user.get_full_name|default:booking.user.username|first|upper }}
+                </div>
+                <div class="client-info">
+                    <h3>{{ booking.user.get_full_name|default:booking.user.username }}</h3>
+                    <p><i class="fas fa-envelope"></i> {{ booking.user.email }}</p>
+                    <p><i class="fas fa-calendar"></i> {{ booking.booking_date|date:"l, F j, Y" }} at {{ booking.booking_time|time:"g:i A" }}</p>
+                    <p><i class="fas fa-tag"></i> {{ booking.category.name }}</p>
+                </div>
+            </div>
+
+            <!-- Show existing note if any -->
+            {% if existing_note %}
+            <div class="existing-note">
+                <h4><i class="fas fa-sticky-note"></i> Existing Notes ({{ existing_note.created_at|date:"M d, Y" }})</h4>
+                <div class="note-content">
+                    <strong>{{ existing_note.title }}</strong><br>
+                    {{ existing_note.content|truncatechars:200 }}
+                </div>
+                <p><a href="#" onclick="alert('View full note feature coming soon')">View Full Note</a></p>
+            </div>
+            {% endif %}
+
+            <!-- Tabs for different note types -->
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('general')">
+                    <i class="fas fa-sticky-note"></i> General Notes
+                </button>
+                <button class="tab" onclick="showTab('prescription')">
+                    <i class="fas fa-prescription"></i> Prescription
+                </button>
+                <button class="tab" onclick="showTab('exercise')">
+                    <i class="fas fa-dumbbell"></i> Exercise
+                </button>
+                <button class="tab" onclick="showTab('referral')">
+                    <i class="fas fa-hand-holding-heart"></i> Referral
+                </button>
+            </div>
+
+            <!-- Form for completing session with notes -->
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <!-- Hidden field to store which tab is active -->
+                <input type="hidden" name="note_type" id="noteType" value="general">
+                
+                <!-- General Notes Tab -->
+                <div id="general-tab" class="tab-content active">
+                    <div class="form-group">
+                        <label><i class="fas fa-heading"></i> Title</label>
+                        <input type="text" name="general_title" class="form-control" value="Post-Session Notes - {{ booking.booking_date|date:'M d, Y' }}" placeholder="Enter title...">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label><i class="fas fa-pencil-alt"></i> Notes / Recommendations</label>
+                        <textarea name="general_content" class="form-control" placeholder="Write your notes, recommendations, or observations here..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Prescription Tab -->
+                <div id="prescription-tab" class="tab-content">
+                    <div class="row">
+                        <div class="form-group">
+                            <label><i class="fas fa-pills"></i> Medication Name</label>
+                            <input type="text" name="medication_name" class="form-control" placeholder="e.g., Sertraline">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-weight"></i> Dosage</label>
+                            <input type="text" name="dosage" class="form-control" placeholder="e.g., 50mg">
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="form-group">
+                            <label><i class="fas fa-clock"></i> Frequency</label>
+                            <input type="text" name="frequency" class="form-control" placeholder="e.g., Once daily">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-calendar-week"></i> Duration</label>
+                            <input type="text" name="duration" class="form-control" placeholder="e.g., 30 days">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label><i class="fas fa-notes-medical"></i> Title</label>
+                        <input type="text" name="prescription_title" class="form-control" value="Prescription - {{ booking.booking_date|date:'M d, Y' }}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label><i class="fas fa-notes-medical"></i> Additional Instructions</label>
+                        <textarea name="prescription_content" class="form-control" placeholder="Add any additional instructions or notes..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Exercise/Homework Tab -->
+                <div id="exercise-tab" class="tab-content">
+                    <div class="form-group">
+                        <label><i class="fas fa-dumbbell"></i> Exercise Name</label>
+                        <input type="text" name="exercise_name" class="form-control" placeholder="e.g., Breathing Exercise, Journaling">
+                    </div>
+                    
+                    <div class="row">
+                        <div class="form-group">
+                            <label><i class="fas fa-clock"></i> Duration</label>
+                            <input type="text" name="exercise_duration" class="form-control" placeholder="e.g., 10 minutes daily">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label><i class="fas fa-heading"></i> Title</label>
+                        <input type="text" name="exercise_title" class="form-control" value="Exercise - {{ booking.booking_date|date:'M d, Y' }}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label><i class="fas fa-list"></i> Instructions</label>
+                        <textarea name="exercise_instructions" class="form-control" placeholder="Step-by-step instructions..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label><i class="fas fa-sticky-note"></i> Additional Notes</label>
+                        <textarea name="exercise_content" class="form-control" placeholder="Any additional notes..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Referral Tab -->
+                <div id="referral-tab" class="tab-content">
+                    <div class="info-box">
+                        <i class="fas fa-info-circle"></i> 
+                        <strong>Referral Information:</strong> Add details about specialists, resources, or services you're referring the client to.
+                    </div>
+                    
+                    <div class="form-group">
+                        <label><i class="fas fa-user-md"></i> Referral To / Title</label>
+                        <input type="text" name="referral_title" class="form-control" placeholder="e.g., Psychiatrist, Nutritionist, Support Group">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label><i class="fas fa-building"></i> Organization/Provider</label>
+                        <input type="text" name="organization" class="form-control" placeholder="Organization name or provider">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label><i class="fas fa-phone"></i> Contact Information</label>
+                        <input type="text" name="contact" class="form-control" placeholder="Phone, email, or website">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label><i class="fas fa-pencil-alt"></i> Reason for Referral / Notes</label>
+                        <textarea name="referral_content" class="form-control" placeholder="Explain why you're making this referral..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Common fields for all tabs -->
+                <div class="form-group">
+                    <label><i class="fas fa-paperclip"></i> Attachment (Optional)</label>
+                    <div class="file-upload" onclick="document.getElementById('fileInput').click()">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Click to upload file (PDF, DOC, Image)</p>
+                        <input type="file" id="fileInput" name="attachment" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+                    </div>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" name="is_important" id="isImportant">
+                    <label for="isImportant">
+                        <i class="fas fa-exclamation-triangle" style="color: #ff9800;"></i> 
+                        Mark as important (client will see highlighted)
+                    </label>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button type="submit" name="add_note" value="1" class="btn btn-success">
+                        <i class="fas fa-check-double"></i> Complete & Send Notes
+                    </button>
+                    <button type="submit" name="complete_only" value="1" class="btn btn-primary">
+                        <i class="fas fa-check"></i> Complete Only (No Notes)
+                    </button>
+                    <a href="{% url 'expert:session_requests' %}" class="btn btn-outline">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName + '-tab').classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+            
+            // Update hidden input
+            document.getElementById('noteType').value = tabName;
+        }
+
+        // File upload display
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const fileName = e.target.files[0]?.name;
+            if (fileName) {
+                const uploadDiv = document.querySelector('.file-upload p');
+                uploadDiv.innerHTML = `<i class="fas fa-check-circle" style="color: #4CAF50;"></i> Selected: ${fileName}`;
+            }
+        });
+
+        // Confirm before completing without notes
+        document.querySelector('button[name="complete_only"]').addEventListener('click', function(e) {
+            if (!confirm('Are you sure you want to complete this session without adding any notes? The client will not receive any post-session information.')) {
+                e.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>

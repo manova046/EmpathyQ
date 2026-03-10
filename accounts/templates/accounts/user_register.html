@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Support | EmpathyQ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Base Styles - Matching index.html */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation - Same as index */
+        .navbar {
+            background-color: #ffffff;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            padding: 15px 0;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: #5d5fef;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: #6c63ff;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #6c63ff;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-block;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-outline {
+            border: 2px solid #6c63ff;
+            color: #6c63ff;
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            background-color: #6c63ff;
+            color: white;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6c63ff, #5d5fef);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(108, 99, 255, 0.2);
+        }
+
+        /* Registration Hero */
+        .registration-hero {
+            padding: 150px 0 80px;
+            background: linear-gradient(135deg, #f5f7ff 0%, #f0f2ff 100%);
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .registration-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="%236c63ff" stroke-width="0.5" stroke-opacity="0.1"/></svg>');
+            background-size: 100px;
+            opacity: 0.5;
+        }
+
+        .registration-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 200px);
+            position: relative;
+            z-index: 1;
+        }
+
+        .registration-wrapper {
+            display: flex;
+            align-items: stretch;
+            justify-content: space-between;
+            max-width: 1200px;
+            width: 100%;
+            gap: 60px;
+        }
+
+        /* Registration Info */
+        .registration-info {
+            flex: 1;
+            background: linear-gradient(135deg, #6c63ff, #5d5fef);
+            border-radius: 20px;
+            padding: 50px 40px;
+            color: white;
+            box-shadow: 0 20px 40px rgba(108, 99, 255, 0.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .registration-info::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1%, transparent 1%);
+            background-size: 20px 20px;
+            opacity: 0.3;
+        }
+
+        .registration-header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .registration-icon {
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            color: white;
+            font-size: 42px;
+            backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 2;
+        }
+
+        .registration-header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .registration-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* Benefits List */
+        .benefits-list {
+            margin-top: 30px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+            transition: transform 0.3s, background 0.3s;
+        }
+
+        .benefit-item:hover {
+            transform: translateX(5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .benefit-icon {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            color: #6c63ff;
+            font-size: 20px;
+            flex-shrink: 0;
+            transition: transform 0.3s;
+        }
+
+        .benefit-item:hover .benefit-icon {
+            transform: scale(1.1);
+        }
+
+        .benefit-content h3 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .benefit-content p {
+            font-size: 0.95rem;
+            opacity: 0.8;
+            margin: 0;
+        }
+
+        /* Quote Section */
+        .quote-section {
+            margin-top: 40px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            border-left: 4px solid white;
+            position: relative;
+            z-index: 2;
+        }
+
+        .quote-text {
+            font-style: italic;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .quote-author {
+            text-align: right;
+            font-weight: 500;
+            opacity: 0.9;
+        }
+
+        /* Registration Form */
+        .registration-form-container {
+            flex: 1;
+            background: white;
+            border-radius: 20px;
+            padding: 50px 40px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .form-header h2 {
+            font-size: 2.2rem;
+            color: #333;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #6c63ff, #5d5fef);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .form-header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+            font-size: 1rem;
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-with-icon i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c63ff;
+            font-size: 18px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px 20px 15px 55px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background-color: #fafafa;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #6c63ff;
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
+        }
+
+        .form-control::placeholder {
+            color: #aaa;
+        }
+
+        /* Password Requirements */
+        .password-requirements {
+            margin-top: 10px;
+            padding: 15px;
+            background-color: #f0f2ff;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .password-requirements ul {
+            list-style: none;
+            padding-left: 0;
+            margin: 10px 0 0 0;
+        }
+
+        .password-requirements li {
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .password-requirements i {
+            margin-right: 8px;
+            font-size: 14px;
+            color: #6c63ff;
+        }
+
+        /* Messages */
+        .messages {
+            margin-bottom: 25px;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .alert-success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border-left: 4px solid #2e7d32;
+        }
+
+        .alert-error {
+            background-color: #ffebee;
+            color: #c62828;
+            border-left: 4px solid #c62828;
+        }
+
+        .alert i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            font-size: 18px;
+            margin-top: 10px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Login Link */
+        .login-link {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .login-link p {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .login-link a {
+            color: #6c63ff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .login-link a:hover {
+            color: #5d5fef;
+            text-decoration: underline;
+        }
+
+        /* Footer - Same as index */
+        .footer {
+            background-color: #2a2a3c;
+            color: white;
+            padding: 60px 0 20px;
+            margin-top: auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-col h3 {
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            color: white;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 15px;
+        }
+
+        .footer-col ul li a {
+            color: #bbb;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-col ul li a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #444;
+            color: #bbb;
+            font-size: 0.9rem;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: background-color 0.3s;
+            text-decoration: none;
+        }
+
+        .social-icons a:hover {
+            background-color: #6c63ff;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .registration-wrapper {
+                flex-direction: column;
+                gap: 40px;
+            }
+            
+            .registration-info, .registration-form-container {
+                width: 100%;
+                max-width: 600px;
+                margin: 0 auto;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .registration-header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .form-header h2 {
+                font-size: 1.8rem;
+            }
+            
+            .registration-form-container {
+                padding: 30px 20px;
+            }
+            
+            .registration-info {
+                padding: 30px 20px;
+            }
+            
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .nav-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        /* Trust Badges */
+        .trust-badges {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .trust-badge {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .trust-badge i {
+            margin-right: 8px;
+            color: #fff;
+        }
+
+        /* Progress Indicator */
+        .progress-indicator {
+            margin-bottom: 30px;
+        }
+
+        .progress-steps {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .progress-steps::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 15%;
+            right: 15%;
+            height: 3px;
+            background: #e0e0e0;
+            z-index: 1;
+        }
+
+        .progress-step {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            background: #e0e0e0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .progress-step.active .step-number {
+            background: #6c63ff;
+            transform: scale(1.2);
+        }
+
+        .step-label {
+            font-size: 0.85rem;
+            color: #777;
+            display: block;
+        }
+
+        .progress-step.active .step-label {
+            color: #6c63ff;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="{% url 'accounts:index' %}" class="logo">
+                <i class="fas fa-heart"></i> EmpathyQ
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="{% url 'accounts:index' %}#home">Home</a></li>
+                <li><a href="{% url 'accounts:index' %}#about">About Us</a></li>
+                <li><a href="{% url 'accounts:index' %}#features">Features</a></li>
+                <li><a href="{% url 'accounts:index' %}#testimonials">Testimonials</a></li>
+                <li><a href="{% url 'accounts:index' %}#contact">Contact</a></li>
+            </ul>
+            
+            <div class="nav-buttons">
+                <a href="{% url 'accounts:login' %}" class="btn btn-outline">Login</a>
+                <a href="{% url 'accounts:expert_register' %}" class="btn btn-primary">Join as Expert</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Registration Hero Section -->
+    <section class="registration-hero">
+        <div class="container registration-container">
+            <div class="registration-wrapper">
+                <!-- Registration Info -->
+                <div class="registration-info">
+                    <div class="registration-header">
+                        <div class="registration-icon">
+                            <i class="fas fa-hands-helping"></i>
+                        </div>
+                        <h1>Begin Your Healing Journey</h1>
+                        <p>Take the first step towards better mental wellness with compassionate support</p>
+                    </div>
+
+                    <!-- Benefits List -->
+                    <div class="benefits-list">
+                        <div class="benefit-item">
+                            <div class="benefit-icon">
+                                <i class="fas fa-user-shield"></i>
+                            </div>
+                            <div class="benefit-content">
+                                <h3>Safe & Confidential</h3>
+                                <p>Your privacy is protected with end-to-end encryption</p>
+                            </div>
+                        </div>
+
+                        <div class="benefit-item">
+                            <div class="benefit-icon">
+                                <i class="fas fa-user-check"></i>
+                            </div>
+                            <div class="benefit-content">
+                                <h3>Verified Experts</h3>
+                                <p>Connect with licensed mental health professionals</p>
+                            </div>
+                        </div>
+
+                        <div class="benefit-item">
+                            <div class="benefit-icon">
+                                <i class="fas fa-comments"></i>
+                            </div>
+                            <div class="benefit-content">
+                                <h3>Multiple Formats</h3>
+                                <p>Video, audio, or chat - choose what works for you</p>
+                            </div>
+                        </div>
+
+                        <div class="benefit-item">
+                            <div class="benefit-icon">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <div class="benefit-content">
+                                <h3>Compassionate Care</h3>
+                                <p>Non-judgmental support from trained professionals</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quote Section -->
+                    <div class="quote-section">
+                        <p class="quote-text">
+                            "The first step towards getting somewhere is to decide that you are not going to stay where you are."
+                        </p>
+                        <p class="quote-author">- Anonymous</p>
+                    </div>
+
+                    <!-- Trust Badges -->
+                    <div class="trust-badges">
+                        <div class="trust-badge">
+                            <i class="fas fa-lock"></i>
+                            <span>Secure Platform</span>
+                        </div>
+                        <div class="trust-badge">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>HIPAA Compliant</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Registration Form -->
+                <div class="registration-form-container">
+                    <!-- Progress Indicator -->
+                    <div class="progress-indicator">
+                        <div class="progress-steps">
+                            <div class="progress-step active">
+                                <div class="step-number">1</div>
+                                <span class="step-label">Create Account</span>
+                            </div>
+                            <div class="progress-step">
+                                <div class="step-number">2</div>
+                                <span class="step-label">Find Expert</span>
+                            </div>
+                            <div class="progress-step">
+                                <div class="step-number">3</div>
+                                <span class="step-label">Start Session</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-header">
+                        <h2>Create Your Account</h2>
+                        <p>Join thousands who have found support on their mental wellness journey</p>
+                    </div>
+
+                    <!-- Messages -->
+                    {% if messages %}
+                    <div class="messages">
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            <i class="fas {% if message.tags == 'success' %}fa-check-circle{% else %}fa-exclamation-circle{% endif %}"></i>
+                            {{ message }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <!-- Registration Form -->
+                    <form method="POST" action="{% url 'accounts:user_register' %}">
+                        {% csrf_token %}
+                        
+                        <div class="form-group">
+                            <label for="username"><i class="fas fa-user"></i> Choose Username</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-user"></i>
+                                <input type="text" 
+                                       id="username" 
+                                       name="username" 
+                                       class="form-control" 
+                                       placeholder="Enter a username" 
+                                       required
+                                       autofocus>
+                            </div>
+                            <small style="color: #666; font-size: 0.85rem; display: block; margin-top: 5px;">
+                                This will be your display name on the platform
+                            </small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email"><i class="fas fa-envelope"></i> Email Address</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" 
+                                       id="email" 
+                                       name="email" 
+                                       class="form-control" 
+                                       placeholder="Enter your email address" 
+                                       required>
+                            </div>
+                            <small style="color: #666; font-size: 0.85rem; display: block; margin-top: 5px;">
+                                We'll send important updates to this email
+                            </small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password1"><i class="fas fa-lock"></i> Create Password</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" 
+                                       id="password1" 
+                                       name="password1" 
+                                       class="form-control" 
+                                       placeholder="Create a secure password" 
+                                       required>
+                            </div>
+                            
+                            <div class="password-requirements">
+                                <strong>Password should include:</strong>
+                                <ul>
+                                    <li><i class="fas fa-check-circle"></i> At least 8 characters</li>
+                                    <li><i class="fas fa-check-circle"></i> One uppercase letter</li>
+                                    <li><i class="fas fa-check-circle"></i> One number or special character</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Privacy Notice -->
+                        <div class="form-group">
+                            <div style="background-color: #f8f9fa; padding: 15px; border-radius: 10px; margin-top: 10px;">
+                                <p style="color: #666; font-size: 0.9rem; margin: 0; display: flex; align-items: flex-start;">
+                                    <i class="fas fa-info-circle" style="color: #6c63ff; margin-right: 10px; margin-top: 3px;"></i>
+                                    By creating an account, you agree to our <a href="#" style="color: #6c63ff;">Privacy Policy</a> and <a href="#" style="color: #6c63ff;">Terms of Service</a>. Your information is secure and confidential.
+                                </p>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary submit-btn">
+                            <i class="fas fa-user-plus"></i> Create Account & Continue
+                        </button>
+                    </form>
+
+                    <!-- Login Link -->
+                    <div class="login-link">
+                        <p>Already have an account? <a href="{% url 'accounts:login' %}">Login here</a></p>
+                        <p style="margin-top: 10px; font-size: 0.9rem; color: #888;">
+                            Are you a mental health professional? <a href="{% url 'accounts:expert_register' %}" style="color: #6c63ff;">Join as an Expert</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>EmpathyQ</h3>
+                    <p style="color: #bbb; margin-bottom: 20px;">Your partner in mental wellness. A safe, compassionate space for healing and growth.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="{% url 'accounts:index' %}#home">Home</a></li>
+                        <li><a href="{% url 'accounts:index' %}#about">About Us</a></li>
+                        <li><a href="{% url 'accounts:index' %}#features">Features</a></li>
+                        <li><a href="{% url 'accounts:index' %}#testimonials">Testimonials</a></li>
+                        <li><a href="{% url 'accounts:index' %}#contact">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Support Services</h3>
+                    <ul>
+                        <li><a href="{% url 'accounts:user_register' %}">Individual Therapy</a></li>
+                        <li><a href="#">Anxiety Support</a></li>
+                        <li><a href="#">Depression Help</a></li>
+                        <li><a href="#">Stress Management</a></li>
+                        <li><a href="#">Crisis Resources</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-envelope" style="margin-right: 10px;"></i> support@empathyq.com</li>
+                        <li><i class="fas fa-phone" style="margin-right: 10px;"></i> +1 (800) 123-HELP</li>
+                        <li><i class="fas fa-map-marker-alt" style="margin-right: 10px;"></i> 123 Wellness Street</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 EmpathyQ. All rights reserved. | <a href="#" style="color: #bbb;">Privacy Policy</a> | <a href="#" style="color: #bbb;">Terms of Service</a></p>
+                <p style="margin-top: 10px; font-size: 0.8rem; color: #888;">If you're in crisis, please call your local emergency services immediately.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script for Form Interactions -->
+    <script>
+        // Add focus effects to form inputs
+        document.querySelectorAll('.form-control').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'translateY(-2px)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Password strength indicator
+        const passwordInput = document.getElementById('password1');
+        if (passwordInput) {
+            passwordInput.addEventListener('input', function() {
+                const password = this.value;
+                const requirements = document.querySelectorAll('.password-requirements li');
+                
+                // Check each requirement
+                const hasLength = password.length >= 8;
+                const hasUppercase = /[A-Z]/.test(password);
+                const hasNumber = /[0-9]/.test(password);
+                const hasSpecial = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
+                const hasNumberOrSpecial = hasNumber || hasSpecial;
+                
+                // Update icons
+                requirements[0].querySelector('i').className = hasLength ? 'fas fa-check-circle' : 'fas fa-circle';
+                requirements[0].querySelector('i').style.color = hasLength ? '#4CAF50' : '#6c63ff';
+                
+                requirements[1].querySelector('i').className = hasUppercase ? 'fas fa-check-circle' : 'fas fa-circle';
+                requirements[1].querySelector('i').style.color = hasUppercase ? '#4CAF50' : '#6c63ff';
+                
+                requirements[2].querySelector('i').className = hasNumberOrSpecial ? 'fas fa-check-circle' : 'fas fa-circle';
+                requirements[2].querySelector('i').style.color = hasNumberOrSpecial ? '#4CAF50' : '#6c63ff';
+            });
+        }
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+            } else {
+                navbar.style.boxShadow = '0 2px 15px rgba(0, 0, 0, 0.05)';
+            }
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href.startsWith('#') && href !== '#') {
+                    e.preventDefault();
+                    const targetElement = document.querySelector(href);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+        });
+
+        // Form submission loading state
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const submitBtn = document.querySelector('.submit-btn');
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
+            submitBtn.disabled = true;
+        });
+    </script>
+</body>
+</html>

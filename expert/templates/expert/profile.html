@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ therapist.name }} - Expert Profile | EmpathyQ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Back Link */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .back-link:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateX(-5px);
+        }
+
+        .back-link i {
+            font-size: 12px;
+        }
+
+        /* Profile Header */
+        .profile-header {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            margin-bottom: 30px;
+        }
+
+        .cover-photo {
+            height: 280px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cover-photo::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0) 50%);
+        }
+
+        .cover-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-info {
+            padding: 0 40px 40px;
+            position: relative;
+        }
+
+        .profile-photo {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 5px solid white;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            position: absolute;
+            top: -90px;
+            left: 40px;
+            overflow: hidden;
+            box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .profile-photo:hover {
+            transform: scale(1.05);
+        }
+
+        .profile-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-photo span {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 64px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .profile-details {
+            margin-left: 240px;
+            padding-top: 30px;
+        }
+
+        .profile-name {
+            font-size: 42px;
+            font-weight: 700;
+            color: #1a1a2c;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        .profile-title {
+            font-size: 20px;
+            color: #667eea;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .rating-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #fbbf24;
+            color: #1a1a1a;
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 15px;
+            box-shadow: 0 4px 10px rgba(251, 191, 36, 0.3);
+        }
+
+        .rating-badge i {
+            color: #1a1a1a;
+            font-size: 13px;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin: 30px 0;
+            background: #f8fafc;
+            padding: 25px;
+            border-radius: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -10px rgba(102, 126, 234, 0.3);
+        }
+
+        .stat-value {
+            font-size: 38px;
+            font-weight: 700;
+            color: #667eea;
+            line-height: 1.2;
+        }
+
+        .stat-label {
+            color: #64748b;
+            font-size: 15px;
+            font-weight: 500;
+            margin-top: 8px;
+        }
+
+        /* Contact Info */
+        .contact-info {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 25px 0;
+        }
+
+        .contact-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 25px;
+            background: #f1f5f9;
+            border-radius: 30px;
+            color: #475569;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .contact-item:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -10px #667eea;
+            border-color: #667eea;
+        }
+
+        .contact-item i {
+            font-size: 15px;
+        }
+
+        /* Main Content - Stacked Layout */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 35px;
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.1);
+            width: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 60px -15px rgba(102, 126, 234, 0.25);
+            border-color: rgba(102, 126, 234, 0.3);
+        }
+
+        .card-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a1a2c;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        .card-title i {
+            color: #667eea;
+            font-size: 28px;
+        }
+
+        /* About Section */
+        .about-text {
+            color: #475569;
+            line-height: 1.9;
+            font-size: 17px;
+            margin-bottom: 30px;
+            word-break: break-word;
+        }
+
+        /* Tags */
+        .specializations {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .specialization-tag {
+            background: linear-gradient(135deg, #f1f5f9, #eef2f6);
+            color: #475569;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .specialization-tag:hover {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transform: translateY(-2px);
+            border-color: white;
+        }
+
+        .specialization-tag i {
+            font-size: 14px;
+        }
+
+        /* Expertise Areas */
+        .expertise-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .expertise-item {
+            background: #f8fafc;
+            padding: 18px 22px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s ease;
+            border: 1px solid #e2e8f0;
+        }
+
+        .expertise-item:hover {
+            background: #667eea;
+            color: white;
+            transform: translateX(5px);
+            border-color: #667eea;
+        }
+
+        .expertise-item:hover i,
+        .expertise-item:hover span {
+            color: white;
+        }
+
+        .expertise-item i {
+            color: #667eea;
+            font-size: 20px;
+            transition: color 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .expertise-item span {
+            color: #475569;
+            font-weight: 500;
+            font-size: 16px;
+            transition: color 0.3s ease;
+            word-break: break-word;
+        }
+
+        /* Phone Numbers */
+        .phone-numbers {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .phone-item {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            padding: 25px;
+            background: #f8fafc;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            border: 1px solid #e2e8f0;
+        }
+
+        .phone-item:hover {
+            background: #f1f5f9;
+            transform: translateX(5px);
+            border-color: #667eea;
+        }
+
+        .phone-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 28px;
+            flex-shrink: 0;
+            box-shadow: 0 10px 15px -5px rgba(102, 126, 234, 0.3);
+        }
+
+        .phone-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .phone-number {
+            font-weight: 700;
+            color: #1a1a2c;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            word-break: break-word;
+        }
+
+        .primary-badge {
+            background: #10b981;
+            color: white;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        .phone-type {
+            font-size: 16px;
+            color: #667eea;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .whatsapp-badge {
+            color: #25D366;
+            font-size: 20px;
+        }
+
+        /* Reviews */
+        .review-item {
+            padding: 35px 0;
+            border-bottom: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .review-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .review-item:first-child {
+            padding-top: 0;
+        }
+
+        .review-item:hover {
+            background: #f8fafc;
+            padding: 35px 30px;
+            margin: 0 -30px;
+            border-radius: 20px;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .reviewer-info {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .reviewer-avatar {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 26px;
+            flex-shrink: 0;
+            box-shadow: 0 8px 15px -5px rgba(102, 126, 234, 0.3);
+        }
+
+        .reviewer-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .reviewer-name {
+            font-weight: 700;
+            color: #1a1a2c;
+            margin-bottom: 8px;
+            font-size: 20px;
+            word-break: break-word;
+        }
+
+        .review-date {
+            font-size: 15px;
+            color: #94a3b8;
+        }
+
+        .review-rating {
+            color: #fbbf24;
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .review-rating i {
+            font-size: 18px;
+        }
+
+        .review-comment {
+            color: #475569;
+            line-height: 1.9;
+            font-size: 16px;
+            background: #f8fafc;
+            padding: 25px;
+            border-radius: 20px;
+            border: 1px solid #e2e8f0;
+            word-break: break-word;
+        }
+
+        /* Languages */
+        .languages-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .language-tag {
+            background: #f1f5f9;
+            color: #475569;
+            padding: 12px 28px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+            border: 1px solid #e2e8f0;
+        }
+
+        .language-tag:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            border-color: #667eea;
+        }
+
+        .language-tag i {
+            font-size: 15px;
+        }
+
+        /* Qualifications */
+        .qualifications-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .qualification-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 25px;
+            padding: 25px;
+            background: #f8fafc;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            border: 1px solid #e2e8f0;
+        }
+
+        .qualification-item:hover {
+            background: #f1f5f9;
+            transform: translateX(5px);
+            border-color: #667eea;
+        }
+
+        .qualification-item i {
+            color: #667eea;
+            width: 32px;
+            font-size: 28px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .qualification-item span {
+            color: #475569;
+            font-weight: 500;
+            font-size: 17px;
+            line-height: 1.7;
+            word-break: break-word;
+        }
+
+        /* Consultation Info Grid */
+        .consultation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 35px;
+        }
+
+        .consultation-item {
+            background: #f8fafc;
+            padding: 25px;
+            border-radius: 20px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .consultation-item:hover {
+            background: #f1f5f9;
+            transform: translateY(-3px);
+            border-color: #667eea;
+        }
+
+        .consultation-label {
+            color: #64748b;
+            font-size: 15px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .consultation-label i {
+            color: #667eea;
+            width: 22px;
+            font-size: 18px;
+        }
+
+        .consultation-value {
+            font-weight: 700;
+            color: #1a1a2c;
+            font-size: 20px;
+            margin-left: 34px;
+        }
+
+        .status-badge {
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .status-available {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-unavailable {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .status-pending {
+            background: #fed7aa;
+            color: #92400e;
+        }
+
+        /* Cancellation Policy */
+        .cancellation-policy {
+            background: #fff7ed;
+            padding: 30px;
+            border-radius: 20px;
+            border-left: 4px solid #f97316;
+            margin-top: 25px;
+        }
+
+        .cancellation-policy h4 {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #9a3412;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .cancellation-policy p {
+            color: #7b341e;
+            font-size: 16px;
+            line-height: 1.8;
+            word-break: break-word;
+        }
+
+        /* Slot Container */
+        .slots-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .slot-item {
+            padding: 22px 30px;
+            border-radius: 20px;
+            border: 2px solid #4CAF50;
+            background: #e8f5e9;
+            cursor: pointer;
+            min-width: 180px;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .slot-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .slot-time {
+            font-weight: 700;
+            color: #333;
+            font-size: 20px;
+        }
+
+        .slot-status {
+            font-size: 14px;
+            color: #4CAF50;
+            margin-top: 10px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .slot-duration {
+            font-size: 13px;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 40px;
+            background: #f8fafc;
+            border-radius: 24px;
+            color: #94a3b8;
+            border: 2px dashed #cbd5e1;
+        }
+
+        .empty-state i {
+            font-size: 70px;
+            margin-bottom: 25px;
+            color: #cbd5e1;
+        }
+
+        .empty-state h4 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+
+        .empty-state p {
+            font-size: 16px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Section Headers */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 30px 0 25px;
+        }
+
+        .section-header h4 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1a1a2c;
+        }
+
+        .section-header i {
+            color: #667eea;
+            font-size: 22px;
+        }
+
+        /* Alert Messages */
+        .alert {
+            padding: 25px;
+            border-radius: 16px;
+            margin: 25px 0;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+
+        /* View All Button */
+        .view-all-btn {
+            display: inline-block;
+            padding: 14px 35px;
+            background: #f1f5f9;
+            color: #667eea;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .view-all-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -10px #667eea;
+        }
+
+        /* Browse Button */
+        .browse-btn {
+            display: inline-block;
+            padding: 18px 45px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 18px;
+            margin-top: 30px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .browse-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.3);
+            border-color: white;
+        }
+
+        /* Animations */
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .profile-header {
+            animation: slideDown 0.5s ease-out;
+        }
+
+        .card {
+            animation: fadeIn 0.5s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
+        .card:nth-child(4) { animation-delay: 0.4s; }
+        .card:nth-child(5) { animation-delay: 0.5s; }
+        .card:nth-child(6) { animation-delay: 0.6s; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 15px;
+            }
+
+            .profile-details {
+                margin-left: 0;
+                padding-top: 100px;
+            }
+
+            .profile-photo {
+                left: 50%;
+                transform: translateX(-50%);
+                width: 150px;
+                height: 150px;
+                top: -75px;
+            }
+
+            .profile-name {
+                text-align: center;
+                font-size: 32px;
+            }
+
+            .profile-title {
+                text-align: center;
+                justify-content: center;
+            }
+
+            .contact-info {
+                justify-content: center;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .review-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .phone-item {
+                flex-direction: column;
+                text-align: center;
+                align-items: center;
+            }
+
+            .phone-details {
+                width: 100%;
+            }
+
+            .phone-number {
+                justify-content: center;
+            }
+
+            .phone-type {
+                justify-content: center;
+            }
+
+            .slot-item {
+                min-width: calc(50% - 10px);
+                flex: 1 1 auto;
+            }
+
+            .consultation-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .card {
+                padding: 25px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .profile-header {
+                border-radius: 20px;
+            }
+
+            .cover-photo {
+                height: 180px;
+            }
+
+            .profile-info {
+                padding: 0 20px 25px;
+            }
+
+            .profile-photo {
+                width: 130px;
+                height: 130px;
+                top: -65px;
+            }
+
+            .profile-name {
+                font-size: 26px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .expertise-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .qualification-item {
+                flex-direction: column;
+                text-align: center;
+                padding: 20px;
+            }
+
+            .slot-item {
+                min-width: 100%;
+            }
+            
+            .card-title {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="javascript:history.back()" class="back-link">
+            <i class="fas fa-arrow-left"></i> Back
+        </a>
+
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="cover-photo">
+                {% if profile.cover_photo %}
+                <img src="{{ profile.cover_photo.url }}" alt="Cover Photo">
+                {% endif %}
+            </div>
+            <div class="profile-info">
+                <div class="profile-photo">
+                    {% if profile.profile_photo %}
+                    <img src="{{ profile.profile_photo.url }}" alt="{{ therapist.name }}">
+                    {% else %}
+                    <span>{{ therapist.name|make_list|first|upper }}</span>
+                    {% endif %}
+                </div>
+                <div class="profile-details">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 20px;">
+                        <div>
+                            <h1 class="profile-name">{{ therapist.name }}</h1>
+                            <div class="profile-title">
+                                <i class="fas fa-user-md"></i>
+                                {% if profile.professional_title %}
+                                {{ profile.professional_title }}
+                                {% elif therapist.specialization %}
+                                {{ therapist.specialization|truncatechars:50 }}
+                                {% else %}
+                                Mental Health Professional
+                                {% endif %}
+                                <span class="rating-badge">
+                                    <i class="fas fa-star"></i>
+                                    {{ avg_rating|default:"0.0" }} ({{ total_reviews }} {{ total_reviews|pluralize:"review,reviews" }})
+                                </span>
+                            </div>
+                        </div>
+                        {% if is_owner %}
+                        <a href="{% url 'expert:profile_settings' %}" class="contact-item" style="background: #667eea; color: white;">
+                            <i class="fas fa-edit"></i> Edit Profile
+                        </a>
+                        {% endif %}
+                    </div>
+
+                    <!-- Stats -->
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-value">{{ profile.experience_years }}+</div>
+                            <div class="stat-label">Years Experience</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">${{ profile.consultation_fee }}</div>
+                            <div class="stat-label">Session Fee</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">{{ total_sessions|default:"0" }}</div>
+                            <div class="stat-label">Sessions Done</div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Info -->
+                    <div class="contact-info">
+                        {% if profile.show_email %}
+                        <a href="mailto:{{ therapist.email }}" class="contact-item">
+                            <i class="fas fa-envelope"></i> {{ therapist.email }}
+                        </a>
+                        {% endif %}
+
+                        <!-- Phone Numbers in Header - Shows first phone number -->
+                        {% if phone_numbers and profile.show_phone %}
+                        {% for phone in phone_numbers %}
+                        {% if forloop.first %}
+                        <a href="tel:{{ phone.number }}" class="contact-item">
+                            <i class="fas fa-{% if phone.type == 'whatsapp' %}fab fa-whatsapp{% else %}phone{% endif %}"></i>
+                            {{ phone.number }}
+                        </a>
+                        {% endif %}
+                        {% endfor %}
+                        {% endif %}
+
+                        {% if profile.video_enabled %}
+                        <a href="#" class="contact-item">
+                            <i class="fas fa-video"></i> Video Call
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content - Stacked Layout (All sections one below another) -->
+        <div class="main-content">
+            
+            <!-- About Card -->
+            <div class="card">
+                <div class="card-title">
+                    <i class="fas fa-user"></i> About Me
+                </div>
+                <div class="about-text">
+                    {{ profile.about_me|default:"No bio provided yet."|linebreaks }}
+                </div>
+
+                <!-- Specializations -->
+                {% if specializations_list %}
+                <div class="section-header">
+                    <i class="fas fa-star"></i>
+                    <h4>Specializations</h4>
+                </div>
+                <div class="specializations">
+                    {% for spec in specializations_list %}
+                    <span class="specialization-tag">
+                        <i class="fas fa-circle"></i>
+                        {{ spec|title }}
+                    </span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <!-- Expertise Areas -->
+                {% if expertise_list %}
+                <div class="section-header" style="margin-top: 25px;">
+                    <i class="fas fa-brain"></i>
+                    <h4>Areas of Expertise</h4>
+                </div>
+                <div class="expertise-grid">
+                    {% for exp in expertise_list %}
+                    <div class="expertise-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>{{ exp|title }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {% if is_owner %}
+                <div class="alert alert-warning" style="margin-top: 20px;">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>No expertise areas added yet.</strong>
+                    <a href="{% url 'expert:profile_settings' %}" style="color: #856404; text-decoration: underline; margin-left: 5px;">Add expertise areas</a>
+                </div>
+                {% endif %}
+                {% endif %}
+            </div>
+
+            <!-- Qualifications Card -->
+            {% if qualifications_list %}
+            <div class="card">
+                <div class="card-title">
+                    <i class="fas fa-graduation-cap"></i> Qualifications
+                </div>
+                <div class="qualifications-list">
+                    {% for qual in qualifications_list %}
+                    <div class="qualification-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>{{ qual }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Consultation Details Card -->
+            <div class="card">
+                <div class="card-title">
+                    <i class="fas fa-clock"></i> Consultation Details
+                </div>
+                
+                <div class="consultation-grid">
+                    <div class="consultation-item">
+                        <div class="consultation-label">
+                            <i class="fas fa-dollar-sign"></i> Consultation Fee
+                        </div>
+                        <div class="consultation-value">${{ profile.consultation_fee }}</div>
+                    </div>
+                    
+                    <div class="consultation-item">
+                        <div class="consultation-label">
+                            <i class="fas fa-hourglass-half"></i> Session Duration
+                        </div>
+                        <div class="consultation-value">{{ profile.session_duration|default:"60" }} minutes</div>
+                    </div>
+                    
+                    <div class="consultation-item">
+                        <div class="consultation-label">
+                            <i class="fas fa-video"></i> Video Consultation
+                        </div>
+                        <div class="consultation-value">
+                            <span class="status-badge {% if profile.video_enabled %}status-available{% else %}status-unavailable{% endif %}">
+                                {% if profile.video_enabled %}Available{% else %}Not Available{% endif %}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="consultation-item">
+                        <div class="consultation-label">
+                            <i class="fas fa-comment-dots"></i> Chat Support
+                        </div>
+                        <div class="consultation-value">
+                            <span class="status-badge {% if profile.chat_enabled %}status-available{% else %}status-unavailable{% endif %}">
+                                {% if profile.chat_enabled %}Available{% else %}Not Available{% endif %}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="consultation-item">
+                        <div class="consultation-label">
+                            <i class="fas fa-phone"></i> Phone Support
+                        </div>
+                        <div class="consultation-value">
+                            <span class="status-badge {% if profile.phone_enabled %}status-available{% else %}status-unavailable{% endif %}">
+                                {% if profile.phone_enabled %}Available{% else %}Not Available{% endif %}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="consultation-item">
+                        <div class="consultation-label">
+                            <i class="fas fa-calendar-check"></i> Booking Type
+                        </div>
+                        <div class="consultation-value">
+                            <span class="status-badge {% if profile.instant_booking %}status-available{% else %}status-pending{% endif %}">
+                                {% if profile.instant_booking %}Instant Booking{% else %}Requires Approval{% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cancellation Policy -->
+                <div class="cancellation-policy">
+                    <h4>
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Cancellation Policy
+                    </h4>
+                    <p>{{ profile.cancellation_policy|default:"24 hours notice required for cancellation" }}</p>
+                </div>
+            </div>
+
+            <!-- Available Slots Card -->
+            {% if not is_owner %}
+            <div class="card">
+                <div class="card-title">
+                    <i class="fas fa-clock"></i> Available Consultation Slots
+                </div>
+                
+                {% if slots_by_date %}
+                    {% for date_str, slots in slots_by_date.items %}
+                        <div style="margin-bottom: 35px; padding-bottom: 30px; {% if not forloop.last %}border-bottom: 1px dashed #e0e0e0;{% endif %}">
+                            <h4 style="color: #667eea; margin-bottom: 25px; font-size: 20px; display: flex; align-items: center; gap: 12px;">
+                                <i class="fas fa-calendar-day"></i> {{ slots.0.date|date:"l, F j, Y" }}
+                            </h4>
+                            <div class="slots-container">
+                                {% for slot in slots %}
+                                    <a href="{% url 'user:book_session' %}?expert={{ therapist.id }}&date={{ slot.date|date:'Y-m-d' }}&time={{ slot.start_time|time:'H:i' }}" 
+                                       class="slot-item">
+                                        <div class="slot-time">{{ slot.start_time|time:"g:i A" }}</div>
+                                        <div class="slot-status">
+                                            <i class="fas fa-circle"></i> Available
+                                        </div>
+                                        <div class="slot-duration">
+                                            {{ slot.duration_minutes }} min
+                                        </div>
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                    
+                    <div style="margin-top: 30px; text-align: center; padding-top: 25px; border-top: 1px solid #edf2f7;">
+                        <p style="color: #666; margin-bottom: 15px; font-size: 16px;">
+                            <i class="fas fa-info-circle" style="color: #667eea;"></i> 
+                            Click on any available time slot to book your session.
+                        </p>
+                        <a href="{% url 'user:book_session' %}?expert={{ therapist.id }}" class="view-all-btn">
+                            <i class="fas fa-calendar-alt"></i> View All Available Times
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="empty-state">
+                        <i class="fas fa-calendar-times"></i>
+                        <h4>No Available Slots</h4>
+                        <p>This expert doesn't have any available slots at the moment. Please check back later or browse other experts.</p>
+                        <a href="{% url 'user:book_session' %}" class="browse-btn">
+                            <i class="fas fa-search"></i> Browse Other Experts
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <!-- Phone Numbers Card -->
+            {% if phone_numbers and profile.show_phone %}
+            <div class="card">
+                <div class="card-title">
+                    <i class="fas fa-phone-alt"></i> Contact Numbers
+                </div>
+                <div class="phone-numbers">
+                    {% for phone in phone_numbers %}
+                    <div class="phone-item">
+                        <div class="phone-icon">
+                            <i class="fas fa-{% if phone.type == 'whatsapp' %}fab fa-whatsapp{% else %}phone{% endif %}"></i>
+                        </div>
+                        <div class="phone-details">
+                            <div class="phone-number">
+                                {{ phone.number }}
+                                {% if phone.is_primary %}
+                                <span class="primary-badge">Primary</span>
+                                {% endif %}
+                            </div>
+                            <div class="phone-type">
+                                <i class="fas fa-{% if phone.type == 'mobile' %}mobile-alt{% elif phone.type == 'work' %}briefcase{% elif phone.type == 'home' %}home{% else %}fa-whatsapp{% endif %}"></i>
+                                {{ phone.type|title }}
+                                {% if phone.type == 'whatsapp' %}
+                                <i class="fab fa-whatsapp whatsapp-badge"></i>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% else %}
+            {% if is_owner %}
+            <div class="card">
+                <div class="card-title">
+                    <i class="fas fa-phone-alt"></i> Contact Numbers
+                </div>
+                <div class="alert alert-warning">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>No phone numbers added yet.</strong>
+                    <a href="{% url 'expert:profile_settings' %}" style="color: #856404; text-decoration: underline; margin-left: 5px;">Add phone numbers</a>
+                </div>
+            </div>
+            {% endif %}
+            {% endif %}
+
+            <!-- Languages Card -->
+            {% if languages_list %}
+            <div class="card">
+                <div class="card-title">
+                    <i class="fas fa-globe"></i> Languages
+                </div>
+                <div class="languages-list">
+                    {% for lang in languages_list %}
+                    <span class="language-tag">
+                        <i class="fas fa-check"></i> {{ lang|title }}
+                    </span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Reviews Card -->
+            <div class="card">
+                <div class="card-title">
+                    <i class="fas fa-star"></i> Client Reviews
+                    {% if total_reviews > 0 %}
+                    <span style="margin-left: 10px; font-size: 18px; color: #666;">({{ total_reviews }} reviews)</span>
+                    {% endif %}
+                </div>
+                
+                {% if reviews %}
+                    {% for review in reviews|slice:":5" %}
+                    <div class="review-item">
+                        <div class="review-header">
+                            <div class="reviewer-info">
+                                <div class="reviewer-avatar">
+                                    {% if review.is_anonymous %}
+                                        <i class="fas fa-user-secret"></i>
+                                    {% else %}
+                                        {{ review.user.get_full_name|default:review.user.username|make_list|first|upper }}
+                                    {% endif %}
+                                </div>
+                                <div class="reviewer-details">
+                                    <div class="reviewer-name">
+                                        {% if review.is_anonymous %}
+                                            Anonymous
+                                        {% else %}
+                                            {{ review.user.get_full_name|default:review.user.username }}
+                                        {% endif %}
+                                    </div>
+                                    <div class="review-date">{{ review.created_at|date:"M d, Y" }}</div>
+                                </div>
+                            </div>
+                            <div class="review-rating">
+                                {% for i in "12345"|make_list %}
+                                    {% if forloop.counter <= review.rating %}
+                                        <i class="fas fa-star"></i>
+                                    {% else %}
+                                        <i class="far fa-star"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="review-comment">
+                            {{ review.comment }}
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                    {% if total_reviews > 5 %}
+                    <div style="text-align: center; margin-top: 30px;">
+                        <a href="#" style="color: #667eea; text-decoration: none; font-weight: 600; font-size: 17px;">See all {{ total_reviews }} reviews →</a>
+                    </div>
+                    {% endif %}
+                {% else %}
+                    <div class="empty-state">
+                        <i class="fas fa-star"></i>
+                        <p>No reviews yet.</p>
+                        {% if not is_owner %}
+                        <p style="font-size: 15px; margin-top: 15px;">Be the first to leave feedback after your session!</p>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Auto-hide messages after 5 seconds
+        setTimeout(function() {
+            document.querySelectorAll('.alert').forEach(function(alert) {
+                if (alert) {
+                    alert.style.transition = 'opacity 0.5s';
+                    alert.style.opacity = '0';
+                    setTimeout(() => alert.remove(), 500);
+                }
+            });
+        }, 5000);
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href.startsWith('#') && href !== '#') {
+                    e.preventDefault();
+                    const targetElement = document.querySelector(href);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

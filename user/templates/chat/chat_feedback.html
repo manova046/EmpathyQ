@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>How Do You Feel? - EmpathyQ</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #eef2ff, #f8fafc);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .feedback-container {
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .feedback-box {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        h2 {
+            color: #1e293b;
+            margin-bottom: 30px;
+            font-size: 1.8rem;
+        }
+
+        .mood-info {
+            background: #f1f5f9;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            color: #475569;
+        }
+
+        .mood-badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .feedback-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #334155;
+        }
+
+        select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+
+        select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .rating-container {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .rating-option {
+            flex: 1;
+            text-align: center;
+        }
+
+        .rating-option input[type="radio"] {
+            display: none;
+        }
+
+        .rating-option label {
+            display: block;
+            padding: 15px 10px;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #475569;
+            transition: all 0.3s;
+            margin: 0;
+        }
+
+        .rating-option input[type="radio"]:checked + label {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+            transform: scale(1.05);
+        }
+
+        .feeling-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .feeling-btn {
+            flex: 1;
+            padding: 15px 10px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .feeling-btn.better {
+            background: #22c55e;
+            color: white;
+        }
+
+        .feeling-btn.better:hover {
+            background: #16a34a;
+            transform: translateY(-2px);
+        }
+
+        .feeling-btn.same {
+            background: #64748b;
+            color: white;
+        }
+
+        .feeling-btn.same:hover {
+            background: #475569;
+            transform: translateY(-2px);
+        }
+
+        .feeling-btn.worse {
+            background: #ef4444;
+            color: white;
+        }
+
+        .feeling-btn.worse:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+
+        .feeling-btn input[type="radio"] {
+            display: none;
+        }
+
+        .feeling-btn input[type="radio"]:checked + .feeling-btn {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .submit-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .skip-link {
+            display: block;
+            margin-top: 20px;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .skip-link:hover {
+            color: #667eea;
+        }
+
+        .errorlist {
+            color: #ef4444;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            padding-left: 0;
+            list-style: none;
+        }
+
+        @media (max-width: 600px) {
+            .feedback-box {
+                padding: 25px;
+            }
+            
+            .feeling-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="feedback-container">
+    <div class="feedback-box">
+        <h2>How was your chat?</h2>
+        
+        {% if room %}
+        <div class="mood-info">
+            <p>You were feeling: <span class="mood-badge">
+                {% if request.user == room.user1 %}
+                    {{ room.mood_user1 }}
+                {% else %}
+                    {{ room.mood_user2 }}
+                {% endif %}
+            </span></p>
+        </div>
+        {% endif %}
+
+        <form method="POST" class="feedback-form">
+            {% csrf_token %}
+            
+            <!-- Feeling after chat -->
+            <div class="form-group">
+                <label>How do you feel after this conversation?</label>
+                <div class="feeling-buttons">
+                    <label class="feeling-btn better">
+                        <input type="radio" name="feeling_after" value="much_better" required>
+                        <span>😊</span>
+                        <span>Much Better</span>
+                    </label>
+                    <label class="feeling-btn better" style="background: #3b82f6;">
+                        <input type="radio" name="feeling_after" value="better" required>
+                        <span>🙂</span>
+                        <span>Better</span>
+                    </label>
+                    <label class="feeling-btn same">
+                        <input type="radio" name="feeling_after" value="same" required>
+                        <span>😐</span>
+                        <span>Same</span>
+                    </label>
+                    <label class="feeling-btn worse">
+                        <input type="radio" name="feeling_after" value="worse" required>
+                        <span>😔</span>
+                        <span>Worse</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Was it helpful? -->
+            <div class="form-group">
+                <label>Was this chat helpful?</label>
+                <select name="was_helpful" required>
+                    <option value="">Select an option</option>
+                    <option value="yes">Yes, very helpful</option>
+                    <option value="somewhat">Somewhat helpful</option>
+                    <option value="no">No, not helpful</option>
+                </select>
+            </div>
+
+            <!-- Rating -->
+            <div class="form-group">
+                <label>Rate your experience (1-5)</label>
+                <div class="rating-container">
+                    {% for i in "12345" %}
+                    <div class="rating-option">
+                        <input type="radio" name="rating" value="{{ i }}" id="star{{ i }}">
+                        <label for="star{{ i }}">{{ i }} ★</label>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Comments -->
+            <div class="form-group">
+                <label>Additional comments (optional)</label>
+                <textarea name="comments" rows="4" placeholder="Share your experience..."></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">Submit Feedback</button>
+            
+            <a href="{% url 'accounts:user_dashboard' %}" class="skip-link">Skip for now</a>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Auto-select feeling buttons when clicked
+    document.querySelectorAll('.feeling-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.feeling-btn').forEach(b => {
+                b.style.transform = 'scale(1)';
+            });
+            this.style.transform = 'scale(1.05)';
+        });
+    });
+</script>
+
+</body>
+</html>

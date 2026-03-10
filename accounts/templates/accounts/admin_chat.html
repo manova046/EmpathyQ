@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Support - EmpathyQ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f7fa;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            padding: 20px 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header h1 i {
+            color: #10b981;
+        }
+
+        .admin-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .admin-badge {
+            background: #6c63ff;
+            color: white;
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-link {
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #666;
+            transition: all 0.3s;
+        }
+
+        .nav-link:hover {
+            background: #f0f2ff;
+            color: #6c63ff;
+        }
+
+        .nav-link.active {
+            background: #10b981;
+            color: white;
+        }
+
+        /* Chat Wrapper */
+        .chat-wrapper {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            min-height: 700px;
+        }
+
+        /* Users Sidebar */
+        .users-sidebar {
+            background: #f8fafd;
+            border-right: 1px solid #e9ecef;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .sidebar-header h3 {
+            font-size: 16px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search-box {
+            margin-top: 15px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 15px 10px 40px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 12px;
+            color: #999;
+        }
+
+        .users-list {
+            list-style: none;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .user-item {
+            padding: 15px 20px;
+            border-bottom: 1px solid #e9ecef;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-item:hover {
+            background: #f0f2ff;
+        }
+
+        .user-item.active {
+            background: #10b981;
+        }
+
+        .user-item.active .user-name,
+        .user-item.active .user-preview {
+            color: white;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            background: #6c63ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .user-time {
+            font-size: 11px;
+            color: #999;
+        }
+
+        .user-preview {
+            font-size: 13px;
+            color: #666;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .unread-count {
+            background: #10b981;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 11px;
+        }
+
+        /* Chat Area */
+        .chat-area {
+            display: flex;
+            flex-direction: column;
+            height: 700px;
+        }
+
+        .chat-header {
+            padding: 20px;
+            border-bottom: 2px solid #f0f2f5;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .chat-header-avatar {
+            width: 45px;
+            height: 45px;
+            background: #6c63ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .chat-header-info h2 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .chat-header-info p {
+            font-size: 13px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .online-status {
+            width: 8px;
+            height: 8px;
+            background: #4caf50;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #f8fafd;
+        }
+
+        .message {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .message.sent {
+            justify-content: flex-end;
+        }
+
+        .message.received {
+            justify-content: flex-start;
+        }
+
+        .message-bubble {
+            max-width: 60%;
+            padding: 12px 18px;
+            border-radius: 18px;
+            position: relative;
+        }
+
+        .message.sent .message-bubble {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.received .message-bubble {
+            background: white;
+            color: #333;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .message-time {
+            font-size: 11px;
+            margin-top: 5px;
+            opacity: 0.7;
+        }
+
+        .message.sent .message-time {
+            text-align: right;
+        }
+
+        .chat-input-container {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            gap: 15px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 30px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: #10b981;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border-radius: 30px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: #666;
+        }
+
+        .empty-state i {
+            font-size: 50px;
+            color: #ccc;
+            margin-bottom: 15px;
+        }
+
+        /* Messages */
+        .messages {
+            margin-bottom: 20px;
+        }
+
+        .alert {
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .alert-success {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        @media (max-width: 768px) {
+            .chat-wrapper {
+                grid-template-columns: 1fr;
+            }
+            
+            .users-sidebar {
+                display: none;
+            }
+        }
+    </style>
+    
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>
+                <i class="fas fa-flag"></i>
+                Admin Support Center
+            </h1>
+            <div class="admin-info">
+                <div class="nav-links">
+                    <a href="{% url 'accounts:admin_dashboard' %}" class="nav-link">
+                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                    </a>
+                    <a href="{% url 'accounts:admin_chat' %}" class="nav-link active">
+                        <i class="fas fa-flag"></i> Support
+                    </a>
+                </div>
+                <span class="admin-badge">
+                    <i class="fas fa-user"></i>
+                    {{ request.user.username }}
+                </span>
+            </div>
+        </div>
+
+        <!-- Messages -->
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                <i class="fas fa-check-circle"></i>
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Chat Interface -->
+        <div class="chat-wrapper">
+            <!-- Users List -->
+            <div class="users-sidebar">
+                <div class="sidebar-header">
+                    <h3>
+                        <i class="fas fa-users"></i>
+                        Support Conversations
+                    </h3>
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search users..." id="userSearch">
+                    </div>
+                </div>
+                <ul class="users-list" id="usersList">
+                    {% for convo in conversations %}
+                    <li class="user-item {% if active_user and active_user.id == convo.user.id %}active{% endif %}" 
+                        onclick="window.location.href='?user={{ convo.user.id }}'">
+                        <div class="user-avatar">
+                            {{ convo.user.username|first|upper }}
+                        </div>
+                        <div class="user-info">
+                            <div class="user-header">
+                                <span class="user-name">{{ convo.user.username }}</span>
+                                <span class="user-time">{{ convo.last_time|timesince }} ago</span>
+                            </div>
+                            <div class="user-preview">
+                                <span>{{ convo.last_message|truncatechars:30 }}</span>
+                                {% if convo.unread_count > 0 %}
+                                <span class="unread-count">{{ convo.unread_count }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </li>
+                    {% empty %}
+                    <li style="text-align: center; padding: 40px 20px; color: #999;">
+                        <i class="fas fa-inbox" style="font-size: 30px; margin-bottom: 10px; display: block;"></i>
+                        No support conversations yet
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- Chat Area -->
+            <div class="chat-area">
+                {% if active_user %}
+                <div class="chat-header">
+                    <div class="chat-header-avatar">
+                        {{ active_user.username|first|upper }}
+                    </div>
+                    <div class="chat-header-info">
+                        <h2>{{ active_user.username }}</h2>
+                        <p>
+                            <span class="online-status"></span>
+                            {{ active_user.email }}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="chat-messages" id="chatMessages">
+                    {% for message in chat_messages %}
+                    <div class="message {% if message.sender == request.user %}sent{% else %}received{% endif %}">
+                        <div class="message-bubble">
+                            <p>{{ message.message }}</p>
+                            <div class="message-time">
+                                {{ message.timestamp|date:"g:i A, M d" }}
+                                {% if message.sender == request.user %}
+                                    {% if message.is_read %}
+                                    <i class="fas fa-check-double" style="color: #4caf50; margin-left: 5px;"></i>
+                                    {% else %}
+                                    <i class="fas fa-check" style="margin-left: 5px;"></i>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <form method="post" class="chat-input-container" id="messageForm">
+                    {% csrf_token %}
+                    <input type="hidden" name="recipient_id" value="{{ active_user.id }}">
+                    <input type="text" name="message" class="chat-input" placeholder="Type your reply..." required autocomplete="off">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> Send
+                    </button>
+                </form>
+                {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-flag"></i>
+                    <h3>Select a conversation</h3>
+                    <p>Choose a user from the list to view and respond to their support request</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Scroll to bottom
+        function scrollToBottom() {
+            const chatMessages = document.getElementById('chatMessages');
+            if (chatMessages) {
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        }
+
+        // Auto-scroll on load
+        document.addEventListener('DOMContentLoaded', function() {
+            scrollToBottom();
+        });
+
+        // Search functionality
+        document.getElementById('userSearch')?.addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const users = document.querySelectorAll('.user-item');
+            
+            users.forEach(user => {
+                const userName = user.querySelector('.user-name').textContent.toLowerCase();
+                if (userName.includes(searchTerm)) {
+                    user.style.display = 'flex';
+                } else {
+                    user.style.display = 'none';
+                }
+            });
+        });
+
+        // Auto-refresh messages every 5 seconds
+        {% if active_user %}
+        setInterval(function() {
+            const currentUrl = window.location.href;
+            fetch(currentUrl, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const newMessages = doc.getElementById('chatMessages');
+                const oldMessages = document.getElementById('chatMessages');
+                
+                if (newMessages && oldMessages) {
+                    oldMessages.innerHTML = newMessages.innerHTML;
+                    scrollToBottom();
+                }
+            });
+        }, 5000);
+        {% endif %}
+    </script>
+</body>
+</html>

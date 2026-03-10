@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Payment | EmpathyQ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .payment-container {
+            max-width: 500px;
+            width: 100%;
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .payment-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .payment-header i {
+            font-size: 48px;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .payment-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a1a2c;
+            margin-bottom: 5px;
+        }
+        
+        .payment-header p {
+            color: #64748b;
+            font-size: 15px;
+        }
+        
+        .booking-summary {
+            background: #f8fafc;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+        
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+        
+        .summary-label {
+            color: #64748b;
+            font-size: 15px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .summary-label i {
+            color: #667eea;
+            font-size: 16px;
+        }
+        
+        .summary-value {
+            font-weight: 600;
+            color: #1a1a2c;
+            font-size: 16px;
+        }
+        
+        .therapist-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .therapist-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        
+        .therapist-details h3 {
+            font-weight: 600;
+            color: #1a1a2c;
+            margin-bottom: 5px;
+        }
+        
+        .therapist-details p {
+            color: #667eea;
+            font-size: 14px;
+        }
+        
+        .amount-due {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 20px 25px;
+            border-radius: 16px;
+            margin-bottom: 25px;
+            color: white;
+        }
+        
+        .amount-label {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .amount-value {
+            font-size: 28px;
+            font-weight: 700;
+        }
+        
+        .razorpay-button {
+            width: 100%;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .razorpay-button:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(102, 126, 234, 0.5);
+        }
+        
+        .payment-note {
+            text-align: center;
+            margin-top: 20px;
+            color: #94a3b8;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .payment-note i {
+            color: #667eea;
+        }
+        
+        .secure-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 15px;
+            color: #10b981;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="payment-container">
+        <div class="payment-header">
+            <i class="fas fa-lock"></i>
+            <h1>Complete Payment</h1>
+            <p>Secure payment powered by Razorpay</p>
+        </div>
+        
+        <div class="booking-summary">
+            <div class="therapist-info">
+                <div class="therapist-avatar">
+                    {{ therapist.name|make_list|first|upper }}
+                </div>
+                <div class="therapist-details">
+                    <h3>{{ therapist.name }}</h3>
+                    <p>{{ therapist.specialization|default:"Mental Health Professional" }}</p>
+                </div>
+            </div>
+            
+            <div class="summary-item">
+                <span class="summary-label"><i class="fas fa-calendar"></i> Date</span>
+                <span class="summary-value">{{ booking.session_date|date:"l, F j, Y" }}</span>
+            </div>
+            
+            <div class="summary-item">
+                <span class="summary-label"><i class="fas fa-clock"></i> Time</span>
+                <span class="summary-value">{{ booking.start_time|time:"g:i A" }} - {{ booking.end_time|time:"g:i A" }}</span>
+            </div>
+            
+            <div class="summary-item">
+                <span class="summary-label"><i class="fas fa-video"></i> Session Type</span>
+                <span class="summary-value">Video Consultation</span>
+            </div>
+        </div>
+        
+        <div class="amount-due">
+            <span class="amount-label">Total Amount</span>
+            <span class="amount-value">₹{{ booking.total_amount }}</span>
+        </div>
+        
+        <form action="{{ callback_url }}" method="POST">
+            {% csrf_token %}
+            <script
+                src="https://checkout.razorpay.com/v1/checkout.js"
+                data-key="{{ razorpay_key_id }}"
+                data-amount="{{ amount }}"
+                data-currency="{{ currency }}"
+                data-order_id="{{ razorpay_order_id }}"
+                data-buttontext="Pay ₹{{ booking.total_amount }} with Razorpay"
+                data-name="EmpathyQ"
+                data-description="Therapy Session with {{ therapist.name }}"
+                data-image="https://your-logo-url.com/logo.png"
+                data-prefill.name="{{ request.user.get_full_name }}"
+                data-prefill.email="{{ request.user.email }}"
+                data-theme.color="#667eea"
+            ></script>
+            <input type="hidden" custom="Hidden Element" name="hidden">
+        </form>
+        
+        <div class="payment-note">
+            <i class="fas fa-shield-alt"></i>
+            Your payment information is secure and encrypted
+        </div>
+        
+        <div class="secure-badge">
+            <i class="fas fa-check-circle"></i>
+            Secured by Razorpay
+        </div>
+    </div>
+</body>
+</html>

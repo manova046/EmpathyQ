@@ -1,0 +1,1617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your emotional snapshot · EmpathyQ</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --mood-low: #2563eb;
+      --mood-anxious: #dc2626;
+      --mood-stressed: #ea580c;
+      --mood-calm: #16a34a;
+      --mood-motivated: #7c3aed;
+      --mood-neutral: #64748b;
+      --mood-irritable: #b45309;
+      --mood-happy: #f59e0b;
+      --mood-excited: #8b5cf6;
+      --mood-grateful: #10b981;
+      --mood-hopeful: #3b82f6;
+      --mood-peaceful: #6ee7b7;
+      --mood-loved: #ec4899;
+      --mood-proud: #f97316;
+      --mood-energetic: #ef4444;
+      --mood-tired: #6b7280;
+      --mood-overwhelmed: #7f1d1d;
+      --mood-lonely: #4c1d95;
+      --mood-confused: #a16207;
+      --mood-hopeless: #1e293b;
+
+      --bg-light: #f8fafc;
+      --surface-white: #ffffff;
+      --text-primary: #0f172a;
+      --text-secondary: #334155;
+      --text-tertiary: #64748b;
+      --border-subtle: #e2e8f0;
+      --accent-gradient: linear-gradient(135deg, #4f46e5 0%, #7e22ce 100%);
+      --dashboard-gradient: linear-gradient(135deg, #4f46e5, #7c3aed, #a855f7);
+      --chat-gradient: linear-gradient(135deg, #10b981, #059669, #047857);
+      --spotify-gradient: linear-gradient(135deg, #1DB954, #1ed760, #1aa34a);
+      --books-gradient: linear-gradient(135deg, #9b59b6, #8e44ad, #6c3483);
+      --shadow-card: 0 20px 35px -8px rgba(0,0,0,0.07), 0 8px 12px -6px rgba(0,0,0,0.05);
+      --shadow-hover: 0 25px 40px -10px rgba(79, 70, 229, 0.15);
+      --shadow-chat: 0 15px 30px -8px rgba(5, 150, 105, 0.3);
+      --shadow-spotify: 0 15px 30px -8px rgba(29, 185, 84, 0.3);
+      --shadow-books: 0 15px 30px -8px rgba(155, 89, 182, 0.3);
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg-light);
+      margin: 0;
+      padding: 2rem 1.5rem;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-primary);
+    }
+
+    /* smooth font */
+    @supports (font-variation-settings: normal) {
+      body { font-family: 'Inter var', 'Inter', system-ui, sans-serif; }
+    }
+
+    .glass-container {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .card-elevated {
+      background: var(--surface-white);
+      border-radius: 2.5rem;
+      box-shadow: var(--shadow-card);
+      backdrop-filter: blur(2px);
+      overflow: hidden;
+      transition: box-shadow 0.3s ease, transform 0.2s ease;
+      border: 1px solid rgba(255,255,255,0.5);
+    }
+
+    .card-elevated:hover {
+      box-shadow: var(--shadow-hover);
+    }
+
+    /* header with refined depth */
+    .header-gradient {
+      background: linear-gradient(145deg, #1e1b4b 0%, #312e81 45%, #4c1d95 100%);
+      color: white;
+      padding: 3.5rem 3rem;
+      position: relative;
+      isolation: isolate;
+    }
+
+    .header-gradient::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .header-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .header-content h1 {
+      font-size: 3.2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+      text-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .header-content .date-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(4px);
+      padding: 0.6rem 1.4rem;
+      border-radius: 60px;
+      font-weight: 500;
+      font-size: 1rem;
+      border: 1px solid rgba(255,255,255,0.2);
+      margin-top: 0.5rem;
+    }
+
+    .header-content .date-badge span {
+      opacity: 0.9;
+    }
+
+    /* mood section */
+    .mood-panel {
+      padding: 2.5rem 2.5rem 1.5rem;
+    }
+
+    .mood-circles {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .mood-sphere {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      box-shadow: 0 20px 30px -10px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.3) inset;
+      transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+      will-change: transform;
+      text-shadow: 0 2px 3px rgba(0,0,0,0.2);
+    }
+
+    .mood-sphere.primary {
+      width: 180px;
+      height: 180px;
+    }
+
+    .mood-sphere:hover {
+      transform: scale(1.03) translateY(-5px);
+      box-shadow: 0 28px 40px -12px currentColor;
+    }
+
+    .mood-sphere .mood-name {
+      font-size: 1.8rem;
+      font-weight: 700;
+      line-height: 1.2;
+      text-transform: capitalize;
+    }
+    .mood-sphere.primary .mood-name {
+      font-size: 2.2rem;
+    }
+    .mood-sphere .mood-label {
+      font-size: 0.9rem;
+      opacity: 0.85;
+      letter-spacing: 0.5px;
+      margin-top: 6px;
+    }
+
+    /* mood colors - expanded for new moods */
+    .mood-low { background: var(--mood-low); }
+    .mood-anxious { background: var(--mood-anxious); }
+    .mood-stressed { background: var(--mood-stressed); }
+    .mood-calm { background: var(--mood-calm); }
+    .mood-motivated { background: var(--mood-motivated); }
+    .mood-neutral { background: var(--mood-neutral); }
+    .mood-irritable { background: var(--mood-irritable); }
+    .mood-happy { background: var(--mood-happy); }
+    .mood-excited { background: var(--mood-excited); }
+    .mood-grateful { background: var(--mood-grateful); }
+    .mood-hopeful { background: var(--mood-hopeful); }
+    .mood-peaceful { background: var(--mood-peaceful); }
+    .mood-loved { background: var(--mood-loved); }
+    .mood-proud { background: var(--mood-proud); }
+    .mood-energetic { background: var(--mood-energetic); }
+    .mood-tired { background: var(--mood-tired); }
+    .mood-overwhelmed { background: var(--mood-overwhelmed); }
+    .mood-lonely { background: var(--mood-lonely); }
+    .mood-confused { background: var(--mood-confused); }
+    .mood-hopeless { background: var(--mood-hopeless); }
+
+    .intensity-section {
+      max-width: 400px;
+      margin: 2rem auto 2rem;
+      text-align: center;
+    }
+
+    .intensity-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 0.8rem;
+    }
+
+    .intensity-header h3 {
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    #intensityValue {
+      font-weight: 700;
+      font-size: 1.5rem;
+      background: rgba(0,0,0,0.02);
+      padding: 0.2rem 1rem;
+      border-radius: 40px;
+      transition: color 0.3s;
+    }
+
+    .intensity-track {
+      background: #e9eef3;
+      height: 12px;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: inset 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    .intensity-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #22c55e, #eab308, #ef4444);
+      border-radius: 20px;
+      transition: width 1.2s cubic-bezier(0.22, 0.97, 0.34, 1.05);
+      box-shadow: 0 0 6px #fbbf24;
+    }
+
+    .intensity-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--text-tertiary);
+      margin-top: 0.4rem;
+    }
+
+    /* insight card */
+    .insight-card {
+      background: #fcf4e9;
+      border-radius: 28px;
+      padding: 2rem 2.2rem;
+      margin: 2rem 2rem 0.5rem;
+      border-left: 6px solid #f59e0b;
+      box-shadow: inset 0 1px 4px rgba(255,255,240,0.8);
+    }
+
+    .insight-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #b45309;
+      font-size: 1.4rem;
+      font-weight: 650;
+      margin-bottom: 1.25rem;
+    }
+
+    .insight-text {
+      color: #2b2b2b;
+      line-height: 1.7;
+      font-size: 1.05rem;
+    }
+
+    .secondary-note {
+      margin-top: 1.5rem;
+      padding-top: 1.2rem;
+      border-top: 2px dashed #fbbf24;
+      font-style: normal;
+    }
+
+    .secondary-note strong {
+      color: #b45309;
+    }
+
+    /* tasks */
+    .tasks-section {
+      padding: 2.5rem 2.5rem 2rem;
+      background: #f9f9fe;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-header h2 {
+      font-size: 2rem;
+      font-weight: 680;
+      letter-spacing: -0.01em;
+      color: #1e293b;
+    }
+
+    .tasks-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.8rem;
+      margin: 2rem 0 1rem;
+    }
+
+    .task-card {
+      background: white;
+      border-radius: 1.8rem;
+      padding: 1.8rem 1.8rem 2rem;
+      box-shadow: 0 8px 18px -6px rgba(0,0,0,0.06);
+      border: 1px solid #eef2f6;
+      transition: 0.25s ease;
+      opacity: 0;
+      animation: cardReveal 0.5s ease forwards;
+      display: flex;
+      flex-direction: column;
+    }
+
+    @keyframes cardReveal {
+      0% { opacity: 0; transform: translateY(12px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .task-card:hover {
+      border-color: #cbd5e1;
+      box-shadow: 0 24px 34px -14px rgba(79,70,229,0.15);
+    }
+
+    .task-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #eef2ff;
+      color: #4f46e5;
+      padding: 0.4rem 1.2rem;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      margin-bottom: 1.2rem;
+      width: fit-content;
+    }
+
+    .task-card h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      color: #0f172a;
+    }
+
+    .task-description {
+      color: #334155;
+      line-height: 1.6;
+      margin-bottom: 1.6rem;
+      flex: 1;
+    }
+
+    .task-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.4rem;
+      font-size: 0.9rem;
+    }
+
+    .duration {
+      background: #f1f5f9;
+      padding: 0.3rem 1rem;
+      border-radius: 30px;
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .energy {
+      padding: 0.3rem 1.2rem;
+      border-radius: 30px;
+      font-weight: 600;
+      background: #f1f5f9;
+    }
+    .energy-low { background: #fff9e6; color: #b45309; }
+    .energy-medium { background: #e0f2fe; color: #0369a1; }
+    .energy-high { background: #fee2e2; color: #b91c1c; }
+
+    .complete-btn {
+      background: linear-gradient(115deg, #10b981, #059669);
+      border: none;
+      color: white;
+      font-weight: 600;
+      padding: 0.9rem 0;
+      border-radius: 60px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.2s;
+      text-align: center;
+      margin-top: 0.5rem;
+      border: 1px solid rgba(255,255,255,0.2);
+      box-shadow: 0 6px 14px rgba(5, 150, 105, 0.2);
+    }
+
+    .complete-btn:hover {
+      background: linear-gradient(115deg, #059669, #047857);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 24px -8px rgba(5,150,105,0.5);
+    }
+
+    .empty-tasks {
+      background: white;
+      border-radius: 40px;
+      padding: 3rem;
+      text-align: center;
+    }
+
+    /* Spotify Music Section */
+    .music-section {
+      margin-top: 2rem;
+      padding: 2.5rem 2.5rem 2rem;
+      background: linear-gradient(135deg, #1DB95410, #19141410);
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .spotify-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .spotify-header i {
+      font-size: 2.5rem;
+      color: #1DB954;
+    }
+
+    .spotify-header h2 {
+      font-size: 2rem;
+      font-weight: 680;
+      color: #1DB954;
+    }
+
+    .playlists-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .playlist-card {
+      background: white;
+      border-radius: 1.5rem;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .playlist-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-spotify);
+    }
+
+    .playlist-image {
+      height: 180px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .playlist-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .playlist-card:hover .playlist-image img {
+      transform: scale(1.05);
+    }
+
+    .playlist-content {
+      padding: 1.5rem;
+    }
+
+    .playlist-content h3 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #0f172a;
+    }
+
+    .playlist-content p {
+      color: #64748b;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+
+    .playlist-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .track-count {
+      color: #94a3b8;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .spotify-btn {
+      background: #1DB954;
+      color: white;
+      padding: 0.6rem 1.2rem;
+      border-radius: 2rem;
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .spotify-btn:hover {
+      background: #1ed760;
+      transform: scale(1.05);
+    }
+
+    .tracks-grid {
+      display: grid;
+      gap: 0.8rem;
+      margin-top: 1.5rem;
+    }
+
+    .track-item {
+      background: white;
+      border-radius: 1rem;
+      padding: 0.8rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: all 0.2s ease;
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .track-item:hover {
+      background: #f8fafc;
+      transform: translateX(5px);
+    }
+
+    .track-image {
+      width: 50px;
+      height: 50px;
+      border-radius: 0.5rem;
+      object-fit: cover;
+    }
+
+    .track-info {
+      flex: 1;
+    }
+
+    .track-name {
+      font-weight: 600;
+      color: #0f172a;
+      margin-bottom: 0.2rem;
+    }
+
+    .track-artist {
+      color: #64748b;
+      font-size: 0.9rem;
+    }
+
+    .track-link {
+      color: #1DB954;
+      font-size: 1.5rem;
+      transition: all 0.2s ease;
+    }
+
+    .track-link:hover {
+      transform: scale(1.1);
+    }
+
+    .spotify-fallback {
+      text-align: center;
+      padding: 3rem;
+      background: rgba(255,255,255,0.5);
+      border-radius: 1.5rem;
+    }
+
+    .spotify-fallback i {
+      font-size: 4rem;
+      color: #1DB954;
+      opacity: 0.5;
+      margin-bottom: 1rem;
+    }
+
+    /* Books Section - UPDATED */
+    .books-section {
+      margin-top: 2rem;
+      padding: 2.5rem 2.5rem 2rem;
+      background: linear-gradient(135deg, #f8f0ff, #f3e8ff);
+      border-top: 2px solid #9b59b6;
+      border-radius: 0 0 var(--radius-2xl, 2.5rem) var(--radius-2xl, 2.5rem);
+    }
+
+    .books-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .books-header i {
+      font-size: 2.5rem;
+      color: #9b59b6;
+    }
+
+    .books-header h2 {
+      font-size: 2rem;
+      font-weight: 680;
+      color: #4a235a;
+    }
+
+    .books-badge {
+      background: #9b59b6;
+      color: white;
+      padding: 0.3rem 1rem;
+      border-radius: 30px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-left: auto;
+    }
+
+    .books-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .book-card {
+      background: white;
+      border-radius: 1.5rem;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(155, 89, 182, 0.15);
+      transition: all 0.3s ease;
+      border: 1px solid rgba(155, 89, 182, 0.2);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .book-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-books);
+    }
+
+    .book-image-container {
+      height: 200px;
+      overflow: hidden;
+      position: relative;
+      background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .book-image-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .book-card:hover .book-image-container img {
+      transform: scale(1.05);
+    }
+
+    .book-image-placeholder {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #9b59b6, #8e44ad);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 3rem;
+    }
+
+    .book-content {
+      padding: 1.5rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .book-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+      color: #2c3e50;
+      line-height: 1.3;
+    }
+
+    .book-author {
+      color: #7f8c8d;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+      font-style: italic;
+    }
+
+    .book-rating {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .stars {
+      color: #f1c40f;
+      font-size: 0.8rem;
+    }
+
+    .rating-count {
+      color: #95a5a6;
+      font-size: 0.7rem;
+    }
+
+    .book-description {
+      color: #34495e;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      margin-bottom: 1rem;
+      flex: 1;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .book-categories {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      margin-bottom: 1rem;
+    }
+
+    .book-category-tag {
+      background: #f3e8ff;
+      color: #9b59b6;
+      padding: 0.2rem 0.6rem;
+      border-radius: 15px;
+      font-size: 0.6rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .book-reason {
+      font-size: 0.8rem;
+      color: #8e44ad;
+      font-style: italic;
+      margin-bottom: 1rem;
+      padding: 0.5rem;
+      background: #f8f0ff;
+      border-radius: 10px;
+      border-left: 3px solid #9b59b6;
+    }
+
+    .book-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: auto;
+    }
+
+    .book-btn {
+      background: #9b59b6;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 2rem;
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      flex: 1;
+      justify-content: center;
+    }
+
+    .book-btn:hover {
+      background: #8e44ad;
+      transform: scale(1.02);
+    }
+
+    .book-btn-outline {
+      background: transparent;
+      color: #9b59b6;
+      border: 2px solid #9b59b6;
+      padding: 0.5rem 1rem;
+      border-radius: 2rem;
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: all 0.3s ease;
+      flex: 1;
+      justify-content: center;
+    }
+
+    .book-btn-outline:hover {
+      background: #9b59b6;
+      color: white;
+      transform: scale(1.02);
+    }
+
+    .load-more-container {
+      text-align: center;
+      margin: 2rem 0 1rem;
+    }
+
+    .load-more-btn {
+      background: linear-gradient(135deg, #9b59b6, #8e44ad);
+      color: white;
+      padding: 1rem 2.5rem;
+      border-radius: 3rem;
+      border: none;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      box-shadow: 0 10px 20px rgba(155, 89, 182, 0.3);
+    }
+
+    .load-more-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px rgba(155, 89, 182, 0.4);
+    }
+
+    .load-more-btn i {
+      transition: transform 0.3s ease;
+    }
+
+    .load-more-btn:hover i {
+      transform: translateX(5px);
+    }
+
+    .books-fallback {
+      text-align: center;
+      padding: 3rem;
+      background: rgba(255,255,255,0.5);
+      border-radius: 1.5rem;
+      border: 2px dashed #9b59b6;
+    }
+
+    .books-fallback i {
+      font-size: 4rem;
+      color: #9b59b6;
+      opacity: 0.5;
+      margin-bottom: 1rem;
+    }
+
+    /* Loading Spinner */
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* action bar */
+    .action-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.2rem;
+      padding: 2.5rem 2rem 2.8rem;
+      background: #ffffff;
+    }
+
+    .btn {
+      padding: 0.9rem 2.3rem;
+      border-radius: 60px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      font-size: 1rem;
+      border: 1px solid transparent;
+    }
+
+    .btn-primary {
+      background: var(--accent-gradient);
+      color: white;
+      box-shadow: 0 10px 20px -7px #7c3aed;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 18px 28px -6px #6d28d9;
+    }
+
+    .btn-secondary {
+      background: white;
+      color: #1e293b;
+      border: 1px solid #cbd5e1;
+    }
+
+    .btn-secondary:hover {
+      background: #f8fafc;
+      border-color: #94a3b8;
+      transform: translateY(-2px);
+    }
+
+    /* Beautiful Dashboard Button Styles */
+    .btn-dashboard {
+      background: var(--dashboard-gradient);
+      color: white;
+      padding: 0.9rem 2.3rem;
+      border-radius: 60px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      font-size: 1rem;
+      border: 1px solid rgba(255,255,255,0.2);
+      box-shadow: 0 10px 20px -7px #5b21b6;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-dashboard::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .btn-dashboard:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 18px 28px -6px #6d28d9;
+    }
+
+    .btn-dashboard:hover::before {
+      left: 100%;
+    }
+
+    .btn-dashboard i {
+      font-size: 1.1rem;
+      transition: transform 0.3s ease;
+    }
+
+    .btn-dashboard:hover i:first-child {
+      transform: translateX(-3px);
+    }
+
+    .btn-dashboard:hover i:last-child {
+      transform: translateX(3px);
+    }
+
+    /* Professional Chat Button Styles */
+    .btn-chat-container {
+      display: flex;
+      justify-content: center;
+      margin: 2rem 0 1rem;
+    }
+
+    .btn-chat {
+      background: var(--chat-gradient);
+      color: white;
+      padding: 1.2rem 3rem;
+      border-radius: 60px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      font-size: 1.2rem;
+      border: 1px solid rgba(255,255,255,0.2);
+      box-shadow: var(--shadow-chat);
+      position: relative;
+      overflow: hidden;
+      min-width: 320px;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-chat::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.7s ease;
+    }
+
+    .btn-chat:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 35px -8px rgba(5, 150, 105, 0.5);
+    }
+
+    .btn-chat:hover::before {
+      left: 100%;
+    }
+
+    .btn-chat i {
+      font-size: 1.4rem;
+      transition: transform 0.3s ease;
+    }
+
+    .btn-chat:hover i:first-child {
+      transform: scale(1.1);
+    }
+
+    .btn-chat:hover i:last-child {
+      transform: translateX(5px);
+    }
+
+    .btn-chat .badge {
+      background: rgba(255,255,255,0.2);
+      padding: 0.2rem 0.8rem;
+      border-radius: 30px;
+      font-size: 0.8rem;
+      margin-left: 0.5rem;
+      backdrop-filter: blur(5px);
+    }
+
+    .timestamp-meta {
+      color: rgba(255,255,255,0.7);
+      font-size: 0.9rem;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid var(--border-subtle);
+      margin: 0 2rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .btn-chat {
+        min-width: auto;
+        width: 90%;
+        padding: 1rem 1.5rem;
+        font-size: 1rem;
+      }
+      
+      .action-bar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .action-bar .btn {
+        justify-content: center;
+      }
+      
+      .playlists-grid,
+      .books-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .books-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .books-badge {
+        margin-left: 0;
+      }
+      
+      .book-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+  <!-- Add Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<div class="glass-container">
+  <div class="card-elevated">
+    <!-- header refined -->
+    <div class="header-gradient">
+      <div class="header-content">
+        <h1>Your emotional snapshot</h1>
+        <p style="font-size: 1.3rem; font-weight: 300; margin-bottom: 1rem;">personalized insight · one step at a time</p>
+        <div class="date-badge">
+          <span>📅</span> {{ checkin.created_at|date:"F j, Y" }} <span>·</span> <span>⏱️ {{ checkin.created_at|date:"g:i A" }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- mood sphere + intensity -->
+    <div class="mood-panel">
+      <div class="mood-circles">
+        <!-- primary mood circle -->
+        <div class="mood-sphere primary {{ mood }} mood-{{ mood }}" id="primaryMoodCircle">
+          <span class="mood-name">{{ mood|title }}</span>
+          <span class="mood-label">primary mood</span>
+        </div>
+
+        {% if secondary_mood %}
+        <div class="mood-sphere {{ secondary_mood }} mood-{{ secondary_mood }}">
+          <span class="mood-name">{{ secondary_mood|title }}</span>
+          <span class="mood-label">secondary</span>
+        </div>
+        {% endif %}
+      </div>
+
+      <div class="intensity-section">
+        <div class="intensity-header">
+          <h3>intensity level</h3>
+          <span id="intensityValue">{{ intensity }}/10</span>
+        </div>
+        <div class="intensity-track">
+          <div class="intensity-fill" id="intensityFill" style="width: 0%;"></div>
+        </div>
+        <div class="intensity-labels">
+          <span>gentle (1)</span>
+          <span>moderate (5)</span>
+          <span>intense (10)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- insight block (context) -->
+    <div class="insight-card">
+      <div class="insight-title">
+        <span style="font-size: 2rem;">🧘</span> understanding your mood
+      </div>
+      <div class="insight-text">
+        {% if mood == 'low' %}
+        <p>You're experiencing lower energy today. This could be related to fatigue, recent disappointments, or natural emotional cycles. Consider gentle activities that provide small wins without overwhelming you.</p>
+        {% elif mood == 'anxious' %}
+        <p>You're feeling anxious. Anxiety often comes from uncertainty or perceived threats. Grounding techniques and structured activities can help bring you back to the present moment.</p>
+        {% elif mood == 'stressed' %}
+        <p>You're feeling stressed. Stress typically arises from feeling overwhelmed or pressured. Breaking tasks into smaller pieces and taking mindful breaks can help reduce this feeling.</p>
+        {% elif mood == 'calm' %}
+        <p>You're feeling calm and balanced. This is an excellent state for reflection and intentional action. Consider using this clarity to set positive intentions.</p>
+        {% elif mood == 'motivated' %}
+        <p>You're feeling motivated! This energy is perfect for tackling meaningful projects. Channel this motivation into focused work while maintaining balance.</p>
+        {% elif mood == 'neutral' %}
+        <p>You're feeling neutral. This balanced state can be a great starting point for intentional choices about how you'd like to feel.</p>
+        {% elif mood == 'irritable' %}
+        <p>You're feeling irritable. This often signals unmet needs, frustration, or sensory overwhelm. Gentle self-care and boundary-setting can help.</p>
+        {% elif mood == 'happy' %}
+        <p>You're feeling happy and content! This positive state is wonderful for connecting with others and appreciating the good things in life. Consider sharing your joy or engaging in activities you love.</p>
+        {% elif mood == 'excited' %}
+        <p>You're feeling excited and enthusiastic! Your energy is high and you're looking forward to things. Channel this excitement into creative projects or new experiences.</p>
+        {% elif mood == 'grateful' %}
+        <p>You're feeling grateful and appreciative. This mindset has powerful psychological benefits. Take a moment to acknowledge what you're thankful for and perhaps express it to someone.</p>
+        {% elif mood == 'hopeful' %}
+        <p>You're feeling hopeful and optimistic. This positive outlook can help you navigate challenges. Use this hope as fuel to work toward your goals.</p>
+        {% elif mood == 'peaceful' %}
+        <p>You're feeling peaceful and serene. This calm state is perfect for reflection, meditation, or simply being present in the moment.</p>
+        {% elif mood == 'loved' %}
+        <p>You're feeling loved and cared for. Connection with others is fundamental to wellbeing. Nurture these relationships and let yourself receive support.</p>
+        {% elif mood == 'proud' %}
+        <p>You're feeling proud and accomplished. Acknowledge your achievements, no matter how small. This confidence can propel you forward.</p>
+        {% elif mood == 'energetic' %}
+        <p>You're feeling energetic and vibrant! This is a great time for physical activity, tackling projects, or engaging in dynamic social interactions.</p>
+        {% elif mood == 'tired' %}
+        <p>You're feeling tired and drained. Your body and mind need rest. Prioritize sleep, gentle activities, and self-care over productivity.</p>
+        {% elif mood == 'overwhelmed' %}
+        <p>You're feeling overwhelmed. Everything may feel like too much right now. Break things down into tiny steps and give yourself permission to pause.</p>
+        {% elif mood == 'lonely' %}
+        <p>You're feeling lonely and isolated. Connection is a basic human need. Consider reaching out to someone, even for a brief conversation.</p>
+        {% elif mood == 'confused' %}
+        <p>You're feeling confused or uncertain. This is normal when facing complexity. Give yourself time, seek clarity, and don't rush decisions.</p>
+        {% elif mood == 'hopeless' %}
+        <p>You're feeling hopeless or discouraged. These feelings can be heavy. Remember that emotions are temporary and support is available. Consider speaking with a counselor.</p>
+        {% endif %}
+
+        {% if secondary_mood %}
+        <div class="secondary-note">
+          <strong>secondary influence:</strong> you also show elements of <strong>{{ secondary_mood|title }}</strong>. This mixed emotional state is normal — we've blended your recommendations.
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- TASKS section professional -->
+    <div class="tasks-section">
+      <div class="section-header">
+        <span style="font-size: 2.2rem;">✨</span>
+        <h2>Atomic tasks · right for now</h2>
+      </div>
+
+      <p style="color: #475569; margin-bottom: 2.2rem; font-size: 1.1rem; max-width: 80%;">
+        small, science-backed actions that match your energy & feeling
+      </p>
+
+      {% if assignments %}
+      <div class="tasks-grid">
+        {% for assignment in assignments %}
+        {% with task=assignment.task %}
+        <div class="task-card" style="animation-delay: {{ forloop.counter0|add:"1" }}00ms">
+
+          <div class="task-badge">
+            {% if task.category %}
+              {{ task.category.icon }} {{ task.category.name }}
+            {% else %}
+              🌱 micro-habit
+            {% endif %}
+          </div>
+
+          <h3>{{ task.title }}</h3>
+          <p class="task-description">{{ task.description }}</p>
+
+          <div class="task-meta">
+            <span class="duration">⏱️ {{ task.duration_minutes }} min</span>
+
+            <span class="energy energy-{{ task.energy_level }}">
+              {% if task.energy_level == 'low' %}
+                ☁️ low effort
+              {% elif task.energy_level == 'medium' %}
+                ⚡ moderate
+              {% else %}
+                🔥 high energy
+              {% endif %}
+            </span>
+          </div>
+
+          <button class="complete-btn"
+                  onclick="completeTask(this, '{{ task.title|escapejs }}')">
+            ✓ Mark as complete
+          </button>
+
+        </div>
+        {% endwith %}
+        {% endfor %}
+      </div>
+
+      {% else %}
+      <div class="empty-tasks">
+        <span style="font-size: 4rem;">🌱</span>
+        <h3 style="margin: 1rem 0 0.5rem; color:#1e293b;">No suggested tasks</h3>
+        <p style="color: #475569; max-width: 500px; margin: 0.5rem auto;">
+          Sometimes the best action is gentle rest. Check back later or explore your own micro-steps.
+        </p>
+
+        <button class="complete-btn"
+                style="background: linear-gradient(115deg, #4682b4, #1e4b6e); margin-top: 1.5rem; max-width: 220px; margin-left: auto; margin-right: auto;"
+                onclick="suggestActivity()">
+          🌟 suggest self-care
+        </button>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Spotify Mood Music Section -->
+    {% if has_spotify %}
+    <div class="music-section">
+      <div class="spotify-header">
+        <i class="fab fa-spotify"></i>
+        <h2>Music for your {{ mood|title }} mood</h2>
+      </div>
+      
+      <p style="color: #475569; margin-bottom: 1.5rem; font-size: 1rem;">
+        Curated Spotify playlists to match your emotional state
+      </p>
+      
+      {% if spotify_playlists %}
+      <div class="playlists-grid">
+        {% for playlist in spotify_playlists %}
+        <div class="playlist-card">
+          {% if playlist.image %}
+          <div class="playlist-image">
+            <img src="{{ playlist.image }}" alt="{{ playlist.name }}">
+          </div>
+          {% endif %}
+          <div class="playlist-content">
+            <h3>{{ playlist.name }}</h3>
+            <p>{{ playlist.description|default:'Perfect for your mood' }}</p>
+            <div class="playlist-meta">
+              <span class="track-count">
+                <i class="fas fa-music"></i> {{ playlist.track_count }} tracks
+              </span>
+              <a href="{{ playlist.url }}" target="_blank" class="spotify-btn">
+                <i class="fab fa-spotify"></i> Play
+              </a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      
+      {% if spotify_tracks %}
+      <div style="margin-top: 2rem;">
+        <h3 style="font-size: 1.3rem; margin-bottom: 1rem; color: #0f172a;">Recommended Tracks</h3>
+        <div class="tracks-grid">
+          {% for track in spotify_tracks %}
+          <div class="track-item">
+            {% if track.image %}
+            <img src="{{ track.image }}" alt="{{ track.album }}" class="track-image">
+            {% else %}
+            <div class="track-image" style="background: #1DB95420; display: flex; align-items: center; justify-content: center;">
+              <i class="fas fa-music" style="color: #1DB954;"></i>
+            </div>
+            {% endif %}
+            <div class="track-info">
+              <div class="track-name">{{ track.name }}</div>
+              <div class="track-artist">{{ track.artist }}</div>
+            </div>
+            <a href="{{ track.url }}" target="_blank" class="track-link">
+              <i class="fab fa-spotify"></i>
+            </a>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+      
+      {% if not spotify_playlists and not spotify_tracks %}
+      <div class="spotify-fallback">
+        <i class="fab fa-spotify"></i>
+        <p style="margin-top: 1rem; color: #64748b;">Discover music that matches your mood on Spotify</p>
+        <a href="https://open.spotify.com/search/{{ mood }}%20mood%20playlist" target="_blank" class="spotify-btn" style="margin-top: 1rem; display: inline-block;">
+          Search on Spotify
+        </a>
+      </div>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- Books Section - FIXED with proper book links -->
+    {% if book_recommendations %}
+    <div class="books-section">
+      <div class="books-header">
+        <i class="fas fa-book-open"></i>
+        <h2>Books for your {{ mood|title }} mood</h2>
+        <span class="books-badge">{{ book_recommendations|length }} books</span>
+      </div>
+      
+      <p style="color: #4a235a; margin-bottom: 1.5rem; font-size: 1rem; opacity: 0.8;">
+        Discover books that resonate with your emotional state
+      </p>
+      
+      <!-- Single books grid with proper links -->
+      <div class="books-grid">
+        {% for book in book_recommendations %}
+        <div class="book-card">
+          <div class="book-image-container">
+            {% if book.thumbnail %}
+            <img src="{{ book.thumbnail }}" alt="{{ book.title }}">
+            {% else %}
+            <div class="book-image-placeholder">
+              <i class="fas fa-book"></i>
+            </div>
+            {% endif %}
+          </div>
+          <div class="book-content">
+            <h3 class="book-title">{{ book.title|truncatechars:50 }}</h3>
+            <p class="book-author">by {{ book.authors|join:", "|truncatechars:30 }}</p>
+            
+            {% if book.average_rating %}
+            <div class="book-rating">
+              <span class="stars">
+                {% for i in "12345"|make_list %}
+                  {% if forloop.counter <= book.average_rating %}
+                    <i class="fas fa-star"></i>
+                  {% elif forloop.counter <= book.average_rating|add:"0.5" %}
+                    <i class="fas fa-star-half-alt"></i>
+                  {% else %}
+                    <i class="far fa-star"></i>
+                  {% endif %}
+                {% endfor %}
+              </span>
+              <span class="rating-count">({{ book.ratings_count|default:"0" }} ratings)</span>
+            </div>
+            {% endif %}
+            
+            {% if book.description %}
+            <p class="book-description">{{ book.description|striptags|truncatechars:120 }}</p>
+            {% endif %}
+            
+            {% if book.categories %}
+            <div class="book-categories">
+              {% for category in book.categories|slice:":3" %}
+              <span class="book-category-tag">{{ category|truncatechars:15 }}</span>
+              {% endfor %}
+            </div>
+            {% endif %}
+            
+            <div class="book-reason">
+              <i class="fas fa-quote-left" style="font-size: 0.6rem; opacity: 0.5;"></i>
+              {% if book.recommendation_reason %}
+                {{ book.recommendation_reason }}
+              {% else %}
+                {% if mood == 'neutral' %}
+                  A thoughtfully selected read for your balanced state
+                {% else %}
+                  Perfectly matched to your {{ mood|title }} mood
+                {% endif %}
+              {% endif %}
+            </div>
+            
+            <div class="book-actions">
+              {% if book.preview_link %}
+                {% if "openlibrary.org" in book.preview_link %}
+                  <a href="{{ book.preview_link }}" target="_blank" class="book-btn">
+                    <i class="fas fa-book-open"></i> Preview
+                  </a>
+                {% else %}
+                  <a href="{{ book.preview_link }}" target="_blank" class="book-btn">
+                    <i class="fas fa-book-open"></i> Preview
+                  </a>
+                {% endif %}
+              {% else %}
+                <a href="https://openlibrary.org/search?q={{ book.title|urlencode }}+{{ book.authors.0|urlencode }}" target="_blank" class="book-btn">
+                  <i class="fas fa-search"></i> Find Book
+                </a>
+              {% endif %}
+              
+              {% if book.info_link %}
+                {% if "openlibrary.org" in book.info_link %}
+                  <a href="{{ book.info_link }}" target="_blank" class="book-btn-outline">
+                    <i class="fas fa-info-circle"></i> Details
+                  </a>
+                {% else %}
+                  <a href="{{ book.info_link }}" target="_blank" class="book-btn-outline">
+                    <i class="fas fa-info-circle"></i> Details
+                  </a>
+                {% endif %}
+              {% else %}
+                <a href="https://www.google.com/search?q={{ book.title|urlencode }}+{{ book.authors.0|urlencode }}+book" target="_blank" class="book-btn-outline">
+                  <i class="fas fa-info-circle"></i> Details
+                </a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      
+      <!-- Explore More Link -->
+      <div style="text-align: center; margin-top: 2rem;">
+        <a href="https://openlibrary.org/search?q={{ mood }}+books" target="_blank" style="color: #9b59b6; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 0.5rem;">
+          <i class="fas fa-search"></i>
+          Discover more {{ mood|title }} books on Open Library
+          <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Professional Chat Button -->
+    <div class="btn-chat-container">
+      <a href="{% url 'user:join_chat' checkin.id %}" class="btn-chat">
+        <i class="fas fa-comments"></i>
+        <span>Connect with a Listener</span>
+        <span class="badge">5 min</span>
+        <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+
+    <!-- footer actions -->
+    <div class="action-bar">
+      <a href="{% url 'user:emotional_checkin' %}" class="btn btn-primary"><span>🔄</span> new check‑in</a>
+      
+      <!-- Beautiful Dashboard Button -->
+      <a href="{% url 'accounts:user_dashboard' %}" class="btn-dashboard">
+        <i class="fas fa-arrow-left"></i>
+        <i class="fas fa-tachometer-alt"></i>
+        <span>Back To Dashboard</span>
+      </a>
+      
+      <a href="/" class="btn btn-secondary"><span>🏠</span> home</a>
+      <a href="#" class="btn btn-secondary" onclick="saveResult()"><span>💾</span> save to journal</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // animate intensity bar & value color
+    const intensity = {{ intensity|default:5 }};
+    const fill = document.getElementById('intensityFill');
+    const intensitySpan = document.getElementById('intensityValue');
+    if (fill) {
+      setTimeout(() => {
+        fill.style.width = (intensity * 10) + '%';
+      }, 200);
+    }
+    if (intensitySpan) {
+      if (intensity <= 3) intensitySpan.style.color = '#16a34a';
+      else if (intensity <= 7) intensitySpan.style.color = '#ea580c';
+      else intensitySpan.style.color = '#b91c1c';
+    }
+
+    // subtle pulse on primary circle
+    const primaryCircle = document.querySelector('.mood-sphere.primary');
+    if (primaryCircle) {
+      setTimeout(() => {
+        primaryCircle.style.transform = 'scale(1.04)';
+        setTimeout(() => { primaryCircle.style.transform = 'scale(1)'; }, 300);
+      }, 400);
+    }
+  });
+
+  // complete task with professional feedback
+  window.completeTask = function(btn, taskTitle) {
+    btn.innerHTML = '✓ completed · +1 step';
+    btn.style.background = '#94a3b8';
+    btn.style.boxShadow = 'none';
+    btn.style.transform = 'scale(0.98)';
+    btn.disabled = true;
+    btn.style.cursor = 'default';
+    
+    const toast = document.createElement('div');
+    toast.innerText = `✨ "${taskTitle}" logged`;
+    toast.style.position = 'fixed';
+    toast.style.bottom = '24px';
+    toast.style.left = '50%';
+    toast.style.transform = 'translateX(-50%)';
+    toast.style.background = '#1e293b';
+    toast.style.color = 'white';
+    toast.style.padding = '12px 28px';
+    toast.style.borderRadius = '60px';
+    toast.style.fontWeight = '500';
+    toast.style.boxShadow = '0 10px 25px -5px #0f172a';
+    toast.style.zIndex = '999';
+    toast.style.opacity = '0';
+    toast.style.transition = 'opacity 0.2s';
+    document.body.appendChild(toast);
+    setTimeout(() => toast.style.opacity = '1', 10);
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      setTimeout(() => document.body.removeChild(toast), 200);
+    }, 2000);
+  };
+
+  window.saveResult = function() {
+    const msg = document.createElement('div');
+    msg.innerText = '📖 Check‑in saved to your journal';
+    msg.style.position = 'fixed';
+    msg.style.top = '24px';
+    msg.style.right = '24px';
+    msg.style.background = '#4f46e5';
+    msg.style.color = 'white';
+    msg.style.padding = '1rem 1.8rem';
+    msg.style.borderRadius = '60px';
+    msg.style.fontWeight = '500';
+    msg.style.boxShadow = '0 20px 30px -12px #1e1b4b';
+    msg.style.zIndex = '1000';
+    document.body.appendChild(msg);
+    setTimeout(() => msg.remove(), 2400);
+    return false;
+  };
+
+  window.suggestActivity = function() {
+    alert('✨ Try: 5 deep breaths, a sip of water, or opening a window. Small steps count.');
+  };
+</script>
+</body>
+</html>

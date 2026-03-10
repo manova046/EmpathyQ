@@ -1,0 +1,356 @@
+
+<style>
+    body {
+        background: linear-gradient(135deg, #eef2ff, #f8fafc);
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .detail-container {
+        max-width: 1000px;
+        margin: 40px auto;
+        padding: 20px;
+    }
+
+    .card {
+        background: rgba(255, 255, 255, 0.75);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 25px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        margin-bottom: 25px;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 25px;
+        color: #1e293b;
+    }
+
+    .mood-badge {
+        display: inline-block;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 500;
+        background: #e0e7ff;
+        color: #4f46e5;
+        margin-right: 8px;
+    }
+
+    .info-row {
+        margin-bottom: 8px;
+        color: #475569;
+    }
+
+    .progress-bar-wrapper {
+        margin-top: 10px;
+    }
+
+    .progress-bar {
+        height: 10px;
+        background: #e2e8f0;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #22c55e, #16a34a);
+        transition: width 0.6s ease;
+    }
+
+    .task-card {
+        background: white;
+        border-radius: 16px;
+        padding: 18px;
+        margin-bottom: 15px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+        transition: 0.3s ease;
+    }
+
+    .task-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 25px rgba(79, 70, 229, 0.15);
+    }
+
+    .task-title {
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 6px;
+    }
+
+    .task-desc {
+        font-size: 14px;
+        color: #64748b;
+        margin-bottom: 10px;
+    }
+
+    .complete-btn {
+        padding: 6px 14px;
+        border-radius: 10px;
+        background: #4f46e5;
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-size: 13px;
+        transition: 0.3s ease;
+    }
+
+    .complete-btn:hover {
+        background: #4338ca;
+    }
+
+    .completed-label {
+        color: #16a34a;
+        font-weight: 500;
+        font-size: 14px;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 15px;
+        margin-bottom: 15px;
+    }
+
+    .stat-box {
+        background: #f8fafc;
+        padding: 12px;
+        border-radius: 12px;
+        text-align: center;
+    }
+
+    .stat-number {
+        font-size: 18px;
+        font-weight: 600;
+        color: #4f46e5;
+    }
+
+    .stat-label {
+        font-size: 12px;
+        color: #64748b;
+    }
+
+    /* NEW: Dashboard Button Styles */
+    .dashboard-btn-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .btn-dashboard {
+        background: #4f46e5;
+        color: white;
+        padding: 12px 24px;
+        border-radius: 12px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 15px;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2);
+    }
+
+    .btn-dashboard:hover {
+        background: #4338ca;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
+    }
+
+    .btn-dashboard i {
+        font-size: 16px;
+    }
+
+    .btn-dashboard-outline {
+        background: transparent;
+        color: #4f46e5;
+        border: 2px solid #4f46e5;
+        padding: 10px 22px;
+        border-radius: 12px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .btn-dashboard-outline:hover {
+        background: #4f46e5;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .header-dashboard-btn {
+        background: rgba(79, 70, 229, 0.1);
+        color: #4f46e5;
+        padding: 10px 20px;
+        border-radius: 12px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid rgba(79, 70, 229, 0.2);
+    }
+
+    .header-dashboard-btn:hover {
+        background: rgba(79, 70, 229, 0.2);
+        transform: translateX(-5px);
+    }
+
+    .button-group {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .dashboard-btn-container {
+            flex-direction: column;
+            gap: 15px;
+            align-items: flex-start;
+        }
+        
+        .button-group {
+            width: 100%;
+            justify-content: space-between;
+        }
+    }
+
+</style>
+
+<div class="detail-container">
+
+    <!-- NEW: Back to Dashboard Button at Top -->
+    <div class="dashboard-btn-container">
+        <a href="{% url 'accounts:user_dashboard' %}" class="btn-dashboard">
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-tachometer-alt"></i>
+            Back to Dashboard
+        </a>
+        
+        <div class="button-group">
+            <a href="{% url 'user:checkin_history' %}" class="header-dashboard-btn">
+                <i class="fas fa-history"></i>
+                View History
+            </a>
+            <a href="{% url 'user:emotional_checkin' %}" class="header-dashboard-btn">
+                <i class="fas fa-plus-circle"></i>
+                New Check-in
+            </a>
+        </div>
+    </div>
+
+    <h2>Check-in Details</h2>
+
+    <!-- Check-in Info Card -->
+    <div class="card">
+        <div class="info-row">
+            <strong>Date:</strong> {{ checkin.created_at|date:"M d, Y - h:i A" }}
+        </div>
+
+        <div class="info-row">
+            <strong>Mood:</strong>
+            <span class="mood-badge">{{ checkin.primary_mood|title }}</span>
+            {% if checkin.secondary_mood %}
+                <span class="mood-badge">{{ checkin.secondary_mood|title }}</span>
+            {% endif %}
+        </div>
+
+        <div class="info-row">
+            <strong>Intensity:</strong> {{ checkin.intensity_score }}/10
+        </div>
+    </div>
+
+
+    <!-- Task Progress Card -->
+    <div class="card">
+        <h3>Task Progress</h3>
+
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-number">{{ total_tasks }}</div>
+                <div class="stat-label">Total</div>
+            </div>
+
+            <div class="stat-box">
+                <div class="stat-number">{{ completed_tasks }}</div>
+                <div class="stat-label">Completed</div>
+            </div>
+
+            <div class="stat-box">
+                <div class="stat-number">{{ pending_tasks }}</div>
+                <div class="stat-label">Pending</div>
+            </div>
+
+            <div class="stat-box">
+                <div class="stat-number">{{ completion_rate }}%</div>
+                <div class="stat-label">Completion</div>
+            </div>
+        </div>
+
+        <div class="progress-bar-wrapper">
+            <div class="progress-bar">
+                <div class="progress-fill" 
+                     style="width: {{ completion_rate }}%;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Assigned Tasks -->
+    <div class="card">
+        <h3>Assigned Tasks</h3>
+
+        {% for assignment in assignments %}
+            <div class="task-card">
+                <div class="task-title">
+                    {{ assignment.task.title }}
+                </div>
+
+                <div class="task-desc">
+                    {{ assignment.task.description }}
+                </div>
+
+                {% if assignment.completed_at %}
+                    <div class="completed-label">
+                        ✔ Completed on {{ assignment.completed_at|date:"M d, Y" }}
+                    </div>
+                {% else %}
+                    <a href="{% url 'user:complete_task' assignment.id %}">
+                        <button class="complete-btn">
+                            Complete Task
+                        </button>
+                    </a>
+                {% endif %}
+            </div>
+        {% empty %}
+            <p>No tasks assigned for this check-in.</p>
+        {% endfor %}
+
+    </div>
+
+    <!-- NEW: Bottom Dashboard Button -->
+    <div style="text-align: center; margin-top: 30px;">
+        <a href="{% url 'accounts:user_dashboard' %}" class="btn-dashboard-outline">
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-tachometer-alt"></i>
+            Back to Dashboard
+        </a>
+    </div>
+
+</div>
+
+<!-- Font Awesome for Icons (Add this if not already in base template) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">

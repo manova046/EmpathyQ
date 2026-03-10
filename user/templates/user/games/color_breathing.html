@@ -1,0 +1,234 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Breathing - EmpathyQ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f5f7ff 0%, #f0f2ff 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .breathing-container {
+            max-width: 500px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .color-circle {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            margin: 30px auto;
+            transition: all 0.3s ease;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .breath-text {
+            font-size: 32px;
+            font-weight: 700;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .color-palette {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .color-option {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .color-option:hover {
+            transform: scale(1.1);
+        }
+
+        .color-option.selected {
+            border-color: #333;
+            transform: scale(1.1);
+        }
+
+        .breath-counter {
+            font-size: 48px;
+            font-weight: 700;
+            color: #6c63ff;
+            margin: 20px 0;
+        }
+
+        .instruction {
+            font-size: 18px;
+            color: #555;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(108, 99, 255, 0.1);
+            border-radius: 15px;
+        }
+
+        .back-btn {
+            background: linear-gradient(135deg, #6c63ff, #5d5fef);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2><i class="fas fa-heart text-primary"></i> Color Breathing</h2>
+            <a href="javascript:history.back()" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <div class="card p-4">
+                    <div class="breathing-container">
+                        <h4 class="mb-3">Choose Your Calming Color</h4>
+                        
+                        <div class="color-palette">
+                            <div class="color-option selected" style="background: #6c63ff;" onclick="selectColor('#6c63ff', 'Purple')"></div>
+                            <div class="color-option" style="background: #4caf50;" onclick="selectColor('#4caf50', 'Green')"></div>
+                            <div class="color-option" style="background: #2196f3;" onclick="selectColor('#2196f3', 'Blue')"></div>
+                            <div class="color-option" style="background: #ff9800;" onclick="selectColor('#ff9800', 'Orange')"></div>
+                            <div class="color-option" style="background: #f44336;" onclick="selectColor('#f44336', 'Red')"></div>
+                            <div class="color-option" style="background: #9c27b0;" onclick="selectColor('#9c27b0', 'Violet')"></div>
+                        </div>
+
+                        <div id="colorCircle" class="color-circle" style="background: #6c63ff;" onclick="startBreathing()">
+                            <div id="breathText" class="breath-text">Breathe In</div>
+                        </div>
+
+                        <div id="breathCounter" class="breath-counter">0</div>
+                        
+                        <div id="instruction" class="instruction">
+                            Click the circle to start. Breathe in as it expands, out as it contracts.
+                        </div>
+
+                        <div class="mt-4">
+                            <button class="btn btn-primary" onclick="resetBreathing()">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let breathingInterval;
+        let breathCount = 0;
+        let isBreathingIn = true;
+        let isActive = false;
+        let currentColor = '#6c63ff';
+        let currentColorName = 'Purple';
+
+        function selectColor(color, name) {
+            currentColor = color;
+            currentColorName = name;
+            document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('selected'));
+            event.target.classList.add('selected');
+            document.getElementById('colorCircle').style.background = color;
+        }
+
+        function startBreathing() {
+            if (isActive) {
+                stopBreathing();
+                return;
+            }
+            
+            isActive = true;
+            const circle = document.getElementById('colorCircle');
+            const breathText = document.getElementById('breathText');
+            
+            breathingInterval = setInterval(() => {
+                if (isBreathingIn) {
+                    circle.style.transform = 'scale(1.3)';
+                    breathText.textContent = 'Breathe In...';
+                    breathText.style.color = 'white';
+                } else {
+                    circle.style.transform = 'scale(1)';
+                    breathText.textContent = 'Breathe Out...';
+                }
+                
+                isBreathingIn = !isBreathingIn;
+                
+                if (!isBreathingIn) {
+                    breathCount++;
+                    document.getElementById('breathCounter').textContent = breathCount;
+                    
+                    // Save progress after 5 breaths
+                    if (breathCount % 5 === 0) {
+                        saveBreathingSession(breathCount);
+                    }
+                }
+            }, 4000); // 4 seconds per breath
+        }
+
+        function stopBreathing() {
+            clearInterval(breathingInterval);
+            isActive = false;
+            document.getElementById('breathText').textContent = 'Paused';
+        }
+
+        function resetBreathing() {
+            stopBreathing();
+            breathCount = 0;
+            document.getElementById('breathCounter').textContent = '0';
+            document.getElementById('colorCircle').style.transform = 'scale(1)';
+            document.getElementById('breathText').textContent = 'Breathe In';
+            document.getElementById('instruction').textContent = 'Click the circle to start. Breathe in as it expands, out as it contracts.';
+        }
+
+        function saveBreathingSession(breaths) {
+            fetch("{% url 'user:save_game_score' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({
+                    game: 'BREATHING',
+                    score: breaths,
+                    time: breaths * 4,
+                    completed: true,
+                    color: currentColorName
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('instruction').textContent = 
+                        `Great job! You've completed ${breaths} mindful breaths with ${currentColorName}.`;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>

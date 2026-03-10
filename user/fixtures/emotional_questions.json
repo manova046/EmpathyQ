@@ -1,0 +1,107 @@
+[
+  {
+    "model": "user.emotionalquestion",
+    "pk": 1,
+    "fields": {
+      "question_text": "What type of movie would you prefer to watch right now?"
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 2,
+    "fields": {
+      "question_text": "How would you prefer to spend your free time?"
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 3,
+    "fields": {
+      "question_text": "What kind of music would you like to listen to?"
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 4,
+    "fields": {
+      "question_text": "How would you start your morning?"
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 5,
+    "fields": {
+      "question_text": "What would you prefer to read?"
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 6,
+    "fields": {
+      "question_text": "What is your current eating pattern?"
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 7,
+    "fields": {
+      "question_text": "What is your current physical activity level?"
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 8,
+    "fields": {
+      "question_text": "How are you managing your thoughts right now?"
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 9,
+    "fields": {
+      "question_text": "What type of TV show would you watch?"
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 10,
+    "fields": {
+      "question_text": "What kind of environment would you prefer to be in?"
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 11,
+    "fields": {
+      "question_text": "How are you approaching your tasks?"
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 12,
+    "fields": {
+      "question_text": "What are you wearing today?"
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 13,
+    "fields": {
+      "question_text": "How are you interacting with others?"
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 14,
+    "fields": {
+      "question_text": "How are you spending your leisure time?"
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 15,
+    "fields": {
+      "question_text": "How is your sleep pattern?"
+    }
+  }
+]

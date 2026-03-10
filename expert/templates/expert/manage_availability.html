@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Availability - EmpathyQ (Expert Consultation)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header Styles */
+        .header {
+            background: white;
+            border-radius: 20px;
+            padding: 25px 35px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .header h1 {
+            font-size: 32px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header h1 i {
+            color: #6c63ff;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        /* Button Styles */
+        .btn {
+            padding: 12px 25px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #6c63ff;
+            border: 2px solid #6c63ff;
+        }
+
+        .btn-secondary:hover {
+            background: #6c63ff;
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #f44336 0%, #da190b 100%);
+            color: white;
+        }
+
+        /* Card Styles */
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f2ff;
+        }
+
+        .card-header h2 {
+            font-size: 22px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-header h2 i {
+            color: #6c63ff;
+        }
+
+        /* Grid Layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: #6c63ff;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
+        }
+
+        /* Consultation Slot Display */
+        .consultation-screen {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .slots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .slot-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            border: 3px solid transparent;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            animation: popIn 0.3s ease;
+        }
+
+        @keyframes popIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .slot-card.available {
+            border-color: #4CAF50;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+        }
+
+        .slot-card.booked {
+            border-color: #f44336;
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
+        .slot-card.blocked {
+            border-color: #9e9e9e;
+            background: linear-gradient(135deg, #f5f5f5 0%, #eeeeee 100%);
+            cursor: not-allowed;
+        }
+
+        .slot-card.selected {
+            border-color: #6c63ff;
+            background: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 100%);
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(108, 99, 255, 0.3);
+        }
+
+        .slot-time {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .slot-date {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        .slot-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .slot-status.available {
+            color: #4CAF50;
+        }
+
+        .slot-status.booked {
+            color: #f44336;
+        }
+
+        .slot-status.blocked {
+            color: #9e9e9e;
+        }
+
+        .booking-info {
+            margin-top: 10px;
+            padding: 8px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 8px;
+            font-size: 12px;
+        }
+
+        /* Working Hours Display */
+        .working-hours-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .working-hour-item {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 5px solid #6c63ff;
+        }
+
+        .working-hour-day {
+            font-weight: 600;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .working-hour-time {
+            color: #6c63ff;
+            font-weight: 500;
+        }
+
+        .delete-btn {
+            background: none;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            transition: color 0.3s;
+            font-size: 16px;
+        }
+
+        .delete-btn:hover {
+            color: #f44336;
+        }
+
+        /* Time Off Items */
+        .timeoff-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .timeoff-item {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 15px;
+            border-left: 5px solid;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .timeoff-item.pending {
+            border-left-color: #f39c12;
+        }
+
+        .timeoff-item.approved {
+            border-left-color: #4CAF50;
+        }
+
+        .timeoff-dates {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .timeoff-reason {
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .timeoff-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-approved {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        /* Messages */
+        .alert {
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        /* Stats Cards */
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .number {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        /* Legend */
+        .legend {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 5px;
+        }
+
+        .legend-color.available {
+            background: #4CAF50;
+        }
+
+        .legend-color.booked {
+            background: #f44336;
+        }
+
+        .legend-color.blocked {
+            background: #9e9e9e;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .grid-3, .grid-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-3, .grid-4 {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .header-actions {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>
+                <i class="fas fa-calendar-check"></i>
+                Manage Consultation Slots
+            </h1>
+            <div class="header-actions">
+                <a href="{% url 'expert:today_sessions' %}" class="btn btn-primary">
+                    <i class="fas fa-calendar-day"></i> Today's Sessions
+                </a>
+                <a href="{% url 'accounts:expert_dashboard' %}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Dashboard
+                </a>
+            </div>
+        </div>
+
+        <!-- Messages -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{% if message.tags == 'success' %}success{% elif message.tags == 'error' %}error{% else %}info{% endif %}">
+                    <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-circle{% else %}info-circle{% endif %}"></i>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- Stats Overview -->
+        <div class="grid-4" style="margin-bottom: 25px;">
+            <div class="stat-card">
+                <h3>Total Consultation Slots</h3>
+                <div class="number">{{ upcoming_slots.count|add:booked_slots.count }}</div>
+            </div>
+            <div class="stat-card" style="background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);">
+                <h3>Available Slots</h3>
+                <div class="number">{{ upcoming_slots.count }}</div>
+            </div>
+            <div class="stat-card" style="background: linear-gradient(135deg, #f44336 0%, #da190b 100%);">
+                <h3>Booked Sessions</h3>
+                <div class="number">{{ booked_slots.count }}</div>
+            </div>
+            <div class="stat-card" style="background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);">
+                <h3>Total Earnings</h3>
+                <div class="number">${{ settings.total_earnings|default:"0" }}</div>
+            </div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="grid-2">
+            <!-- Left Column - Working Hours Setup -->
+            <div>
+                <!-- Set Working Hours Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>
+                            <i class="fas fa-clock"></i>
+                            Set Your Working Hours
+                        </h2>
+                    </div>
+                    
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="add_availability">
+                        
+                        <div class="form-group">
+                            <label>Day of Week</label>
+                            <select name="day_of_week" class="form-control" required>
+                                <option value="">Select day...</option>
+                                {% for day_value, day_name in days_of_week %}
+                                    <option value="{{ day_value }}">{{ day_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="grid-2" style="gap: 10px;">
+                            <div class="form-group">
+                                <label>Start Time</label>
+                                <input type="time" name="start_time" class="form-control" required value="09:00">
+                            </div>
+                            <div class="form-group">
+                                <label>End Time</label>
+                                <input type="time" name="end_time" class="form-control" required value="17:00">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-success" style="width: 100%;">
+                            <i class="fas fa-plus-circle"></i> Add Working Hours
+                        </button>
+                    </form>
+
+                    <!-- Current Working Hours Display -->
+                    {% if availabilities %}
+                        <div style="margin-top: 30px;">
+                            <h3 style="margin-bottom: 15px;">Your Current Schedule</h3>
+                            <div class="working-hours-list">
+                                {% for slot in availabilities %}
+                                    <div class="working-hour-item">
+                                        <div>
+                                            <span class="working-hour-day">{{ slot.get_day_of_week_display }}</span>
+                                            <span class="working-hour-time">{{ slot.start_time|time:"g:i A" }} - {{ slot.end_time|time:"g:i A" }}</span>
+                                        </div>
+                                        <form method="POST" style="display: inline;">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="action" value="delete_availability">
+                                            <input type="hidden" name="slot_id" value="{{ slot.id }}">
+                                            <button type="submit" class="delete-btn" onclick="return confirm('Remove these working hours?')">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Generate Consultation Slots Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>
+                            <i class="fas fa-calendar-plus"></i>
+                            Generate Consultation Slots
+                        </h2>
+                    </div>
+                    
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="generate_slots">
+                        
+                        <div class="grid-2" style="gap: 10px;">
+                            <div class="form-group">
+                                <label>Start Date</label>
+                                <input type="date" name="start_date" class="form-control" value="{{ today|date:'Y-m-d' }}">
+                            </div>
+                            <div class="form-group">
+                                <label>End Date</label>
+                                <input type="date" name="end_date" class="form-control" value="{{ today|date:'Y-m-d' }}">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">
+                            <i class="fas fa-magic"></i> Generate Consultation Slots
+                        </button>
+                    </form>
+
+                    <div class="info-box" style="margin-top: 15px; padding: 10px; background: #e3f2fd; border-radius: 8px;">
+                        <i class="fas fa-info-circle"></i>
+                        <small>This creates individual bookable consultation slots based on your working hours.</small>
+                    </div>
+                </div>
+
+                <!-- Consultation Settings Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>
+                            <i class="fas fa-cog"></i>
+                            Consultation Settings
+                        </h2>
+                    </div>
+                    
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="update_settings">
+                        
+                        <div class="form-group">
+                            <label>Consultation Fee ($)</label>
+                            <input type="number" name="consultation_fee" class="form-control" 
+                                   value="{{ settings.consultation_fee }}" min="0" step="5">
+                        </div>
+
+                        <div class="grid-2" style="gap: 10px;">
+                            <div class="form-group">
+                                <label>Session Duration (min)</label>
+                                <input type="number" name="session_duration" class="form-control" 
+                                       value="{{ settings.session_duration }}" min="30" step="15">
+                            </div>
+                            <div class="form-group">
+                                <label>Buffer Time (min)</label>
+                                <input type="number" name="buffer_time" class="form-control" 
+                                       value="{{ settings.buffer_time }}" min="0" step="5">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Advance Booking Days</label>
+                            <input type="number" name="advance_booking_days" class="form-control" 
+                                   value="{{ settings.advance_booking_days }}" min="1" max="90">
+                        </div>
+
+                        <div style="display: flex; gap: 15px; flex-wrap: wrap; margin: 15px 0;">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="video_enabled" {% if settings.video_enabled %}checked{% endif %}>
+                                <i class="fas fa-video"></i> Video Sessions
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="instant_booking" {% if settings.instant_booking %}checked{% endif %}>
+                                <i class="fas fa-bolt"></i> Instant Booking
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-success" style="width: 100%;">
+                            <i class="fas fa-save"></i> Save Settings
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Right Column - Slots Display -->
+            <div>
+                <!-- Available Consultation Slots -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>
+                            <i class="fas fa-clock"></i>
+                            Available Consultation Slots
+                        </h2>
+                        <span class="badge">{{ upcoming_slots.count }} Available</span>
+                    </div>
+
+                    <!-- Schedule Header -->
+                    <div class="consultation-screen">
+                        <i class="fas fa-calendar-alt"></i> UPCOMING CONSULTATIONS <i class="fas fa-calendar-alt"></i>
+                    </div>
+
+                    <!-- Legend -->
+                    <div class="legend">
+                        <div class="legend-item">
+                            <div class="legend-color available"></div>
+                            <span>Available for Booking</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color booked"></div>
+                            <span>Already Booked</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color blocked"></div>
+                            <span>Unavailable</span>
+                        </div>
+                    </div>
+
+                    {% if upcoming_slots %}
+                        <div class="slots-grid">
+                            {% for slot in upcoming_slots %}
+                                <div class="slot-card available" onclick="selectSlot({{ slot.id }})">
+                                    <div class="slot-time">{{ slot.start_time|time:"g:i A" }}</div>
+                                    <div class="slot-date">{{ slot.date|date:"D, M d" }}</div>
+                                    <div class="slot-status available">
+                                        <i class="fas fa-circle"></i> Available
+                                    </div>
+                                    <div style="margin-top: 8px; font-size: 12px; color: #666;">
+                                        {{ slot.duration_minutes }} min session
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p style="text-align: center; color: #999; padding: 40px;">
+                            <i class="fas fa-calendar-times" style="font-size: 48px; margin-bottom: 15px; display: block;"></i>
+                            No available consultation slots. Generate slots from your working hours.
+                        </p>
+                    {% endif %}
+                </div>
+
+                <!-- Booked Sessions -->
+                <div class="card" style="margin-top: 25px;">
+                    <div class="card-header">
+                        <h2>
+                            <i class="fas fa-calendar-check"></i>
+                            Confirmed Sessions
+                        </h2>
+                    </div>
+
+                    {% if booked_slots %}
+                        <div class="slots-grid">
+                            {% for slot in booked_slots %}
+                                <div class="slot-card booked">
+                                    <div class="slot-time">{{ slot.start_time|time:"g:i A" }}</div>
+                                    <div class="slot-date">{{ slot.date|date:"D, M d" }}</div>
+                                    <div class="slot-status booked">
+                                        <i class="fas fa-check-circle"></i> Confirmed
+                                    </div>
+                                    {% if slot.booking %}
+                                        <div class="booking-info">
+                                            <i class="fas fa-user"></i> Client: {{ slot.booking.seeker.username }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p style="text-align: center; color: #999; padding: 30px;">
+                            <i class="fas fa-calendar" style="font-size: 48px; margin-bottom: 15px; display: block;"></i>
+                            No confirmed sessions yet. Clients will book your available slots.
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Time Off Section -->
+        <div class="card">
+            <div class="card-header">
+                <h2>
+                    <i class="fas fa-calendar-times"></i>
+                    Time Off / Unavailable Periods
+                </h2>
+            </div>
+
+            <div class="grid-2">
+                <!-- Request Time Off -->
+                <div>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="add_time_off">
+                        
+                        <div class="grid-2" style="gap: 10px; margin-bottom: 15px;">
+                            <div class="form-group">
+                                <label>Start Date</label>
+                                <input type="date" name="start_date" class="form-control" required 
+                                       min="{{ today|date:'Y-m-d' }}">
+                            </div>
+                            <div class="form-group">
+                                <label>End Date</label>
+                                <input type="date" name="end_date" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Reason (Optional)</label>
+                            <input type="text" name="reason" class="form-control" placeholder="e.g., Vacation, Conference, Personal time">
+                        </div>
+
+                        <button type="submit" class="btn btn-warning">
+                            <i class="fas fa-pause-circle"></i> Request Time Off
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Existing Time Off Requests -->
+                <div>
+                    <h3 style="margin-bottom: 15px;">Your Time Off Requests</h3>
+                    {% if time_offs %}
+                        <div class="timeoff-list">
+                            {% for time_off in time_offs %}
+                                <div class="timeoff-item {% if time_off.status == 'approved' %}approved{% else %}pending{% endif %}">
+                                    <div>
+                                        <div class="timeoff-dates">
+                                            {{ time_off.start_date|date:"M d" }} - {{ time_off.end_date|date:"M d, Y" }}
+                                        </div>
+                                        {% if time_off.reason %}
+                                            <div class="timeoff-reason">
+                                                <i class="fas fa-comment"></i> {{ time_off.reason }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div>
+                                        <span class="timeoff-status status-{{ time_off.status }}">
+                                            {{ time_off.status|title }}
+                                        </span>
+                                        {% if time_off.status == 'pending' %}
+                                            <form method="POST" style="display: inline; margin-left: 10px;">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="action" value="cancel_time_off">
+                                                <input type="hidden" name="timeoff_id" value="{{ time_off.id }}">
+                                                <button type="submit" class="delete-btn" onclick="return confirm('Cancel this time off request?')">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </form>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p style="color: #999; text-align: center; padding: 20px;">
+                            <i class="fas fa-calendar" style="font-size: 24px; margin-bottom: 10px; display: block;"></i>
+                            No time off requests. You can request time off when needed.
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden Form for Slot Actions -->
+    <form id="slot-action-form" method="POST" style="display: none;">
+        {% csrf_token %}
+        <input type="hidden" name="action" id="slot-action">
+        <input type="hidden" name="slot_id" id="slot-id">
+    </form>
+
+    <script>
+        // Auto-hide messages
+        setTimeout(function() {
+            document.querySelectorAll('.alert').forEach(function(alert) {
+                alert.style.transition = 'opacity 0.5s';
+                alert.style.opacity = '0';
+                setTimeout(() => alert.remove(), 500);
+            });
+        }, 5000);
+
+        // Slot selection for blocking/unblocking
+        function selectSlot(slotId) {
+            var action = prompt('Enter action (block/unblock):', 'block');
+            if (action && (action === 'block' || action === 'unblock')) {
+                document.getElementById('slot-action').value = action + '_slot';
+                document.getElementById('slot-id').value = slotId;
+                document.getElementById('slot-action-form').submit();
+            }
+        }
+
+        // Animation for new slots
+        document.querySelectorAll('.slot-card').forEach((card, index) => {
+            card.style.animationDelay = `${index * 0.05}s`;
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,815 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOS Game - EmpathyQ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-50: #eef2ff;
+            --primary-100: #e0e7ff;
+            --primary-200: #c7d2fe;
+            --primary-300: #a5b4fc;
+            --primary-400: #818cf8;
+            --primary-500: #6366f1;
+            --primary-600: #4f46e5;
+            --primary-700: #4338ca;
+            --primary-800: #3730a3;
+            --primary-900: #312e81;
+            
+            --success-500: #22c55e;
+            --success-600: #16a34a;
+            --danger-500: #ef4444;
+            --danger-600: #dc2626;
+            --warning-500: #f59e0b;
+            
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+            --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+            
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-2xl: 1.5rem;
+            --radius-full: 9999px;
+        }
+
+        body {
+            background: linear-gradient(135deg, #2b5876, #4e4376);
+            min-height: 100vh;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        .game-wrapper {
+            padding: 20px 0 40px;
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .game-header h2 {
+            color: white;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .game-header h2 i {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 50%;
+            font-size: 2rem;
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            padding: 12px 28px;
+            border-radius: var(--radius-full);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            background: white;
+            color: #2b5876;
+            transform: translateY(-2px);
+            border-color: white;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .game-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius-2xl);
+            padding: 35px;
+            box-shadow: var(--shadow-2xl);
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+
+        .stats-panel {
+            background: linear-gradient(135deg, #2b5876, #4e4376);
+            border-radius: var(--radius-xl);
+            padding: 25px;
+            color: white;
+            margin-bottom: 30px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: var(--radius-lg);
+            backdrop-filter: blur(5px);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .turn-indicator {
+            text-align: center;
+            font-size: 1.5rem;
+            margin: 20px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa, #ffffff);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--gray-200);
+        }
+
+        .player-turn {
+            color: #2b5876;
+            font-weight: 700;
+            animation: pulse 2s infinite;
+        }
+
+        .computer-turn {
+            color: #4e4376;
+            font-weight: 700;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 30px 0;
+            padding: 20px;
+            background: var(--gray-100);
+            border-radius: var(--radius-xl);
+        }
+
+        .cell {
+            aspect-ratio: 1;
+            background: white;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .cell:hover:not(.disabled) {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-xl);
+            border-color: #2b5876;
+        }
+
+        .cell.player {
+            color: #2b5876;
+            background: linear-gradient(135deg, #e8f0fe, #ffffff);
+        }
+
+        .cell.computer {
+            color: #4e4376;
+            background: linear-gradient(135deg, #f0e6ff, #ffffff);
+        }
+
+        .cell.win {
+            background: linear-gradient(135deg, #84fab0, #8fd3f4);
+            color: white;
+            animation: winPulse 1s ease;
+            border-color: white;
+        }
+
+        @keyframes winPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .cell.disabled {
+            cursor: not-allowed;
+            opacity: 0.9;
+        }
+
+        .message-box {
+            text-align: center;
+            font-size: 1.3rem;
+            padding: 20px;
+            border-radius: var(--radius-xl);
+            margin: 20px 0;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .message-box.win {
+            background: linear-gradient(135deg, #84fab0, #8fd3f4);
+            color: white;
+        }
+
+        .message-box.lose {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+        }
+
+        .message-box.draw {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: white;
+        }
+
+        .control-btn {
+            background: linear-gradient(135deg, #2b5876, #4e4376);
+            color: white;
+            border: none;
+            padding: 18px 30px;
+            border-radius: var(--radius-full);
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .control-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-2xl);
+        }
+
+        .control-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .personal-stats {
+            background: white;
+            border-radius: var(--radius-xl);
+            padding: 25px;
+            margin-top: 25px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--gray-200);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 15px;
+            background: var(--gray-50);
+            border-radius: var(--radius-lg);
+        }
+
+        .stat-label-sm {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .stat-value-lg {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #2b5876, #4e4376);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .difficulty-selector {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .difficulty-btn {
+            padding: 8px 20px;
+            border: 2px solid #2b5876;
+            background: transparent;
+            color: #2b5876;
+            border-radius: var(--radius-full);
+            font-weight: 600;
+            transition: all 0.3s;
+            cursor: pointer;
+            flex: 1;
+            max-width: 120px;
+        }
+
+        .difficulty-btn.active {
+            background: linear-gradient(135deg, #2b5876, #4e4376);
+            color: white;
+            border-color: transparent;
+        }
+
+        .difficulty-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(43, 88, 118, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .game-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .game-header h2 {
+                font-size: 2rem;
+            }
+            
+            .stats-panel {
+                grid-template-columns: 1fr;
+            }
+            
+            .board {
+                gap: 10px;
+            }
+            
+            .cell {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-wrapper">
+        <div class="container">
+            <!-- Header -->
+            <div class="game-header">
+                <h2>
+                    <i class="fas fa-gamepad"></i>
+                    SOS Game vs Computer
+                </h2>
+                <a href="{% url 'accounts:user_dashboard' %}" class="back-btn">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back to Dashboard</span>
+                </a>
+            </div>
+
+            <!-- Game Container -->
+            <div class="game-container">
+                <!-- Difficulty Selector -->
+                <div class="difficulty-selector">
+                    <button class="difficulty-btn active" onclick="setDifficulty('easy')" id="easyBtn">Easy</button>
+                    <button class="difficulty-btn" onclick="setDifficulty('medium')" id="mediumBtn">Medium</button>
+                    <button class="difficulty-btn" onclick="setDifficulty('hard')" id="hardBtn">Hard</button>
+                </div>
+
+                <!-- Stats -->
+                <div class="stats-panel">
+                    <div class="stat-box">
+                        <div class="stat-value" id="wins">0</div>
+                        <div class="stat-label">Wins</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="losses">0</div>
+                        <div class="stat-label">Losses</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="draws">0</div>
+                        <div class="stat-label">Draws</div>
+                    </div>
+                </div>
+
+                <!-- Turn Indicator -->
+                <div class="turn-indicator" id="turnIndicator">
+                    Your turn! <span class="player-turn">(You are S)</span>
+                </div>
+
+                <!-- Game Board -->
+                <div class="board" id="board">
+                    <!-- Cells will be created by JavaScript -->
+                </div>
+
+                <!-- Message Box -->
+                <div id="messageBox" class="message-box" style="display: none;"></div>
+
+                <!-- Reset Button -->
+                <button class="control-btn" onclick="resetGame()" id="resetBtn">
+                    <i class="fas fa-redo-alt"></i>
+                    <span>New Game</span>
+                </button>
+
+                <!-- Personal Stats -->
+                <div class="personal-stats">
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-label-sm">Highest Score (Wins)</div>
+                            <div class="stat-value-lg" id="highestScore">0</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label-sm">Games Played</div>
+                            <div class="stat-value-lg" id="gamesPlayed">0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get scores from Django
+        const userScores = {{ scores|safe }};
+        let highestScore = userScores.highest_score || 0;
+        let gamesPlayed = userScores.games_played || 0;
+
+        // Game variables
+        let board = ['', '', '', '', '', '', '', '', ''];
+        let currentPlayer = 'player'; // 'player' or 'computer'
+        let gameActive = true;
+        let wins = 0;
+        let losses = 0;
+        let draws = 0;
+        let gameCompleted = false;
+        let difficulty = 'easy';
+        let playerSymbol = 'S';
+        let computerSymbol = 'O';
+
+        // Winning combinations
+        const winningConditions = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+            [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+            [0, 4, 8], [2, 4, 6]             // Diagonals
+        ];
+
+        // Initialize display
+        document.getElementById('highestScore').textContent = highestScore;
+        document.getElementById('gamesPlayed').textContent = gamesPlayed;
+
+        // Set difficulty
+        function setDifficulty(level) {
+            difficulty = level;
+            document.querySelectorAll('.difficulty-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(level + 'Btn').classList.add('active');
+            resetGame();
+        }
+
+        // Initialize board
+        function renderBoard() {
+            const boardElement = document.getElementById('board');
+            boardElement.innerHTML = '';
+            
+            for (let i = 0; i < 9; i++) {
+                const cell = document.createElement('div');
+                let cellClass = 'cell';
+                if (board[i] === 'S') cellClass += ' player';
+                else if (board[i] === 'O') cellClass += ' computer';
+                if (!gameActive || board[i] !== '' || currentPlayer !== 'player') cellClass += ' disabled';
+                
+                cell.className = cellClass;
+                cell.textContent = board[i];
+                cell.onclick = () => handleCellClick(i);
+                boardElement.appendChild(cell);
+            }
+        }
+
+        // Handle cell click (player move)
+        function handleCellClick(index) {
+            if (!gameActive || board[index] !== '' || currentPlayer !== 'player' || gameCompleted) return;
+
+            // Make player move
+            board[index] = playerSymbol;
+            
+            // Check for win after player move
+            const winResult = checkWin();
+            
+            if (winResult) {
+                // Player wins
+                gameActive = false;
+                gameCompleted = true;
+                wins++;
+                updateStats();
+                
+                // Show win message
+                const messageBox = document.getElementById('messageBox');
+                messageBox.style.display = 'block';
+                messageBox.className = 'message-box win';
+                messageBox.textContent = '🎉 You win! Great job!';
+                
+                // Highlight winning cells
+                highlightWinningCells(winResult);
+                
+                // Save score
+                saveGameScore();
+                
+            } else if (isBoardFull()) {
+                // Draw
+                gameActive = false;
+                gameCompleted = true;
+                draws++;
+                updateStats();
+                
+                const messageBox = document.getElementById('messageBox');
+                messageBox.style.display = 'block';
+                messageBox.className = 'message-box draw';
+                messageBox.textContent = "It's a draw! Good game!";
+                
+            } else {
+                // Switch to computer turn
+                currentPlayer = 'computer';
+                updateTurnIndicator();
+                renderBoard();
+                
+                // Computer move after delay
+                setTimeout(() => computerMove(), 500);
+            }
+            
+            renderBoard();
+        }
+
+        // Computer move
+        function computerMove() {
+            if (!gameActive || currentPlayer !== 'computer' || gameCompleted) return;
+
+            let moveIndex;
+            
+            // Different AI based on difficulty
+            switch(difficulty) {
+                case 'easy':
+                    moveIndex = getEasyMove();
+                    break;
+                case 'medium':
+                    moveIndex = getMediumMove();
+                    break;
+                case 'hard':
+                    moveIndex = getHardMove();
+                    break;
+                default:
+                    moveIndex = getEasyMove();
+            }
+            
+            if (moveIndex === -1) return; // No moves available
+            
+            // Make computer move
+            board[moveIndex] = computerSymbol;
+            
+            // Check for win after computer move
+            const winResult = checkWin();
+            
+            if (winResult) {
+                // Computer wins
+                gameActive = false;
+                gameCompleted = true;
+                losses++;
+                updateStats();
+                
+                // Show lose message
+                const messageBox = document.getElementById('messageBox');
+                messageBox.style.display = 'block';
+                messageBox.className = 'message-box lose';
+                messageBox.textContent = '😢 Computer wins! Try again!';
+                
+                // Highlight winning cells
+                highlightWinningCells(winResult);
+                
+            } else if (isBoardFull()) {
+                // Draw
+                gameActive = false;
+                gameCompleted = true;
+                draws++;
+                updateStats();
+                
+                const messageBox = document.getElementById('messageBox');
+                messageBox.style.display = 'block';
+                messageBox.className = 'message-box draw';
+                messageBox.textContent = "It's a draw! Good game!";
+                
+            } else {
+                // Switch back to player
+                currentPlayer = 'player';
+                updateTurnIndicator();
+            }
+            
+            renderBoard();
+        }
+
+        // Easy AI - random moves
+        function getEasyMove() {
+            const emptyCells = [];
+            for (let i = 0; i < 9; i++) {
+                if (board[i] === '') emptyCells.push(i);
+            }
+            if (emptyCells.length === 0) return -1;
+            return emptyCells[Math.floor(Math.random() * emptyCells.length)];
+        }
+
+        // Medium AI - tries to win, blocks player wins, otherwise random
+        function getMediumMove() {
+            // Check if computer can win
+            for (let condition of winningConditions) {
+                const [a, b, c] = condition;
+                if (board[a] === computerSymbol && board[b] === computerSymbol && board[c] === '') return c;
+                if (board[a] === computerSymbol && board[c] === computerSymbol && board[b] === '') return b;
+                if (board[b] === computerSymbol && board[c] === computerSymbol && board[a] === '') return a;
+            }
+            
+            // Block player win
+            for (let condition of winningConditions) {
+                const [a, b, c] = condition;
+                if (board[a] === playerSymbol && board[b] === playerSymbol && board[c] === '') return c;
+                if (board[a] === playerSymbol && board[c] === playerSymbol && board[b] === '') return b;
+                if (board[b] === playerSymbol && board[c] === playerSymbol && board[a] === '') return a;
+            }
+            
+            // Take center if available
+            if (board[4] === '') return 4;
+            
+            // Random move
+            return getEasyMove();
+        }
+
+        // Hard AI - tries to win, blocks player wins, takes corners, otherwise random
+        function getHardMove() {
+            // Check if computer can win
+            for (let condition of winningConditions) {
+                const [a, b, c] = condition;
+                if (board[a] === computerSymbol && board[b] === computerSymbol && board[c] === '') return c;
+                if (board[a] === computerSymbol && board[c] === computerSymbol && board[b] === '') return b;
+                if (board[b] === computerSymbol && board[c] === computerSymbol && board[a] === '') return a;
+            }
+            
+            // Block player win
+            for (let condition of winningConditions) {
+                const [a, b, c] = condition;
+                if (board[a] === playerSymbol && board[b] === playerSymbol && board[c] === '') return c;
+                if (board[a] === playerSymbol && board[c] === playerSymbol && board[b] === '') return b;
+                if (board[b] === playerSymbol && board[c] === playerSymbol && board[a] === '') return a;
+            }
+            
+            // Take center if available
+            if (board[4] === '') return 4;
+            
+            // Take corners
+            const corners = [0, 2, 6, 8];
+            for (let corner of corners) {
+                if (board[corner] === '') return corner;
+            }
+            
+            // Random move
+            return getEasyMove();
+        }
+
+        // Check for win
+        function checkWin() {
+            for (let condition of winningConditions) {
+                const [a, b, c] = condition;
+                if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                    return condition;
+                }
+            }
+            return null;
+        }
+
+        // Highlight winning cells
+        function highlightWinningCells(winCondition) {
+            setTimeout(() => {
+                const cells = document.querySelectorAll('.cell');
+                winCondition.forEach(index => {
+                    cells[index].classList.add('win');
+                });
+            }, 100);
+        }
+
+        // Check if board is full
+        function isBoardFull() {
+            return board.every(cell => cell !== '');
+        }
+
+        // Update turn indicator
+        function updateTurnIndicator() {
+            const indicator = document.getElementById('turnIndicator');
+            if (currentPlayer === 'player') {
+                indicator.innerHTML = `Your turn! <span class="player-turn">(You are ${playerSymbol})</span>`;
+            } else {
+                indicator.innerHTML = `Computer's turn... <span class="computer-turn">(Computer is ${computerSymbol})</span>`;
+            }
+        }
+
+        // Update stats display
+        function updateStats() {
+            document.getElementById('wins').textContent = wins;
+            document.getElementById('losses').textContent = losses;
+            document.getElementById('draws').textContent = draws;
+        }
+
+        // Reset game
+        function resetGame() {
+            board = ['', '', '', '', '', '', '', '', ''];
+            currentPlayer = 'player';
+            gameActive = true;
+            gameCompleted = false;
+            
+            renderBoard();
+            updateTurnIndicator();
+            
+            document.getElementById('messageBox').style.display = 'none';
+        }
+
+        // Save score to server
+        function saveGameScore() {
+            fetch("{% url 'user:save_game_score' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({
+                    game: 'SOS',
+                    score: wins,
+                    completed: true
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    highestScore = data.highest_score;
+                    gamesPlayed = data.games_played;
+                    document.getElementById('highestScore').textContent = highestScore;
+                    document.getElementById('gamesPlayed').textContent = gamesPlayed;
+                    console.log('Score saved successfully!');
+                }
+            })
+            .catch(error => console.error('Error saving score:', error));
+        }
+
+        // Initialize game
+        renderBoard();
+        updateTurnIndicator();
+        updateStats();
+    </script>
+</body>
+</html>

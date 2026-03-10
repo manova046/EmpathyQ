@@ -1,0 +1,902 @@
+[
+  {
+    "model": "user.emotionalquestion",
+    "pk": 101,
+    "fields": {
+      "question_text": "How would you describe your energy level right now?",
+      "category": "energy",
+      "weight": 1.5
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 102,
+    "fields": {
+      "question_text": "What word best describes your current emotional state?",
+      "category": "mood",
+      "weight": 2.0
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 103,
+    "fields": {
+      "question_text": "How well are you able to focus at this moment?",
+      "category": "focus",
+      "weight": 1.3
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 104,
+    "fields": {
+      "question_text": "How connected do you feel to others right now?",
+      "category": "social",
+      "weight": 1.4
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 105,
+    "fields": {
+      "question_text": "What is your stress level at this moment?",
+      "category": "stress",
+      "weight": 1.8
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 106,
+    "fields": {
+      "question_text": "How optimistic do you feel about the near future?",
+      "category": "mood",
+      "weight": 1.6
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 107,
+    "fields": {
+      "question_text": "How well are you taking care of yourself today?",
+      "category": "energy",
+      "weight": 1.2
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 108,
+    "fields": {
+      "question_text": "How supported do you feel by those around you?",
+      "category": "social",
+      "weight": 1.5
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 109,
+    "fields": {
+      "question_text": "How clear is your thinking right now?",
+      "category": "focus",
+      "weight": 1.4
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 110,
+    "fields": {
+      "question_text": "How would you rate your overall mood today?",
+      "category": "mood",
+      "weight": 1.9
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 111,
+    "fields": {
+      "question_text": "How much joy have you experienced recently?",
+      "category": "mood",
+      "weight": 1.5
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 112,
+    "fields": {
+      "question_text": "How overwhelmed do you feel by your responsibilities?",
+      "category": "stress",
+      "weight": 1.7
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 113,
+    "fields": {
+      "question_text": "How peaceful is your mind right now?",
+      "category": "mood",
+      "weight": 1.6
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 114,
+    "fields": {
+      "question_text": "How motivated are you to tackle your tasks?",
+      "category": "focus",
+      "weight": 1.5
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 115,
+    "fields": {
+      "question_text": "How much do you feel appreciated by others?",
+      "category": "social",
+      "weight": 1.3
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 116,
+    "fields": {
+      "question_text": "How restless or calm is your body?",
+      "category": "energy",
+      "weight": 1.4
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 117,
+    "fields": {
+      "question_text": "How hopeful are you about resolving current challenges?",
+      "category": "mood",
+      "weight": 1.6
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 118,
+    "fields": {
+      "question_text": "How easily can you make decisions right now?",
+      "category": "focus",
+      "weight": 1.3
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 119,
+    "fields": {
+      "question_text": "How connected do you feel to yourself?",
+      "category": "mood",
+      "weight": 1.5
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 120,
+    "fields": {
+      "question_text": "How much are you worrying about things outside your control?",
+      "category": "stress",
+      "weight": 1.7
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 121,
+    "fields": {
+      "question_text": "How grateful do you feel in this moment?",
+      "category": "mood",
+      "weight": 1.4
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 122,
+    "fields": {
+      "question_text": "How physically energized do you feel?",
+      "category": "energy",
+      "weight": 1.5
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 123,
+    "fields": {
+      "question_text": "How much do you feel understood by others?",
+      "category": "social",
+      "weight": 1.4
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 124,
+    "fields": {
+      "question_text": "How confident do you feel in handling today's challenges?",
+      "category": "mood",
+      "weight": 1.6
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 125,
+    "fields": {
+      "question_text": "How easily are you getting distracted?",
+      "category": "focus",
+      "weight": 1.3
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 126,
+    "fields": {
+      "question_text": "How much patience do you have right now?",
+      "category": "mood",
+      "weight": 1.4
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 127,
+    "fields": {
+      "question_text": "How lonely do you feel at this moment?",
+      "category": "social",
+      "weight": 1.7
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 128,
+    "fields": {
+      "question_text": "How much are you looking forward to something?",
+      "category": "mood",
+      "weight": 1.3
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 129,
+    "fields": {
+      "question_text": "How well are you managing your emotions?",
+      "category": "mood",
+      "weight": 1.6
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 130,
+    "fields": {
+      "question_text": "How safe and secure do you feel?",
+      "category": "mood",
+      "weight": 1.8
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 131,
+    "fields": {
+      "question_text": "How curious are you feeling right now?",
+      "category": "focus",
+      "weight": 1.2
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 132,
+    "fields": {
+      "question_text": "How much are you comparing yourself to others?",
+      "category": "mood",
+      "weight": 1.4
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 133,
+    "fields": {
+      "question_text": "How rested do you feel after sleep?",
+      "category": "energy",
+      "weight": 1.5
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 134,
+    "fields": {
+      "question_text": "How hopeful are you about your personal growth?",
+      "category": "mood",
+      "weight": 1.4
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 135,
+    "fields": {
+      "question_text": "How irritable have you been feeling?",
+      "category": "mood",
+      "weight": 1.6
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 136,
+    "fields": {
+      "question_text": "How much are you enjoying your daily activities?",
+      "category": "mood",
+      "weight": 1.5
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 137,
+    "fields": {
+      "question_text": "How mentally clear or foggy do you feel?",
+      "category": "focus",
+      "weight": 1.4
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 138,
+    "fields": {
+      "question_text": "How much do you feel in control of your life?",
+      "category": "mood",
+      "weight": 1.7
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 139,
+    "fields": {
+      "question_text": "How interested are you in socializing?",
+      "category": "social",
+      "weight": 1.3
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 140,
+    "fields": {
+      "question_text": "How much peace do you feel internally?",
+      "category": "mood",
+      "weight": 1.6
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 141,
+    "fields": {
+      "question_text": "How proud are you of something you've done recently?",
+      "category": "mood",
+      "weight": 1.2
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 142,
+    "fields": {
+      "question_text": "How much are you dwelling on past events?",
+      "category": "focus",
+      "weight": 1.5
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 143,
+    "fields": {
+      "question_text": "How excited are you about upcoming plans?",
+      "category": "mood",
+      "weight": 1.3
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 144,
+    "fields": {
+      "question_text": "How much self-compassion are you showing yourself?",
+      "category": "mood",
+      "weight": 1.5
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 145,
+    "fields": {
+      "question_text": "How overwhelmed are you by your thoughts?",
+      "category": "stress",
+      "weight": 1.7
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 146,
+    "fields": {
+      "question_text": "How connected to nature do you feel?",
+      "category": "mood",
+      "weight": 1.2
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 147,
+    "fields": {
+      "question_text": "How much are you looking forward to the future?",
+      "category": "mood",
+      "weight": 1.4
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 148,
+    "fields": {
+      "question_text": "How easily frustrated are you becoming?",
+      "category": "mood",
+      "weight": 1.5
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 149,
+    "fields": {
+      "question_text": "How much do you feel like yourself today?",
+      "category": "mood",
+      "weight": 1.6
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 150,
+    "fields": {
+      "question_text": "How hopeful are you about your relationships?",
+      "category": "social",
+      "weight": 1.4
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 151,
+    "fields": {
+      "question_text": "How much physical tension are you holding?",
+      "category": "energy",
+      "weight": 1.5
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 152,
+    "fields": {
+      "question_text": "How inspired do you feel?",
+      "category": "mood",
+      "weight": 1.4
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 153,
+    "fields": {
+      "question_text": "How much are you worrying about the future?",
+      "category": "stress",
+      "weight": 1.6
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 154,
+    "fields": {
+      "question_text": "How content are you with where you are in life?",
+      "category": "mood",
+      "weight": 1.5
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 155,
+    "fields": {
+      "question_text": "How much do you feel heard by others?",
+      "category": "social",
+      "weight": 1.4
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 156,
+    "fields": {
+      "question_text": "How much energy do you have for hobbies?",
+      "category": "energy",
+      "weight": 1.3
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 157,
+    "fields": {
+      "question_text": "How accepting are you of your current emotions?",
+      "category": "mood",
+      "weight": 1.4
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 158,
+    "fields": {
+      "question_text": "How much do you feel like you belong?",
+      "category": "social",
+      "weight": 1.5
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 159,
+    "fields": {
+      "question_text": "How passionate do you feel about anything right now?",
+      "category": "mood",
+      "weight": 1.4
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 160,
+    "fields": {
+      "question_text": "How much are you struggling with self-doubt?",
+      "category": "mood",
+      "weight": 1.6
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 161,
+    "fields": {
+      "question_text": "How balanced does your life feel?",
+      "category": "mood",
+      "weight": 1.5
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 162,
+    "fields": {
+      "question_text": "How much do you feel you're growing as a person?",
+      "category": "mood",
+      "weight": 1.3
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 163,
+    "fields": {
+      "question_text": "How much are you affected by others' moods?",
+      "category": "social",
+      "weight": 1.4
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 164,
+    "fields": {
+      "question_text": "How playful or lighthearted do you feel?",
+      "category": "mood",
+      "weight": 1.3
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 165,
+    "fields": {
+      "question_text": "How much do you feel you're carrying emotional weight?",
+      "category": "stress",
+      "weight": 1.6
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 166,
+    "fields": {
+      "question_text": "How optimistic are you about your health?",
+      "category": "mood",
+      "weight": 1.3
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 167,
+    "fields": {
+      "question_text": "How much do you feel in tune with your body?",
+      "category": "energy",
+      "weight": 1.4
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 168,
+    "fields": {
+      "question_text": "How much are you holding back your feelings?",
+      "category": "mood",
+      "weight": 1.5
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 169,
+    "fields": {
+      "question_text": "How connected do you feel to your purpose?",
+      "category": "mood",
+      "weight": 1.5
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 170,
+    "fields": {
+      "question_text": "How much do you feel you're making progress?",
+      "category": "focus",
+      "weight": 1.4
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 171,
+    "fields": {
+      "question_text": "How much do you feel you're falling behind?",
+      "category": "stress",
+      "weight": 1.6
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 172,
+    "fields": {
+      "question_text": "How forgiving are you toward yourself?",
+      "category": "mood",
+      "weight": 1.4
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 173,
+    "fields": {
+      "question_text": "How much do you feel like giving up?",
+      "category": "mood",
+      "weight": 1.7
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 174,
+    "fields": {
+      "question_text": "How excited are you about learning something new?",
+      "category": "focus",
+      "weight": 1.3
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 175,
+    "fields": {
+      "question_text": "How much do you feel you have a support system?",
+      "category": "social",
+      "weight": 1.5
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 176,
+    "fields": {
+      "question_text": "How much are you avoiding difficult emotions?",
+      "category": "mood",
+      "weight": 1.5
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 177,
+    "fields": {
+      "question_text": "How hopeful are you about finding solutions?",
+      "category": "mood",
+      "weight": 1.4
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 178,
+    "fields": {
+      "question_text": "How much do you feel you're being authentic?",
+      "category": "mood",
+      "weight": 1.4
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 179,
+    "fields": {
+      "question_text": "How much do you feel you're being judged?",
+      "category": "social",
+      "weight": 1.5
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 180,
+    "fields": {
+      "question_text": "How much do you feel you're meeting expectations?",
+      "category": "stress",
+      "weight": 1.5
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 181,
+    "fields": {
+      "question_text": "How playful is your mood right now?",
+      "category": "mood",
+      "weight": 1.3
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 182,
+    "fields": {
+      "question_text": "How much do you feel you're in a rut?",
+      "category": "mood",
+      "weight": 1.6
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 183,
+    "fields": {
+      "question_text": "How much do you feel you're thriving?",
+      "category": "mood",
+      "weight": 1.5
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 184,
+    "fields": {
+      "question_text": "How connected do you feel to your values?",
+      "category": "mood",
+      "weight": 1.4
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 185,
+    "fields": {
+      "question_text": "How much are you looking forward to tomorrow?",
+      "category": "mood",
+      "weight": 1.4
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 186,
+    "fields": {
+      "question_text": "How much do you feel you're being productive?",
+      "category": "focus",
+      "weight": 1.3
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 187,
+    "fields": {
+      "question_text": "How much do you feel you're procrastinating?",
+      "category": "focus",
+      "weight": 1.4
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 188,
+    "fields": {
+      "question_text": "How much do you feel you're being creative?",
+      "category": "focus",
+      "weight": 1.3
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 189,
+    "fields": {
+      "question_text": "How much do you feel you're being analytical?",
+      "category": "focus",
+      "weight": 1.2
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 190,
+    "fields": {
+      "question_text": "How much do you feel you're being intuitive?",
+      "category": "mood",
+      "weight": 1.2
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 191,
+    "fields": {
+      "question_text": "How much do you feel you're being patient?",
+      "category": "mood",
+      "weight": 1.4
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 192,
+    "fields": {
+      "question_text": "How much do you feel you're being impulsive?",
+      "category": "mood",
+      "weight": 1.3
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 193,
+    "fields": {
+      "question_text": "How much do you feel you're being resilient?",
+      "category": "mood",
+      "weight": 1.4
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 194,
+    "fields": {
+      "question_text": "How much do you feel you're being vulnerable?",
+      "category": "social",
+      "weight": 1.4
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 195,
+    "fields": {
+      "question_text": "How much do you feel you're being strong?",
+      "category": "mood",
+      "weight": 1.5
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 196,
+    "fields": {
+      "question_text": "How much do you feel you're being weak?",
+      "category": "mood",
+      "weight": 1.6
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 197,
+    "fields": {
+      "question_text": "How much do you feel you're being understood?",
+      "category": "social",
+      "weight": 1.4
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 198,
+    "fields": {
+      "question_text": "How much do you feel you're being misunderstood?",
+      "category": "social",
+      "weight": 1.5
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 199,
+    "fields": {
+      "question_text": "How much do you feel you're being accepted?",
+      "category": "social",
+      "weight": 1.4
+    }
+  },
+  {
+    "model": "user.emotionalquestion",
+    "pk": 200,
+    "fields": {
+      "question_text": "How much do you feel you're being rejected?",
+      "category": "social",
+      "weight": 1.6
+    }
+  }
+]

@@ -1,0 +1,335 @@
+[
+  {
+    "model": "user.taskcategory",
+    "pk": 1,
+    "fields": {
+      "name": "Mind Care",
+      "description": "Grounding and mental reset activities",
+      "icon": "🧠"
+    }
+  },
+  {
+    "model": "user.taskcategory",
+    "pk": 2,
+    "fields": {
+      "name": "Body Reset",
+      "description": "Physical regulation and movement",
+      "icon": "🌿"
+    }
+  },
+  {
+    "model": "user.taskcategory",
+    "pk": 3,
+    "fields": {
+      "name": "Productivity Boost",
+      "description": "Small wins to regain momentum",
+      "icon": "🚀"
+    }
+  },
+
+
+  {
+    "model": "user.atomictask",
+    "pk": 1,
+    "fields": {
+      "title": "Sit in sunlight for 5 minutes",
+      "description": "Step outside or sit near a window and let natural light reach you.",
+      "mood": "low",
+      "category": 2,
+      "duration_minutes": 5,
+      "energy_level": "low",
+      "priority": 5,
+      "is_active": true
+    }
+  },
+  {
+    "model": "user.atomictask",
+    "pk": 2,
+    "fields": {
+      "title": "Write one thing you're grateful for",
+      "description": "It can be small. Just one thing.",
+      "mood": "low",
+      "category": 1,
+      "duration_minutes": 5,
+      "energy_level": "low",
+      "priority": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "user.atomictask",
+    "pk": 3,
+    "fields": {
+      "title": "Take a warm shower",
+      "description": "Reset your body and refresh your senses.",
+      "mood": "low",
+      "category": 2,
+      "duration_minutes": 10,
+      "energy_level": "low",
+      "priority": 3,
+      "is_active": true
+    }
+  },
+
+  
+  {
+    "model": "user.atomictask",
+    "pk": 4,
+    "fields": {
+      "title": "5-4-3-2-1 grounding exercise",
+      "description": "Name 5 things you see, 4 you feel, 3 you hear, 2 you smell, 1 you taste.",
+      "mood": "stressed",
+      "category": 1,
+      "duration_minutes": 5,
+      "energy_level": "low",
+      "priority": 5,
+      "is_active": true
+    }
+  },
+  {
+    "model": "user.atomictask",
+    "pk": 5,
+    "fields": {
+      "title": "Take 10 slow breaths",
+      "description": "Inhale 4 seconds, exhale 6 seconds.",
+      "mood": "stressed",
+      "category": 1,
+      "duration_minutes": 5,
+      "energy_level": "low",
+      "priority": 5,
+      "is_active": true
+    }
+  },
+  {
+    "model": "user.atomictask",
+    "pk": 6,
+    "fields": {
+      "title": "Short 10-minute walk",
+      "description": "Walk without your phone and observe surroundings.",
+      "mood": "stressed",
+      "category": 2,
+      "duration_minutes": 10,
+      "energy_level": "medium",
+      "priority": 4,
+      "is_active": true
+    }
+  },
+
+
+  {
+    "model": "user.atomictask",
+    "pk": 7,
+    "fields": {
+      "title": "Listen to calming music",
+      "description": "Play something soft and slow for 10 minutes.",
+      "mood": "calm",
+      "category": 1,
+      "duration_minutes": 10,
+      "energy_level": "low",
+      "priority": 3,
+      "is_active": true
+    }
+  },
+  {
+    "model": "user.atomictask",
+    "pk": 8,
+    "fields": {
+      "title": "Light stretching",
+      "description": "Gently stretch your body to maintain balance.",
+      "mood": "calm",
+      "category": 2,
+      "duration_minutes": 10,
+      "energy_level": "medium",
+      "priority": 3,
+      "is_active": true
+    }
+  },
+  {
+    "model": "user.atomictask",
+    "pk": 9,
+    "fields": {
+      "title": "Organize a small space",
+      "description": "Clean or arrange one small area.",
+      "mood": "calm",
+      "category": 3,
+      "duration_minutes": 10,
+      "energy_level": "medium",
+      "priority": 2,
+      "is_active": true
+    }
+  },
+
+  {
+    "model": "user.atomictask",
+    "pk": 10,
+    "fields": {
+      "title": "Write 3 goals for today",
+      "description": "Keep them realistic and achievable.",
+      "mood": "motivated",
+      "category": 3,
+      "duration_minutes": 5,
+      "energy_level": "high",
+      "priority": 5,
+      "is_active": true
+    }
+  },
+  {
+    "model": "user.atomictask",
+    "pk": 11,
+    "fields": {
+      "title": "Start your hardest task first",
+      "description": "Use your energy wisely.",
+      "mood": "motivated",
+      "category": 3,
+      "duration_minutes": 15,
+      "energy_level": "high",
+      "priority": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "user.atomictask",
+    "pk": 12,
+    "fields": {
+      "title": "Quick workout burst",
+      "description": "Do 20 pushups or 30 squats.",
+      "mood": "motivated",
+      "category": 2,
+      "duration_minutes": 5,
+      "energy_level": "high",
+      "priority": 3,
+      "is_active": true
+    }
+  },
+
+
+  {
+    "model": "user.atomictask",
+    "pk": 13,
+    "fields": {
+      "title": "Box breathing",
+      "description": "Inhale 4, hold 4, exhale 4, hold 4.",
+      "mood": "anxious",
+      "category": 1,
+      "duration_minutes": 5,
+      "energy_level": "low",
+      "priority": 5,
+      "is_active": true
+    }
+  },
+  {
+    "model": "user.atomictask",
+    "pk": 14,
+    "fields": {
+      "title": "Write your worries down",
+      "description": "Putting thoughts on paper reduces mental load.",
+      "mood": "anxious",
+      "category": 1,
+      "duration_minutes": 10,
+      "energy_level": "low",
+      "priority": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "user.atomictask",
+    "pk": 15,
+    "fields": {
+      "title": "Slow mindful walk",
+      "description": "Walk slowly and notice each step.",
+      "mood": "anxious",
+      "category": 2,
+      "duration_minutes": 10,
+      "energy_level": "medium",
+      "priority": 3,
+      "is_active": true
+    }
+  },
+
+  {
+    "model": "user.atomictask",
+    "pk": 16,
+    "fields": {
+      "title": "Read 5 pages of a book",
+      "description": "Something light and enjoyable.",
+      "mood": "neutral",
+      "category": 1,
+      "duration_minutes": 10,
+      "energy_level": "medium",
+      "priority": 3,
+      "is_active": true
+    }
+  },
+  {
+    "model": "user.atomictask",
+    "pk": 17,
+    "fields": {
+      "title": "Tidy your workspace",
+      "description": "Clear physical clutter to clear mental clutter.",
+      "mood": "neutral",
+      "category": 3,
+      "duration_minutes": 10,
+      "energy_level": "medium",
+      "priority": 3,
+      "is_active": true
+    }
+  },
+  {
+    "model": "user.atomictask",
+    "pk": 18,
+    "fields": {
+      "title": "Drink a full glass of water",
+      "description": "Hydration improves clarity.",
+      "mood": "neutral",
+      "category": 2,
+      "duration_minutes": 2,
+      "energy_level": "low",
+      "priority": 2,
+      "is_active": true
+    }
+  },
+
+
+  {
+    "model": "user.atomictask",
+    "pk": 19,
+    "fields": {
+      "title": "Step away for 5 minutes",
+      "description": "Remove yourself from the triggering environment.",
+      "mood": "irritable",
+      "category": 1,
+      "duration_minutes": 5,
+      "energy_level": "low",
+      "priority": 5,
+      "is_active": true
+    }
+  },
+  {
+    "model": "user.atomictask",
+    "pk": 20,
+    "fields": {
+      "title": "Progressive muscle relaxation",
+      "description": "Tense and release each muscle group slowly.",
+      "mood": "irritable",
+      "category": 1,
+      "duration_minutes": 10,
+      "energy_level": "low",
+      "priority": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "user.atomictask",
+    "pk": 21,
+    "fields": {
+      "title": "Write what is bothering you",
+      "description": "Identify the root of frustration.",
+      "mood": "irritable",
+      "category": 1,
+      "duration_minutes": 10,
+      "energy_level": "medium",
+      "priority": 3,
+      "is_active": true
+    }
+  }
+]

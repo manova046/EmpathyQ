@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmed | EmpathyQ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Add your styles here */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="success-message">
+            <i class="fas fa-check-circle"></i>
+            <h1>Booking Confirmed!</h1>
+            <p>Your session has been booked successfully. Check your email for details.</p>
+            <a href="{% url 'user:booking_history' %}" class="btn">View My Bookings</a>
+        </div>
+    </div>
+</body>
+</html>

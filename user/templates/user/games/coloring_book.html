@@ -1,0 +1,894 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mindful Coloring - EmpathyQ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-50: #eef2ff;
+            --primary-100: #e0e7ff;
+            --primary-200: #c7d2fe;
+            --primary-300: #a5b4fc;
+            --primary-400: #818cf8;
+            --primary-500: #6366f1;
+            --primary-600: #4f46e5;
+            --primary-700: #4338ca;
+            --primary-800: #3730a3;
+            --primary-900: #312e81;
+            
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+            --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+            
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-2xl: 1.5rem;
+            --radius-full: 9999px;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        .game-wrapper {
+            padding: 20px 0 40px;
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .game-header h2 {
+            color: white;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .game-header h2 i {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 50%;
+            font-size: 2rem;
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            padding: 12px 28px;
+            border-radius: var(--radius-full);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            background: white;
+            color: #667eea;
+            transform: translateY(-2px);
+            border-color: white;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .coloring-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius-2xl);
+            padding: 30px;
+            box-shadow: var(--shadow-2xl);
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+
+        /* Design Selector */
+        .design-selector {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .design-btn {
+            padding: 12px 25px;
+            border: 2px solid var(--primary-600);
+            background: transparent;
+            color: var(--primary-600);
+            border-radius: var(--radius-full);
+            font-weight: 600;
+            transition: all 0.3s;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .design-btn i {
+            font-size: 1.2rem;
+        }
+
+        .design-btn:hover {
+            background: var(--primary-50);
+            transform: translateY(-2px);
+        }
+
+        .design-btn.active {
+            background: linear-gradient(135deg, var(--primary-600), var(--primary-800));
+            color: white;
+            border-color: transparent;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .design-btn.active i {
+            color: white;
+        }
+
+        .color-palette {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 25px 0;
+            flex-wrap: wrap;
+            padding: 15px;
+            background: var(--gray-100);
+            border-radius: var(--radius-xl);
+        }
+
+        .color-swatch {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .color-swatch:hover {
+            transform: scale(1.15);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .color-swatch.selected {
+            border-color: var(--gray-800);
+            transform: scale(1.15);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 15px;
+            background: var(--gray-50);
+            border-radius: var(--radius-xl);
+        }
+
+        .tool-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .tool-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--gray-600);
+            font-size: 1.2rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .tool-btn:hover {
+            background: var(--primary-600);
+            color: white;
+            transform: scale(1.1);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .tool-btn.active {
+            background: linear-gradient(135deg, var(--primary-600), var(--primary-800));
+            color: white;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .action-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: var(--radius-full);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .action-btn.reset {
+            background: white;
+            color: var(--gray-600);
+            border: 2px solid var(--gray-300);
+        }
+
+        .action-btn.reset:hover {
+            background: var(--gray-100);
+            transform: translateY(-2px);
+        }
+
+        .action-btn.save {
+            background: linear-gradient(135deg, var(--primary-600), var(--primary-800));
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .action-btn.save:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* SVG Container */
+        .svg-container {
+            background: white;
+            border-radius: var(--radius-xl);
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: var(--shadow-lg);
+            border: 2px solid var(--gray-200);
+        }
+
+        svg {
+            width: 100%;
+            height: auto;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+            max-width: 500px;
+        }
+
+        .path {
+            transition: fill 0.2s ease;
+            cursor: pointer;
+        }
+
+        .path:hover {
+            filter: brightness(1.1);
+            stroke: var(--primary-600);
+            stroke-width: 3;
+        }
+
+        .stats-panel {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--primary-600), var(--primary-800));
+            border-radius: var(--radius-xl);
+            color: white;
+            margin-top: 20px;
+        }
+
+        .stat-box {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .personal-stats {
+            background: white;
+            border-radius: var(--radius-xl);
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 15px;
+            background: var(--gray-50);
+            border-radius: var(--radius-lg);
+        }
+
+        .stat-label-sm {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .stat-value-lg {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-600), var(--primary-800));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        @media (max-width: 768px) {
+            .game-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .game-header h2 {
+                font-size: 2rem;
+            }
+            
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .tool-group, .action-group {
+                justify-content: center;
+            }
+            
+            .design-selector {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .design-btn {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-wrapper">
+        <div class="container">
+            <!-- Header -->
+            <div class="game-header">
+                <h2>
+                    <i class="fas fa-paint-brush"></i>
+                    Mindful Coloring
+                </h2>
+                <a href="{% url 'accounts:user_dashboard' %}" class="back-btn">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back to Dashboard</span>
+                </a>
+            </div>
+
+            <!-- Main Container -->
+            <div class="coloring-container">
+                <!-- Design Selector - 10 Different Designs -->
+                <div class="design-selector">
+                    <button class="design-btn active" onclick="changeDesign(1)" id="design1">
+                        <i class="fas fa-circle"></i> Mandala
+                    </button>
+                    <button class="design-btn" onclick="changeDesign(2)" id="design2">
+                        <i class="fas fa-flower"></i> Flower
+                    </button>
+                    <button class="design-btn" onclick="changeDesign(3)" id="design3">
+                        <i class="fas fa-star"></i> Star
+                    </button>
+                    <button class="design-btn" onclick="changeDesign(4)" id="design4">
+                        <i class="fas fa-heart"></i> Heart
+                    </button>
+                    <button class="design-btn" onclick="changeDesign(5)" id="design5">
+                        <i class="fas fa-fish"></i> Fish
+                    </button>
+                    <button class="design-btn" onclick="changeDesign(6)" id="design6">
+                        <i class="fas fa-tree"></i> Tree
+                    </button>
+                    <button class="design-btn" onclick="changeDesign(7)" id="design7">
+                        <i class="fas fa-butterfly"></i> Butterfly
+                    </button>
+                    <button class="design-btn" onclick="changeDesign(8)" id="design8">
+                        <i class="fas fa-sun"></i> Sun
+                    </button>
+                    <button class="design-btn" onclick="changeDesign(9)" id="design9">
+                        <i class="fas fa-moon"></i> Moon
+                    </button>
+                    <button class="design-btn" onclick="changeDesign(10)" id="design10">
+                        <i class="fas fa-crown"></i> Crown
+                    </button>
+                </div>
+
+                <!-- Color Palette -->
+                <div class="color-palette" id="colorPalette">
+                    <!-- Color swatches will be added by JavaScript -->
+                </div>
+
+                <!-- Toolbar -->
+                <div class="toolbar">
+                    <div class="tool-group">
+                        <button class="tool-btn" onclick="setTool('brush')" id="brushBtn" title="Brush">
+                            <i class="fas fa-paint-brush"></i>
+                        </button>
+                        <button class="tool-btn" onclick="setTool('eraser')" id="eraserBtn" title="Eraser">
+                            <i class="fas fa-eraser"></i>
+                        </button>
+                        <button class="tool-btn" onclick="setTool('fill')" id="fillBtn" title="Fill All">
+                            <i class="fas fa-fill-drip"></i>
+                        </button>
+                    </div>
+                    <div class="action-group">
+                        <button class="action-btn reset" onclick="resetColoring()">
+                            <i class="fas fa-redo"></i> Reset
+                        </button>
+                        <button class="action-btn save" onclick="saveColoring()">
+                            <i class="fas fa-save"></i> Save
+                        </button>
+                    </div>
+                </div>
+
+                <!-- SVG Container -->
+                <div class="svg-container" id="svgContainer">
+                    <!-- Design 1: Mandala (Default) -->
+                    <svg id="design1-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" style="display: block;">
+                        <!-- Outer circle -->
+                        <circle class="path" cx="200" cy="200" r="180" fill="white" stroke="#6c63ff" stroke-width="2" data-part="outer"/>
+                        <!-- Inner circle -->
+                        <circle class="path" cx="200" cy="200" r="140" fill="white" stroke="#6c63ff" stroke-width="2" data-part="inner1"/>
+                        <!-- Center circle -->
+                        <circle class="path" cx="200" cy="200" r="100" fill="white" stroke="#6c63ff" stroke-width="2" data-part="center"/>
+                        <!-- Flower petals -->
+                        <path class="path" d="M200 60 L240 140 L200 120 L160 140 L200 60" fill="white" stroke="#6c63ff" stroke-width="2" data-part="petal1"/>
+                        <path class="path" d="M340 200 L260 160 L280 200 L260 240 L340 200" fill="white" stroke="#6c63ff" stroke-width="2" data-part="petal2"/>
+                        <path class="path" d="M200 340 L160 260 L200 280 L240 260 L200 340" fill="white" stroke="#6c63ff" stroke-width="2" data-part="petal3"/>
+                        <path class="path" d="M60 200 L140 240 L120 200 L140 160 L60 200" fill="white" stroke="#6c63ff" stroke-width="2" data-part="petal4"/>
+                        <!-- Decorative dots -->
+                        <circle class="path" cx="200" cy="60" r="15" fill="white" stroke="#6c63ff" stroke-width="2" data-part="dot1"/>
+                        <circle class="path" cx="340" cy="200" r="15" fill="white" stroke="#6c63ff" stroke-width="2" data-part="dot2"/>
+                        <circle class="path" cx="200" cy="340" r="15" fill="white" stroke="#6c63ff" stroke-width="2" data-part="dot3"/>
+                        <circle class="path" cx="60" cy="200" r="15" fill="white" stroke="#6c63ff" stroke-width="2" data-part="dot4"/>
+                    </svg>
+
+                    <!-- Design 2: Flower -->
+                    <svg id="design2-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                        <!-- Flower center -->
+                        <circle class="path" cx="200" cy="200" r="60" fill="white" stroke="#6c63ff" stroke-width="2" data-part="center"/>
+                        <!-- Petals -->
+                        <circle class="path" cx="200" cy="100" r="40" fill="white" stroke="#6c63ff" stroke-width="2" data-part="petal-top"/>
+                        <circle class="path" cx="300" cy="200" r="40" fill="white" stroke="#6c63ff" stroke-width="2" data-part="petal-right"/>
+                        <circle class="path" cx="200" cy="300" r="40" fill="white" stroke="#6c63ff" stroke-width="2" data-part="petal-bottom"/>
+                        <circle class="path" cx="100" cy="200" r="40" fill="white" stroke="#6c63ff" stroke-width="2" data-part="petal-left"/>
+                        <circle class="path" cx="250" cy="150" r="30" fill="white" stroke="#6c63ff" stroke-width="2" data-part="petal-tr"/>
+                        <circle class="path" cx="250" cy="250" r="30" fill="white" stroke="#6c63ff" stroke-width="2" data-part="petal-br"/>
+                        <circle class="path" cx="150" cy="250" r="30" fill="white" stroke="#6c63ff" stroke-width="2" data-part="petal-bl"/>
+                        <circle class="path" cx="150" cy="150" r="30" fill="white" stroke="#6c63ff" stroke-width="2" data-part="petal-tl"/>
+                        <!-- Stem -->
+                        <rect class="path" x="195" y="260" width="10" height="80" fill="white" stroke="#6c63ff" stroke-width="2" data-part="stem"/>
+                        <!-- Leaves -->
+                        <path class="path" d="M200 300 L230 330 L200 320 L170 330 L200 300" fill="white" stroke="#6c63ff" stroke-width="2" data-part="leaf-left"/>
+                        <path class="path" d="M200 300 L230 330 L200 320 L170 330 L200 300" fill="white" stroke="#6c63ff" stroke-width="2" data-part="leaf-right" transform="translate(0,0) scale(-1,1) translate(-400,0)"/>
+                    </svg>
+
+                    <!-- Design 3: Star -->
+                    <svg id="design3-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                        <!-- Outer star -->
+                        <path class="path" d="M200 20 L245 140 L380 140 L270 220 L310 340 L200 270 L90 340 L130 220 L20 140 L155 140 L200 20" fill="white" stroke="#6c63ff" stroke-width="2" data-part="outer-star"/>
+                        <!-- Inner star -->
+                        <path class="path" d="M200 80 L225 160 L310 160 L240 210 L260 280 L200 240 L140 280 L160 210 L90 160 L175 160 L200 80" fill="white" stroke="#6c63ff" stroke-width="2" data-part="inner-star"/>
+                        <!-- Center circle -->
+                        <circle class="path" cx="200" cy="200" r="30" fill="white" stroke="#6c63ff" stroke-width="2" data-part="center"/>
+                    </svg>
+
+                    <!-- Design 4: Heart -->
+                    <svg id="design4-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                        <!-- Main heart -->
+                        <path class="path" d="M200,320 L80,200 C20,140 20,50 100,20 C150,0 200,40 200,40 C200,40 250,0 300,20 C380,50 380,140 320,200 L200,320" fill="white" stroke="#6c63ff" stroke-width="2" data-part="main-heart"/>
+                        <!-- Left inner heart -->
+                        <path class="path" d="M200,280 L120,180 C80,140 80,80 140,60 C170,50 200,80 200,80 C200,80 230,50 260,60 C320,80 320,140 280,180 L200,280" fill="white" stroke="#6c63ff" stroke-width="2" data-part="inner-heart" transform="translate(0,0)"/>
+                    </svg>
+
+                    <!-- Design 5: Fish -->
+                    <svg id="design5-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                        <!-- Fish body -->
+                        <ellipse class="path" cx="200" cy="200" rx="120" ry="60" fill="white" stroke="#6c63ff" stroke-width="2" data-part="body"/>
+                        <!-- Tail -->
+                        <path class="path" d="M80 200 L20 160 L20 240 L80 200" fill="white" stroke="#6c63ff" stroke-width="2" data-part="tail"/>
+                        <!-- Eye -->
+                        <circle class="path" cx="260" cy="180" r="10" fill="white" stroke="#6c63ff" stroke-width="2" data-part="eye"/>
+                        <!-- Fin top -->
+                        <path class="path" d="M200 140 L240 80 L160 80 L200 140" fill="white" stroke="#6c63ff" stroke-width="2" data-part="fin-top"/>
+                        <!-- Fin bottom -->
+                        <path class="path" d="M200 260 L240 320 L160 320 L200 260" fill="white" stroke="#6c63ff" stroke-width="2" data-part="fin-bottom"/>
+                        <!-- Scales -->
+                        <circle class="path" cx="180" cy="190" r="8" fill="white" stroke="#6c63ff" stroke-width="1.5" data-part="scale1"/>
+                        <circle class="path" cx="220" cy="190" r="8" fill="white" stroke="#6c63ff" stroke-width="1.5" data-part="scale2"/>
+                        <circle class="path" cx="200" cy="220" r="8" fill="white" stroke="#6c63ff" stroke-width="1.5" data-part="scale3"/>
+                        <circle class="path" cx="160" cy="220" r="8" fill="white" stroke="#6c63ff" stroke-width="1.5" data-part="scale4"/>
+                        <circle class="path" cx="240" cy="220" r="8" fill="white" stroke="#6c63ff" stroke-width="1.5" data-part="scale5"/>
+                    </svg>
+
+                    <!-- Design 6: Tree -->
+                    <svg id="design6-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                        <!-- Trunk -->
+                        <rect class="path" x="180" y="250" width="40" height="120" fill="white" stroke="#6c63ff" stroke-width="2" data-part="trunk"/>
+                        <!-- Leaves - layers -->
+                        <circle class="path" cx="200" cy="150" r="50" fill="white" stroke="#6c63ff" stroke-width="2" data-part="leaves1"/>
+                        <circle class="path" cx="200" cy="90" r="45" fill="white" stroke="#6c63ff" stroke-width="2" data-part="leaves2"/>
+                        <circle class="path" cx="200" cy="40" r="40" fill="white" stroke="#6c63ff" stroke-width="2" data-part="leaves3"/>
+                        <circle class="path" cx="150" cy="120" r="30" fill="white" stroke="#6c63ff" stroke-width="2" data-part="leaves4"/>
+                        <circle class="path" cx="250" cy="120" r="30" fill="white" stroke="#6c63ff" stroke-width="2" data-part="leaves5"/>
+                        <circle class="path" cx="140" cy="180" r="25" fill="white" stroke="#6c63ff" stroke-width="2" data-part="leaves6"/>
+                        <circle class="path" cx="260" cy="180" r="25" fill="white" stroke="#6c63ff" stroke-width="2" data-part="leaves7"/>
+                        <!-- Grass -->
+                        <path class="path" d="M100 370 L200 310 L300 370" fill="white" stroke="#6c63ff" stroke-width="2" data-part="grass"/>
+                    </svg>
+
+                    <!-- Design 7: Butterfly -->
+                    <svg id="design7-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                        <!-- Body -->
+                        <ellipse class="path" cx="200" cy="200" rx="30" ry="80" fill="white" stroke="#6c63ff" stroke-width="2" data-part="body"/>
+                        <!-- Left wing top -->
+                        <path class="path" d="M170 120 L80 80 L120 160 L170 160" fill="white" stroke="#6c63ff" stroke-width="2" data-part="wing-lt"/>
+                        <!-- Left wing bottom -->
+                        <path class="path" d="M170 240 L80 320 L120 240 L170 240" fill="white" stroke="#6c63ff" stroke-width="2" data-part="wing-lb"/>
+                        <!-- Right wing top -->
+                        <path class="path" d="M230 120 L320 80 L280 160 L230 160" fill="white" stroke="#6c63ff" stroke-width="2" data-part="wing-rt"/>
+                        <!-- Right wing bottom -->
+                        <path class="path" d="M230 240 L320 320 L280 240 L230 240" fill="white" stroke="#6c63ff" stroke-width="2" data-part="wing-rb"/>
+                        <!-- Antennae -->
+                        <path class="path" d="M180 120 L140 60" fill="white" stroke="#6c63ff" stroke-width="2" data-part="antenna-l"/>
+                        <path class="path" d="M220 120 L260 60" fill="white" stroke="#6c63ff" stroke-width="2" data-part="antenna-r"/>
+                        <!-- Head -->
+                        <circle class="path" cx="200" cy="120" r="15" fill="white" stroke="#6c63ff" stroke-width="2" data-part="head"/>
+                    </svg>
+
+                    <!-- Design 8: Sun -->
+                    <svg id="design8-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                        <!-- Sun center -->
+                        <circle class="path" cx="200" cy="200" r="70" fill="white" stroke="#6c63ff" stroke-width="2" data-part="center"/>
+                        <!-- Rays -->
+                        <line class="path" x1="200" y1="50" x2="200" y2="100" stroke="#6c63ff" stroke-width="2" data-part="ray-n"/>
+                        <line class="path" x1="350" y1="200" x2="300" y2="200" stroke="#6c63ff" stroke-width="2" data-part="ray-e"/>
+                        <line class="path" x1="200" y1="350" x2="200" y2="300" stroke="#6c63ff" stroke-width="2" data-part="ray-s"/>
+                        <line class="path" x1="50" y1="200" x2="100" y2="200" stroke="#6c63ff" stroke-width="2" data-part="ray-w"/>
+                        <line class="path" x1="80" y1="80" x2="120" y2="120" stroke="#6c63ff" stroke-width="2" data-part="ray-ne"/>
+                        <line class="path" x1="320" y1="80" x2="280" y2="120" stroke="#6c63ff" stroke-width="2" data-part="ray-nw"/>
+                        <line class="path" x1="80" y1="320" x2="120" y2="280" stroke="#6c63ff" stroke-width="2" data-part="ray-se"/>
+                        <line class="path" x1="320" y1="320" x2="280" y2="280" stroke="#6c63ff" stroke-width="2" data-part="ray-sw"/>
+                        <!-- Ray ends -->
+                        <circle class="path" cx="200" cy="30" r="8" fill="white" stroke="#6c63ff" stroke-width="2" data-part="ray-n-end"/>
+                        <circle class="path" cx="370" cy="200" r="8" fill="white" stroke="#6c63ff" stroke-width="2" data-part="ray-e-end"/>
+                        <circle class="path" cx="200" cy="370" r="8" fill="white" stroke="#6c63ff" stroke-width="2" data-part="ray-s-end"/>
+                        <circle class="path" cx="30" cy="200" r="8" fill="white" stroke="#6c63ff" stroke-width="2" data-part="ray-w-end"/>
+                    </svg>
+
+                    <!-- Design 9: Moon and Stars -->
+                    <svg id="design9-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                        <!-- Moon -->
+                        <path class="path" d="M300,200 A100,100 0 1,1 200,100 A80,80 0 0,0 300,200" fill="white" stroke="#6c63ff" stroke-width="2" data-part="moon"/>
+                        <!-- Stars -->
+                        <polygon class="path" points="100,100 110,130 140,130 115,145 125,175 100,160 75,175 85,145 60,130 90,130" fill="white" stroke="#6c63ff" stroke-width="1.5" data-part="star1"/>
+                        <polygon class="path" points="50,300 57,317 77,317 62,330 70,350 50,340 30,350 38,330 23,317 43,317" fill="white" stroke="#6c63ff" stroke-width="1.5" data-part="star2"/>
+                        <polygon class="path" points="350,120 355,132 370,132 360,142 365,158 350,150 335,158 340,142 330,132 345,132" fill="white" stroke="#6c63ff" stroke-width="1.5" data-part="star3"/>
+                    </svg>
+
+                    <!-- Design 10: Crown -->
+                    <svg id="design10-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                        <!-- Crown base -->
+                        <rect class="path" x="100" y="200" width="200" height="40" fill="white" stroke="#6c63ff" stroke-width="2" data-part="base"/>
+                        <!-- Crown points -->
+                        <polygon class="path" points="140,200 120,120 160,160 180,100 200,160 220,100 240,160 280,120 260,200" fill="white" stroke="#6c63ff" stroke-width="2" data-part="points"/>
+                        <!-- Jewels -->
+                        <circle class="path" cx="160" cy="140" r="10" fill="white" stroke="#6c63ff" stroke-width="2" data-part="jewel1"/>
+                        <circle class="path" cx="200" cy="120" r="10" fill="white" stroke="#6c63ff" stroke-width="2" data-part="jewel2"/>
+                        <circle class="path" cx="240" cy="140" r="10" fill="white" stroke="#6c63ff" stroke-width="2" data-part="jewel3"/>
+                        <circle class="path" cx="120" cy="180" r="8" fill="white" stroke="#6c63ff" stroke-width="2" data-part="jewel4"/>
+                        <circle class="path" cx="280" cy="180" r="8" fill="white" stroke="#6c63ff" stroke-width="2" data-part="jewel5"/>
+                        <!-- Top decoration -->
+                        <circle class="path" cx="200" cy="70" r="15" fill="white" stroke="#6c63ff" stroke-width="2" data-part="top"/>
+                    </svg>
+                </div>
+
+                <!-- Timer and Stats -->
+                <div class="stats-panel">
+                    <div class="stat-box">
+                        <div class="stat-value" id="timer">00:00</div>
+                        <div class="stat-label">Time</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="partsColored">0</div>
+                        <div class="stat-label">Parts Colored</div>
+                    </div>
+                </div>
+
+                <!-- Personal Stats -->
+                <div class="personal-stats">
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-label-sm">Total Colored</div>
+                            <div class="stat-value-lg" id="totalColored">{{ scores.total_score|default:0 }}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label-sm">Sessions</div>
+                            <div class="stat-value-lg" id="sessions">{{ scores.games_played|default:0 }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get scores from Django
+        const userScores = {{ scores|safe }};
+        let totalColored = userScores.total_score || 0;
+        let sessions = userScores.games_played || 0;
+
+        // Colors array
+        const colors = [
+            '#ff6b6b', '#4ecdc4', '#ffe66d', '#c7f0db', '#ff9ff3',
+            '#feca57', '#ff6b9d', '#48dbfb', '#1dd1a1', '#f368e0',
+            '#ff9f43', '#10ac84', '#8395a7', '#c44569', '#574b90',
+            '#ff7f50', '#7bed9f', '#70a1ff', '#ffcccc', '#b8e994'
+        ];
+
+        let currentColor = colors[0];
+        let currentTool = 'brush';
+        let coloredParts = new Set();
+        let timer = 0;
+        let timerInterval;
+        let currentDesign = 1;
+        let partsColored = 0;
+
+        // Initialize display
+        document.getElementById('totalColored').textContent = totalColored;
+        document.getElementById('sessions').textContent = sessions;
+
+        // Initialize color palette
+        const palette = document.getElementById('colorPalette');
+        colors.forEach((color, index) => {
+            const swatch = document.createElement('div');
+            swatch.className = `color-swatch ${index === 0 ? 'selected' : ''}`;
+            swatch.style.backgroundColor = color;
+            swatch.onclick = () => selectColor(color, swatch);
+            palette.appendChild(swatch);
+        });
+
+        // Function to change design
+        function changeDesign(designNumber) {
+            // Hide all SVGs
+            for (let i = 1; i <= 10; i++) {
+                const svg = document.getElementById(`design${i}-svg`);
+                if (svg) svg.style.display = 'none';
+            }
+            
+            // Show selected SVG
+            const selectedSvg = document.getElementById(`design${designNumber}-svg`);
+            if (selectedSvg) selectedSvg.style.display = 'block';
+            
+            // Update active button
+            document.querySelectorAll('.design-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(`design${designNumber}`).classList.add('active');
+            
+            // Reset coloring for new design
+            currentDesign = designNumber;
+            resetColoring();
+        }
+
+        // Add click handlers to SVG paths
+        function addPathClickHandlers() {
+            document.querySelectorAll('.path').forEach(path => {
+                // Remove existing listeners to prevent duplicates
+                path.removeEventListener('click', pathClickHandler);
+                path.addEventListener('click', pathClickHandler);
+            });
+        }
+
+        // Path click handler
+        function pathClickHandler(e) {
+            if (currentTool === 'brush') {
+                this.style.fill = currentColor;
+                coloredParts.add(this.dataset.part);
+                updatePartsColored();
+            } else if (currentTool === 'eraser') {
+                this.style.fill = 'white';
+                coloredParts.delete(this.dataset.part);
+                updatePartsColored();
+            } else if (currentTool === 'fill') {
+                document.querySelectorAll('.path').forEach(path => {
+                    path.style.fill = currentColor;
+                });
+                // Mark all parts as colored
+                document.querySelectorAll('.path').forEach(path => {
+                    coloredParts.add(path.dataset.part);
+                });
+                updatePartsColored();
+            }
+            
+            // Start timer on first interaction
+            if (!timerInterval) {
+                startTimer();
+            }
+        }
+
+        function updatePartsColored() {
+            partsColored = coloredParts.size;
+            document.getElementById('partsColored').textContent = partsColored;
+        }
+
+        function selectColor(color, element) {
+            currentColor = color;
+            document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
+            element.classList.add('selected');
+        }
+
+        function setTool(tool) {
+            currentTool = tool;
+            document.getElementById('brushBtn').classList.toggle('active', tool === 'brush');
+            document.getElementById('eraserBtn').classList.toggle('active', tool === 'eraser');
+            document.getElementById('fillBtn').classList.toggle('active', tool === 'fill');
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timer++;
+                const minutes = Math.floor(timer / 60);
+                const seconds = timer % 60;
+                document.getElementById('timer').textContent = 
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        function resetColoring() {
+            document.querySelectorAll('.path').forEach(path => {
+                path.style.fill = 'white';
+            });
+            coloredParts.clear();
+            updatePartsColored();
+            
+            // Save reset as a session
+            saveColoringSession(0);
+        }
+
+        function saveColoring() {
+            const coloredCount = coloredParts.size;
+            
+            fetch("{% url 'user:save_game_score' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({
+                    game: 'COLORING',
+                    score: coloredCount,
+                    time: timer,
+                    completed: true
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    totalColored = data.total_score;
+                    sessions = data.games_played;
+                    document.getElementById('totalColored').textContent = totalColored;
+                    document.getElementById('sessions').textContent = sessions;
+                    alert('Your beautiful artwork has been saved! 🎨');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function saveColoringSession(parts) {
+            fetch("{% url 'user:save_game_score' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({
+                    game: 'COLORING',
+                    score: parts,
+                    time: timer,
+                    completed: true
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    totalColored = data.total_score;
+                    sessions = data.games_played;
+                    document.getElementById('totalColored').textContent = totalColored;
+                    document.getElementById('sessions').textContent = sessions;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        // Initialize click handlers
+        addPathClickHandlers();
+
+        // Re-add handlers when design changes
+        window.changeDesign = function(designNumber) {
+            // Hide all SVGs
+            for (let i = 1; i <= 10; i++) {
+                const svg = document.getElementById(`design${i}-svg`);
+                if (svg) svg.style.display = 'none';
+            }
+            
+            // Show selected SVG
+            const selectedSvg = document.getElementById(`design${designNumber}-svg`);
+            if (selectedSvg) {
+                selectedSvg.style.display = 'block';
+                // Add click handlers to the new SVG paths
+                setTimeout(() => addPathClickHandlers(), 100);
+            }
+            
+            // Update active button
+            document.querySelectorAll('.design-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(`design${designNumber}`).classList.add('active');
+            
+            // Reset coloring for new design
+            currentDesign = designNumber;
+            resetColoring();
+        };
+    </script>
+</body>
+</html>

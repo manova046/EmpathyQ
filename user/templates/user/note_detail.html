@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ note.title }} - EmpathyQ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .navbar {
+            background-color: #ffffff;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            padding: 15px 0;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: #5d5fef;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: #6c63ff;
+        }
+
+        .user-badge {
+            background-color: #6c63ff;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin: 100px auto 40px;
+        }
+
+        .note-container {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+
+        .note-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f2ff;
+        }
+
+        .note-header h1 {
+            font-size: 28px;
+            color: #333;
+        }
+
+        .note-type-badge {
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .type-prescription { background: #ffebee; color: #c62828; }
+        .type-recommendation { background: #e8f5e9; color: #2e7d32; }
+        .type-exercise { background: #e3f2fd; color: #1565c0; }
+        .type-referral { background: #fff3e0; color: #ef6c00; }
+        .type-general { background: #f3e5f5; color: #7b1fa2; }
+
+        .therapist-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+        }
+
+        .therapist-avatar {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #6c63ff, #5d5fef);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .therapist-details h3 {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .therapist-details p {
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 5px;
+        }
+
+        .session-info {
+            background: #f0f2ff;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .session-info span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #555;
+        }
+
+        .session-info i {
+            color: #6c63ff;
+        }
+
+        .note-content {
+            margin: 30px 0;
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .note-content h4 {
+            color: #6c63ff;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .note-content p {
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .prescription-details {
+            background: #f8f9fa;
+            border-radius: 16px;
+            padding: 25px;
+            margin: 30px 0;
+            border-left: 4px solid #c62828;
+        }
+
+        .prescription-details h4 {
+            color: #c62828;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .prescription-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .prescription-item {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+        }
+
+        .prescription-item label {
+            color: #666;
+            font-size: 13px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .prescription-item .value {
+            font-weight: 600;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .exercise-details {
+            background: #f8f9fa;
+            border-radius: 16px;
+            padding: 25px;
+            margin: 30px 0;
+            border-left: 4px solid #1565c0;
+        }
+
+        .exercise-details h4 {
+            color: #1565c0;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .attachment-section {
+            background: #f0f2ff;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 30px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .attachment-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .attachment-info i {
+            font-size: 40px;
+            color: #6c63ff;
+        }
+
+        .attachment-details p {
+            color: #666;
+            font-size: 13px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: #6c63ff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a52d5;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(108, 99, 255, 0.3);
+        }
+
+        .btn-outline {
+            border: 2px solid #6c63ff;
+            color: #6c63ff;
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            background: #6c63ff;
+            color: white;
+        }
+
+        .btn-success {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #45a049;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            justify-content: space-between;
+        }
+
+        .nav-button {
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #6c63ff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .nav-button:hover {
+            background: #f0f2ff;
+        }
+
+        .nav-button.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .important-badge {
+            background: #ff9800;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-left: 10px;
+        }
+
+        .meta-info {
+            display: flex;
+            gap: 20px;
+            color: #999;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .note-container {
+                padding: 25px;
+            }
+            
+            .therapist-info {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .nav-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="{% url 'accounts:index' %}" class="logo">
+                <i class="fas fa-heart"></i> EmpathyQ
+            </a>
+            <span class="user-badge">
+                <i class="fas fa-user-circle"></i> {{ request.user.get_full_name|default:request.user.username }}
+            </span>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="note-container">
+            <div class="note-header">
+                <h1>{{ note.title }}</h1>
+                <span class="note-type-badge type-{{ note.note_type }}">
+                    <i class="fas 
+                        {% if note.note_type == 'prescription' %}fa-prescription
+                        {% elif note.note_type == 'recommendation' %}fa-check-circle
+                        {% elif note.note_type == 'exercise' %}fa-dumbbell
+                        {% elif note.note_type == 'referral' %}fa-hand-holding-heart
+                        {% else %}fa-sticky-note
+                        {% endif %}">
+                    </i>
+                    {{ note.get_note_type_display }}
+                    {% if note.is_important %}
+                        <span class="important-badge"><i class="fas fa-exclamation-triangle"></i> Important</span>
+                    {% endif %}
+                </span>
+            </div>
+
+            <div class="therapist-info">
+                <div class="therapist-avatar">
+                    {{ note.therapist.name|first|upper }}
+                </div>
+                <div class="therapist-details">
+                    <h3>Dr. {{ note.therapist.name }}</h3>
+                    <p><i class="fas fa-briefcase"></i> {{ note.therapist.specialization|default:"Mental Health Professional" }}</p>
+                    <p><i class="fas fa-envelope"></i> {{ note.therapist.email }}</p>
+                </div>
+            </div>
+
+            <div class="session-info">
+                <span><i class="fas fa-calendar"></i> Session Date: {{ note.session.booking_date|date:"F j, Y" }}</span>
+                <span><i class="fas fa-clock"></i> {{ note.session.booking_time|time:"g:i A" }}</span>
+                <span><i class="fas fa-tag"></i> {{ note.session.category.name }}</span>
+            </div>
+
+            <div class="meta-info">
+                <span><i class="fas fa-clock"></i> Created: {{ note.created_at|date:"F j, Y" }}</span>
+                {% if note.created_at != note.updated_at %}
+                    <span><i class="fas fa-pencil-alt"></i> Updated: {{ note.updated_at|date:"F j, Y" }}</span>
+                {% endif %}
+            </div>
+
+            <!-- Prescription Details -->
+            {% if note.note_type == 'prescription' and note.medication_name %}
+                <div class="prescription-details">
+                    <h4><i class="fas fa-prescription"></i> Prescription Details</h4>
+                    <div class="prescription-grid">
+                        <div class="prescription-item">
+                            <label>Medication</label>
+                            <div class="value">{{ note.medication_name }}</div>
+                        </div>
+                        {% if note.dosage %}
+                        <div class="prescription-item">
+                            <label>Dosage</label>
+                            <div class="value">{{ note.dosage }}</div>
+                        </div>
+                        {% endif %}
+                        {% if note.frequency %}
+                        <div class="prescription-item">
+                            <label>Frequency</label>
+                            <div class="value">{{ note.frequency }}</div>
+                        </div>
+                        {% endif %}
+                        {% if note.duration %}
+                        <div class="prescription-item">
+                            <label>Duration</label>
+                            <div class="value">{{ note.duration }}</div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Exercise Details -->
+            {% if note.note_type == 'exercise' and note.exercise_name %}
+                <div class="exercise-details">
+                    <h4><i class="fas fa-dumbbell"></i> Exercise Details</h4>
+                    <div class="prescription-grid">
+                        <div class="prescription-item">
+                            <label>Exercise</label>
+                            <div class="value">{{ note.exercise_name }}</div>
+                        </div>
+                        {% if note.exercise_duration %}
+                        <div class="prescription-item">
+                            <label>Duration</label>
+                            <div class="value">{{ note.exercise_duration }}</div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% if note.exercise_instructions %}
+                        <div style="margin-top: 20px;">
+                            <label>Instructions</label>
+                            <p style="margin-top: 10px; line-height: 1.8;">{{ note.exercise_instructions|linebreaks }}</p>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+
+            <!-- Main Content -->
+            <div class="note-content">
+                <h4>Notes & Recommendations</h4>
+                <p>{{ note.content|linebreaks }}</p>
+            </div>
+
+            <!-- Attachment -->
+            {% if note.attachment %}
+                <div class="attachment-section">
+                    <div class="attachment-info">
+                        <i class="fas fa-file-alt"></i>
+                        <div class="attachment-details">
+                            <strong>Attachment</strong>
+                            <p>Click to download the attached file</p>
+                        </div>
+                    </div>
+                    <a href="{% url 'user:download_note_attachment' note.id %}" class="btn btn-success">
+                        <i class="fas fa-download"></i> Download
+                    </a>
+                </div>
+            {% endif %}
+
+            <!-- Navigation Buttons -->
+            <div class="nav-buttons">
+                <div>
+                    <a href="{% url 'user:my_notes' %}" class="btn btn-outline">
+                        <i class="fas fa-arrow-left"></i> Back to Notes
+                    </a>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    {% if prev_note %}
+                        <a href="{% url 'user:view_note' prev_note.id %}" class="nav-button">
+                            <i class="fas fa-chevron-left"></i> Previous
+                        </a>
+                    {% endif %}
+                    {% if next_note %}
+                        <a href="{% url 'user:view_note' next_note.id %}" class="nav-button">
+                            Next <i class="fas fa-chevron-right"></i>
+                        </a>
+                    {% endif %}
+                    <a href="#" onclick="window.print()" class="btn btn-outline">
+                        <i class="fas fa-print"></i> Print
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

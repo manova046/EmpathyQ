@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join as Expert | EmpathyQ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Base Styles - Matching index.html */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation - Same as index */
+        .navbar {
+            background-color: #ffffff;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            padding: 15px 0;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: #5d5fef;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: #6c63ff;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #6c63ff;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-block;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-outline {
+            border: 2px solid #6c63ff;
+            color: #6c63ff;
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            background-color: #6c63ff;
+            color: white;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6c63ff, #5d5fef);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(108, 99, 255, 0.2);
+        }
+
+        /* Registration Hero */
+        .registration-hero {
+            padding: 150px 0 80px;
+            background: linear-gradient(135deg, #f5f7ff 0%, #f0f2ff 100%);
+            flex: 1;
+        }
+
+        .registration-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 200px);
+        }
+
+        .registration-wrapper {
+            display: flex;
+            align-items: stretch;
+            justify-content: space-between;
+            max-width: 1200px;
+            width: 100%;
+            gap: 60px;
+        }
+
+        /* Registration Info */
+        .registration-info {
+            flex: 1;
+            background: linear-gradient(135deg, #6c63ff, #5d5fef);
+            border-radius: 20px;
+            padding: 50px 40px;
+            color: white;
+            box-shadow: 0 20px 40px rgba(108, 99, 255, 0.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .registration-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .registration-icon {
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            color: white;
+            font-size: 42px;
+            backdrop-filter: blur(10px);
+        }
+
+        .registration-header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .registration-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* Benefits List */
+        .benefits-list {
+            margin-top: 30px;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+        }
+
+        .benefit-icon {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            color: #6c63ff;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .benefit-content h3 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .benefit-content p {
+            font-size: 0.95rem;
+            opacity: 0.8;
+            margin: 0;
+        }
+
+        /* Registration Form */
+        .registration-form-container {
+            flex: 1;
+            background: white;
+            border-radius: 20px;
+            padding: 50px 40px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .form-header h2 {
+            font-size: 2.2rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .form-header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+            font-size: 1rem;
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-with-icon i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c63ff;
+            font-size: 18px;
+            z-index: 1;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px 20px 15px 55px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background-color: #fafafa;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #6c63ff;
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
+        }
+
+        .form-control::placeholder {
+            color: #aaa;
+        }
+
+        /* Select Dropdown Styles */
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236c63ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 20px center;
+            background-size: 16px;
+            padding-right: 50px;
+        }
+
+        select.form-control option {
+            padding: 12px;
+            font-size: 16px;
+        }
+
+        /* File Upload Styles */
+        .file-upload-container {
+            border: 2px dashed #e0e0e0;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            background-color: #fafafa;
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .file-upload-container:hover {
+            border-color: #6c63ff;
+            background-color: #f0f2ff;
+        }
+
+        .file-upload-icon {
+            font-size: 40px;
+            color: #6c63ff;
+            margin-bottom: 15px;
+        }
+
+        .file-upload-text {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .file-upload-text strong {
+            color: #6c63ff;
+        }
+
+        .file-upload-hint {
+            font-size: 0.85rem;
+            color: #999;
+            margin-top: 10px;
+        }
+
+        .file-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .file-name {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #e8f5e9;
+            border-radius: 8px;
+            color: #2e7d32;
+            font-size: 0.95rem;
+            display: none;
+        }
+
+        .file-name i {
+            margin-right: 8px;
+        }
+
+        /* Form Grid for better layout */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-grid .form-group {
+            margin-bottom: 20px;
+        }
+
+        /* Messages */
+        .messages {
+            margin-bottom: 25px;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .alert-success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border-left: 4px solid #2e7d32;
+        }
+
+        .alert-error {
+            background-color: #ffebee;
+            color: #c62828;
+            border-left: 4px solid #c62828;
+        }
+
+        .alert i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            font-size: 18px;
+            margin-top: 20px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        /* Login Link */
+        .login-link {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .login-link p {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .login-link a {
+            color: #6c63ff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .login-link a:hover {
+            color: #5d5fef;
+            text-decoration: underline;
+        }
+
+        /* Footer - Same as index */
+        .footer {
+            background-color: #2a2a3c;
+            color: white;
+            padding: 60px 0 20px;
+            margin-top: auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-col h3 {
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            color: white;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 15px;
+        }
+
+        .footer-col ul li a {
+            color: #bbb;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-col ul li a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #444;
+            color: #bbb;
+            font-size: 0.9rem;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: background-color 0.3s;
+            text-decoration: none;
+        }
+
+        .social-icons a:hover {
+            background-color: #6c63ff;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .registration-wrapper {
+                flex-direction: column;
+                gap: 40px;
+            }
+            
+            .registration-info, .registration-form-container {
+                width: 100%;
+                max-width: 600px;
+                margin: 0 auto;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .registration-header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .form-header h2 {
+                font-size: 1.8rem;
+            }
+            
+            .registration-form-container {
+                padding: 30px 20px;
+            }
+            
+            .registration-info {
+                padding: 30px 20px;
+            }
+            
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .nav-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        /* Process Steps */
+        .process-steps {
+            margin-top: 40px;
+        }
+
+        .process-steps h3 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: white;
+            font-size: 1.4rem;
+        }
+
+        .steps {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .steps::before {
+            content: '';
+            position: absolute;
+            top: 25px;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.3);
+            z-index: 1;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            color: #6c63ff;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .step p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            max-width: 120px;
+            margin: 0 auto;
+        }
+
+        /* Required Field Indicator */
+        .required-field::after {
+            content: '*';
+            color: #ff4444;
+            margin-left: 4px;
+            font-weight: bold;
+        }
+
+        .field-note {
+            font-size: 0.85rem;
+            color: #888;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="{% url 'accounts:index' %}" class="logo">
+                <i class="fas fa-heart"></i> EmpathyQ
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="{% url 'accounts:index' %}#home">Home</a></li>
+                <li><a href="{% url 'accounts:index' %}#about">About Us</a></li>
+                <li><a href="{% url 'accounts:index' %}#features">Features</a></li>
+                <li><a href="{% url 'accounts:index' %}#testimonials">Testimonials</a></li>
+                <li><a href="{% url 'accounts:index' %}#contact">Contact</a></li>
+            </ul>
+            
+            <div class="nav-buttons">
+                <a href="{% url 'accounts:login' %}" class="btn btn-outline">Login</a>
+                <a href="{% url 'accounts:user_register' %}" class="btn btn-primary">Get Help</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Registration Hero Section -->
+    <section class="registration-hero">
+        <div class="container registration-container">
+            <div class="registration-wrapper">
+                <!-- Registration Info -->
+                <div class="registration-info">
+                    <div class="registration-header">
+                        <div class="registration-icon">
+                            <i class="fas fa-user-md"></i>
+                        </div>
+                        <h1>Join Our Expert Team</h1>
+                        <p>Make a difference in people's lives by providing compassionate mental health support</p>
+                    </div>
+
+                    <!-- Benefits List -->
+                    <div class="benefits-list">
+                        <div class="benefit-item">
+                            <div class="benefit-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div class="benefit-content">
+                                <h3>Verified Platform</h3>
+                                <p>Work on a trusted, secure platform with verified clients</p>
+                            </div>
+                        </div>
+
+                        <div class="benefit-item">
+                            <div class="benefit-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="benefit-content">
+                                <h3>Flexible Schedule</h3>
+                                <p>Set your own hours and work from anywhere</p>
+                            </div>
+                        </div>
+
+                        <div class="benefit-item">
+                            <div class="benefit-icon">
+                                <i class="fas fa-hand-holding-heart"></i>
+                            </div>
+                            <div class="benefit-content">
+                                <h3>Make an Impact</h3>
+                                <p>Help individuals on their mental wellness journey</p>
+                            </div>
+                        </div>
+
+                        <div class="benefit-item">
+                            <div class="benefit-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="benefit-content">
+                                <h3>Professional Network</h3>
+                                <p>Connect with fellow mental health professionals</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Process Steps -->
+                    <div class="process-steps">
+                        <h3>Simple Application Process</h3>
+                        <div class="steps">
+                            <div class="step">
+                                <div class="step-number">1</div>
+                                <p>Submit Application</p>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">2</div>
+                                <p>Verification Review</p>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">3</div>
+                                <p>Start Helping</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Registration Form -->
+                <div class="registration-form-container">
+                    <div class="form-header">
+                        <h2>Expert Application</h2>
+                        <p>Fill in your details to start your journey as a mental health professional</p>
+                    </div>
+
+                    <!-- Messages -->
+                    {% if messages %}
+                    <div class="messages">
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            <i class="fas {% if message.tags == 'success' %}fa-check-circle{% else %}fa-exclamation-circle{% endif %}"></i>
+                            {{ message }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <!-- Registration Form -->
+                    <form method="POST" action="{% url 'accounts:expert_register' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <h3 style="color: #6c63ff; margin-bottom: 20px; font-size: 1.3rem;">
+                            <i class="fas fa-user-circle"></i> Account Information
+                        </h3>
+                        
+                        <div class="form-group">
+                            <label for="username" class="required-field">Username</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-user"></i>
+                                <input type="text" 
+                                       id="username" 
+                                       name="username" 
+                                       class="form-control" 
+                                       placeholder="Choose a username" 
+                                       required
+                                       autofocus>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email" class="required-field">Email Address</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" 
+                                       id="email" 
+                                       name="email" 
+                                       class="form-control" 
+                                       placeholder="Enter your email" 
+                                       required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password1" class="required-field">Password</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" 
+                                       id="password1" 
+                                       name="password1" 
+                                       class="form-control" 
+                                       placeholder="Create a secure password" 
+                                       required>
+                            </div>
+                            <div class="field-note">
+                                <i class="fas fa-info-circle"></i> Minimum 8 characters with letters and numbers
+                            </div>
+                        </div>
+
+                        <h3 style="color: #6c63ff; margin: 30px 0 20px; font-size: 1.3rem;">
+                            <i class="fas fa-graduation-cap"></i> Professional Information
+                        </h3>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="qualification" class="required-field">Qualification</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-certificate"></i>
+                                    <input type="text" 
+                                           id="qualification" 
+                                           name="qualification" 
+                                           class="form-control" 
+                                           placeholder="e.g., PhD Psychology, M.Sc Clinical Psychology" 
+                                           required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="license_number" class="required-field">License Number</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-id-card"></i>
+                                    <input type="text" 
+                                           id="license_number" 
+                                           name="license_number" 
+                                           class="form-control" 
+                                           placeholder="Your professional license number" 
+                                           required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="experience_years" class="required-field">Experience (Years)</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-briefcase"></i>
+                                    <input type="number" 
+                                           id="experience_years" 
+                                           name="experience_years" 
+                                           class="form-control" 
+                                           placeholder="e.g., 5" 
+                                           min="1"
+                                           max="50"
+                                           required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="specialization" class="required-field">Specialization</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-star"></i>
+                                    <select id="specialization" name="specialization" class="form-control" required>
+                                        <option value="" disabled selected>Select your specialization</option>
+                                        <option value="Clinical Psychology">Clinical Psychology</option>
+                                        <option value="Counseling Psychology">Counseling Psychology</option>
+                                        <option value="Child & Adolescent Psychology">Child & Adolescent Psychology</option>
+                                        <option value="Educational Psychology">Educational Psychology</option>
+                                        <option value="Health Psychology">Health Psychology</option>
+                                        <option value="Neuropsychology">Neuropsychology</option>
+                                        <option value="Forensic Psychology">Forensic Psychology</option>
+                                        <option value="Industrial/Organizational Psychology">Industrial/Organizational Psychology</option>
+                                        <option value="Sports Psychology">Sports Psychology</option>
+                                        <option value="Rehabilitation Psychology">Rehabilitation Psychology</option>
+                                        <option value="Trauma & PTSD">Trauma & PTSD</option>
+                                        <option value="Anxiety & Depression">Anxiety & Depression</option>
+                                        <option value="Marriage & Family Therapy">Marriage & Family Therapy</option>
+                                        <option value="Addiction Counseling">Addiction Counseling</option>
+                                        <option value="Eating Disorders">Eating Disorders</option>
+                                        <option value="Geriatric Psychology">Geriatric Psychology</option>
+                                        <option value="School Psychology">School Psychology</option>
+                                        <option value="Behavioral Therapy">Behavioral Therapy</option>
+                                        <option value="Cognitive Behavioral Therapy (CBT)">Cognitive Behavioral Therapy (CBT)</option>
+                                        <option value="Mindfulness & Meditation">Mindfulness & Meditation</option>
+                                        <option value="Other - Specify in Qualification">Other (Specify in Qualification)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Certificate Upload Section -->
+                        <h3 style="color: #6c63ff; margin: 30px 0 20px; font-size: 1.3rem;">
+                            <i class="fas fa-certificate"></i> Verification Documents
+                        </h3>
+
+                        <div class="form-group">
+                            <label for="certificate" class="required-field">Upload Degree Certificate</label>
+                            <div class="file-upload-container" id="fileUploadContainer">
+                                <div class="file-upload-icon">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                </div>
+                                <div class="file-upload-text">
+                                    <strong>Click to upload</strong> or drag and drop
+                                </div>
+                                <div class="file-upload-hint">
+                                    Supported formats: PDF, JPEG, PNG (Max size: 10MB)
+                                </div>
+                                <input type="file" 
+                                       id="certificate" 
+                                       name="certificate" 
+                                       class="file-input" 
+                                       accept=".pdf,.jpg,.jpeg,.png" 
+                                       required>
+                            </div>
+                            <div id="fileName" class="file-name">
+                                <i class="fas fa-check-circle"></i>
+                                <span id="fileNameText"></span>
+                            </div>
+                            <div class="field-note">
+                                <i class="fas fa-info-circle"></i> Please upload your highest degree certificate or professional license
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="additional_documents">Additional Documents (Optional)</label>
+                            <div class="file-upload-container" style="border-color: #e0e0e0; background-color: #fafafa;">
+                                <div class="file-upload-icon">
+                                    <i class="fas fa-paperclip"></i>
+                                </div>
+                                <div class="file-upload-text">
+                                    <strong>Click to upload</strong> additional certifications
+                                </div>
+                                <div class="file-upload-hint">
+                                    CV, additional certifications, or license proof
+                                </div>
+                                <input type="file" 
+                                       id="additional_documents" 
+                                       name="additional_documents" 
+                                       class="file-input" 
+                                       accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" 
+                                       multiple>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div style="background-color: #f0f2ff; padding: 20px; border-radius: 12px; margin-top: 20px;">
+                                <p style="color: #444; font-size: 0.95rem; margin: 0; display: flex; align-items: flex-start;">
+                                    <i class="fas fa-shield-alt" style="color: #6c63ff; margin-right: 12px; font-size: 20px; margin-top: 2px;"></i>
+                                    <span>
+                                        <strong>Verification Process:</strong> Your documents will be securely reviewed by our verification team. 
+                                        All information is kept confidential and used only for professional verification purposes. 
+                                        You'll receive an email notification once your application is approved (usually within 2-3 business days).
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary submit-btn" id="submitBtn">
+                            <i class="fas fa-paper-plane"></i> Submit for Approval
+                        </button>
+                    </form>
+
+                    <!-- Login Link -->
+                    <div class="login-link">
+                        <p>Already have an account? <a href="{% url 'accounts:login' %}">Login here</a></p>
+                        <p style="margin-top: 10px; font-size: 0.9rem; color: #888;">
+                            Looking for support instead? <a href="{% url 'accounts:user_register' %}" style="color: #6c63ff;">Get Help as a User</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>EmpathyQ</h3>
+                    <p style="color: #bbb; margin-bottom: 20px;">Your partner in mental wellness. A safe, compassionate space for healing and growth.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="{% url 'accounts:index' %}#home">Home</a></li>
+                        <li><a href="{% url 'accounts:index' %}#about">About Us</a></li>
+                        <li><a href="{% url 'accounts:index' %}#features">Features</a></li>
+                        <li><a href="{% url 'accounts:index' %}#testimonials">Testimonials</a></li>
+                        <li><a href="{% url 'accounts:index' %}#contact">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>For Experts</h3>
+                    <ul>
+                        <li><a href="{% url 'accounts:expert_register' %}">Join Our Team</a></li>
+                        <li><a href="#">Expert Resources</a></li>
+                        <li><a href="#">Professional Guidelines</a></li>
+                        <li><a href="#">Support Community</a></li>
+                        <li><a href="#">Expert FAQs</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-envelope" style="margin-right: 10px;"></i> experts@empathyq.com</li>
+                        <li><i class="fas fa-phone" style="margin-right: 10px;"></i> +1 (800) 123-HELP</li>
+                        <li><i class="fas fa-map-marker-alt" style="margin-right: 10px;"></i> 123 Wellness Street</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 EmpathyQ. All rights reserved. | <a href="#" style="color: #bbb;">Privacy Policy</a> | <a href="#" style="color: #bbb;">Terms of Service</a></p>
+                <p style="margin-top: 10px; font-size: 0.8rem; color: #888;">All mental health professionals are verified and licensed.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script for Form Interactions -->
+    <script>
+        // Add focus effects to form inputs
+        document.querySelectorAll('.form-control:not(select)').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'translateY(-2px)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+            } else {
+                navbar.style.boxShadow = '0 2px 15px rgba(0, 0, 0, 0.05)';
+            }
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href.startsWith('#') && href !== '#') {
+                    e.preventDefault();
+                    const targetElement = document.querySelector(href);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+        });
+
+        // File upload handling for certificate
+        const certificateInput = document.getElementById('certificate');
+        const fileNameDiv = document.getElementById('fileName');
+        const fileNameText = document.getElementById('fileNameText');
+
+        certificateInput.addEventListener('change', function(e) {
+            if (this.files && this.files[0]) {
+                const file = this.files[0];
+                fileNameText.textContent = file.name + ' (' + (file.size / 1024 / 1024).toFixed(2) + ' MB)';
+                fileNameDiv.style.display = 'block';
+                
+                // Check file size (10MB limit)
+                if (file.size > 10 * 1024 * 1024) {
+                    alert('File size exceeds 10MB limit. Please choose a smaller file.');
+                    this.value = '';
+                    fileNameDiv.style.display = 'none';
+                }
+            }
+        });
+
+        // Additional documents handling
+        const additionalDocsInput = document.getElementById('additional_documents');
+        additionalDocsInput.addEventListener('change', function(e) {
+            if (this.files && this.files.length > 0) {
+                let fileNames = [];
+                for (let i = 0; i < this.files.length; i++) {
+                    fileNames.push(this.files[i].name);
+                }
+                // You can create a similar display for multiple files if needed
+                console.log('Selected files:', fileNames);
+            }
+        });
+
+        // Form validation
+        const form = document.querySelector('form');
+        const submitBtn = document.getElementById('submitBtn');
+
+        form.addEventListener('submit', function(e) {
+            const experienceYears = document.getElementById('experience_years').value;
+            const specialization = document.getElementById('specialization').value;
+            const certificate = document.getElementById('certificate').files[0];
+            
+            if (parseInt(experienceYears) < 1) {
+                e.preventDefault();
+                alert('Please enter a valid experience years (minimum 1 year)');
+                return false;
+            }
+            
+            if (!specialization) {
+                e.preventDefault();
+                alert('Please select your specialization');
+                return false;
+            }
+            
+            if (!certificate) {
+                e.preventDefault();
+                alert('Please upload your degree certificate');
+                return false;
+            }
+            
+            // Show loading state
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+            submitBtn.disabled = true;
+            
+            // Optional: Add a small delay to show loading state
+            return true;
+        });
+
+        // Drag and drop visual feedback
+        const uploadContainer = document.getElementById('fileUploadContainer');
+        
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            uploadContainer.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            uploadContainer.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            uploadContainer.addEventListener(eventName, unhighlight, false);
+        });
+
+        function highlight() {
+            uploadContainer.style.borderColor = '#6c63ff';
+            uploadContainer.style.backgroundColor = '#f0f2ff';
+        }
+
+        function unhighlight() {
+            uploadContainer.style.borderColor = '#e0e0e0';
+            uploadContainer.style.backgroundColor = '#fafafa';
+        }
+
+        uploadContainer.addEventListener('drop', function(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            certificateInput.files = files;
+            
+            // Trigger change event
+            const event = new Event('change', { bubbles: true });
+            certificateInput.dispatchEvent(event);
+        });
+
+        // Password strength indicator (optional)
+        const passwordInput = document.getElementById('password1');
+        passwordInput.addEventListener('input', function() {
+            const password = this.value;
+            let strength = 0;
+            
+            if (password.length >= 8) strength++;
+            if (password.match(/[a-z]+/)) strength++;
+            if (password.match(/[A-Z]+/)) strength++;
+            if (password.match(/[0-9]+/)) strength++;
+            if (password.match(/[$@#&!]+/)) strength++;
+            
+            // You can add visual feedback here if needed
+        });
+    </script>
+</body>
+</html>

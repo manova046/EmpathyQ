@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: #6c63ff; color: white; padding: 20px; text-align: center; }
+        .content { padding: 20px; background: #f9f9f9; }
+        .button { background: #6c63ff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>New Session Request</h2>
+        </div>
+        <div class="content">
+            <p>Hello Dr. {{ booking.therapist.name }},</p>
+            <p>You have received a new session request from <strong>{{ booking.user.get_full_name|default:booking.user.username }}</strong>.</p>
+            
+            <h3>Session Details:</h3>
+            <ul>
+                <li><strong>Date:</strong> {{ booking.booking_date }}</li>
+                <li><strong>Time:</strong> {{ booking.booking_time }}</li>
+                <li><strong>Category:</strong> {{ booking.category.name }}</li>
+                {% if booking.notes %}
+                <li><strong>Notes:</strong> {{ booking.notes }}</li>
+                {% endif %}
+            </ul>
+            
+            <p style="text-align: center;">
+                <a href="{{ site_url }}{% url 'expert:session_requests' %}" class="button">View Session Requests</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

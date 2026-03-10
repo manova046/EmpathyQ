@@ -1,0 +1,399 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors - EmpathyQ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f5f7ff 0%, #f0f2ff 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .game-wrapper {
+            padding: 40px 0;
+        }
+        
+        .choice-btn {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            transition: all 0.3s;
+            margin: 10px;
+            border: 3px solid #6c63ff;
+            background: white;
+            color: #6c63ff;
+        }
+
+        .choice-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 20px rgba(108, 99, 255, 0.3);
+            background: #6c63ff;
+            color: white;
+        }
+
+        .choice-btn i {
+            display: block;
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .display-1 {
+            font-size: 5rem;
+        }
+
+        .card {
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .back-btn {
+            background: linear-gradient(135deg, #6c63ff, #5d5fef);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(108, 99, 255, 0.2);
+            color: white;
+        }
+
+        .highest-score {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(245, 158, 11, 0.3);
+            animation: glow 2s ease-in-out infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes glow {
+            0% { box-shadow: 0 5px 15px rgba(245, 158, 11, 0.3); }
+            50% { box-shadow: 0 5px 25px rgba(245, 158, 11, 0.6); }
+            100% { box-shadow: 0 5px 15px rgba(245, 158, 11, 0.3); }
+        }
+
+        .highest-score i {
+            font-size: 2rem;
+            margin-right: 10px;
+        }
+
+        .highest-score .score-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .highest-score .score-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 30px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+
+        .new-record {
+            animation: celebrate 1s ease-in-out;
+        }
+
+        @keyframes celebrate {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); background: linear-gradient(135deg, #34d399, #10b981); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-wrapper">
+        <div class="container py-4">
+            <!-- Game Header with User Info -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2>
+                        <i class="fas fa-hand-rock text-primary"></i>
+                        Rock Paper Scissors
+                    </h2>
+                    <p class="text-muted">Welcome, <strong>{{ username }}</strong>!</p>
+                </div>
+                <a href="javascript:history.back()" class="back-btn">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+
+            <!-- Highest Score Banner -->
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <div class="highest-score" id="highestScoreBanner">
+                        <div class="d-flex align-items-center justify-content-center">
+                            <i class="fas fa-trophy"></i>
+                            <div>
+                                <div class="score-label">Your Highest Score</div>
+                                <div class="score-value" id="highestScore">0</div>
+                            </div>
+                        </div>
+                        <div class="stats-container">
+                            <div class="stat-item">
+                                <div class="stat-value" id="totalGames">0</div>
+                                <div class="stat-label">Games Played</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="totalScore">0</div>
+                                <div class="stat-label">Total Score</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game Stats -->
+            <div class="row mb-4">
+                <div class="col-md-6 mb-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h5 class="card-title text-muted">Current Score</h5>
+                            <h2 class="display-4 text-primary" id="playerScore">0</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h5 class="card-title text-muted">Computer Score</h5>
+                            <h2 class="display-4 text-warning" id="computerScore">0</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game Choices -->
+            <div class="text-center mb-5">
+                <h4 class="mb-4">Make Your Move</h4>
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <button class="btn choice-btn" onclick="playRPS('rock')">
+                        <i class="fas fa-hand-rock"></i>
+                        <span>Rock</span>
+                    </button>
+                    <button class="btn choice-btn" onclick="playRPS('paper')">
+                        <i class="fas fa-hand-paper"></i>
+                        <span>Paper</span>
+                    </button>
+                    <button class="btn choice-btn" onclick="playRPS('scissors')">
+                        <i class="fas fa-hand-scissors"></i>
+                        <span>Scissors</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Game Display -->
+            <div class="row mb-5">
+                <div class="col-md-5 mb-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h5 class="card-title">Your Choice</h5>
+                            <div class="display-1" id="playerChoiceDisplay">✊</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 d-flex align-items-center justify-content-center">
+                    <h2>VS</h2>
+                </div>
+                <div class="col-md-5 mb-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h5 class="card-title">Computer</h5>
+                            <div class="display-1" id="computerChoiceDisplay">✊</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Result Display -->
+            <div class="text-center mb-4">
+                <div class="alert alert-info" id="rpsResult">
+                    Make your move!
+                </div>
+            </div>
+
+            <!-- Reset Button -->
+            <div class="text-center">
+                <button class="btn btn-secondary" onclick="resetRPS()">
+                    <i class="fas fa-redo"></i> Reset Game
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Game state
+        let playerScore = 0;
+        let computerScore = 0;
+        let gamesPlayed = 0;
+        let highestScore = 0;
+        let totalScore = 0;
+        
+        // User identifier and scores from Django
+        const userId = '{{ user_id }}';
+        const username = '{{ username }}';
+        const gameScores = {{ scores|safe }};
+        
+        // Load initial scores from database
+        highestScore = gameScores.highest_score || 0;
+        gamesPlayed = gameScores.games_played || 0;
+        totalScore = gameScores.total_score || 0;
+        
+        document.getElementById('highestScore').textContent = highestScore;
+        document.getElementById('totalGames').textContent = gamesPlayed;
+        document.getElementById('totalScore').textContent = totalScore;
+
+        // Function to save score to database
+        function saveScoreToDatabase(score, completed) {
+            fetch('/user/api/save-score/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    game: 'RPS',
+                    score: score,
+                    completed: completed
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('Score saved successfully');
+                    // Update displayed stats
+                    if (data.highest_score > highestScore) {
+                        highestScore = data.highest_score;
+                        document.getElementById('highestScore').textContent = highestScore;
+                        
+                        // Celebration animation
+                        const banner = document.getElementById('highestScoreBanner');
+                        banner.classList.add('new-record');
+                        setTimeout(() => banner.classList.remove('new-record'), 1000);
+                    }
+                    document.getElementById('totalGames').textContent = data.games_played;
+                    document.getElementById('totalScore').textContent = data.total_score;
+                    
+                    // Update local variables
+                    gamesPlayed = data.games_played;
+                    totalScore = data.total_score;
+                }
+            })
+            .catch(error => console.error('Error saving score:', error));
+        }
+
+        // Function to get CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        function playRPS(playerChoice) {
+            const choices = ['rock', 'paper', 'scissors'];
+            const computerChoice = choices[Math.floor(Math.random() * 3)];
+            
+            const choiceEmojis = {
+                'rock': '✊',
+                'paper': '✋',
+                'scissors': '✌️'
+            };
+            
+            document.getElementById('playerChoiceDisplay').textContent = choiceEmojis[playerChoice];
+            document.getElementById('computerChoiceDisplay').textContent = choiceEmojis[computerChoice];
+            
+            let result = '';
+            let alertClass = 'alert-info';
+            let won = false;
+            
+            if (playerChoice === computerChoice) {
+                result = "It's a Tie! 🤝";
+                alertClass = 'alert-warning';
+            } else if (
+                (playerChoice === 'rock' && computerChoice === 'scissors') ||
+                (playerChoice === 'paper' && computerChoice === 'rock') ||
+                (playerChoice === 'scissors' && computerChoice === 'paper')
+            ) {
+                result = "You Win! 🎉";
+                alertClass = 'alert-success';
+                playerScore++;
+                won = true;
+            } else {
+                result = "Computer Wins 🤖";
+                alertClass = 'alert-danger';
+                computerScore++;
+            }
+            
+            document.getElementById('playerScore').textContent = playerScore;
+            document.getElementById('computerScore').textContent = computerScore;
+            
+            const resultElement = document.getElementById('rpsResult');
+            resultElement.textContent = result;
+            resultElement.className = `alert ${alertClass}`;
+            
+            // Save to database if player won
+            if (won) {
+                saveScoreToDatabase(playerScore, true);
+            }
+        }
+
+        function resetRPS() {
+            playerScore = 0;
+            computerScore = 0;
+            
+            document.getElementById('playerScore').textContent = '0';
+            document.getElementById('computerScore').textContent = '0';
+            document.getElementById('playerChoiceDisplay').textContent = '✊';
+            document.getElementById('computerChoiceDisplay').textContent = '✊';
+            
+            const resultElement = document.getElementById('rpsResult');
+            resultElement.textContent = 'Make your move!';
+            resultElement.className = 'alert alert-info';
+        }
+    </script>
+</body>
+</html>

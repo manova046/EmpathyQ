@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with Expert - EmpathyQ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navigation */
+        .navbar {
+            background-color: #ffffff;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+            padding: 15px 0;
+            flex-shrink: 0;
+        }
+
+        .nav-container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: #5d5fef;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: #6c63ff;
+        }
+
+        .back-link {
+            color: #666;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .back-link:hover {
+            color: #6c63ff;
+        }
+
+        .user-badge {
+            background-color: #6c63ff;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* Chat Container */
+        .chat-container {
+            flex: 1;
+            display: flex;
+            max-width: 1200px;
+            width: 90%;
+            margin: 20px auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        /* Sidebar - Experts List */
+        .experts-sidebar {
+            width: 300px;
+            background: #f8f9fa;
+            border-right: 1px solid #e0e0e0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .sidebar-header h3 {
+            font-size: 16px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-header h3 i {
+            color: #6c63ff;
+        }
+
+        .experts-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .expert-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 5px;
+            text-decoration: none;
+            color: inherit;
+            position: relative;
+        }
+
+        .expert-item:hover {
+            background: #f0f2ff;
+        }
+
+        .expert-item.active {
+            background: linear-gradient(135deg, #6c63ff, #5d5fef);
+            color: white;
+        }
+
+        .expert-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 20px;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .expert-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .expert-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .expert-specialty {
+            font-size: 12px;
+            color: #666;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .expert-item.active .expert-specialty {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .unread-badge {
+            background: #ff4757;
+            color: white;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 20px;
+            margin-left: 8px;
+        }
+
+        /* Chat Area */
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: white;
+        }
+
+        .chat-header {
+            padding: 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .selected-expert-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .selected-expert-avatar {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .selected-expert-details h4 {
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .selected-expert-details p {
+            font-size: 13px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .booking-badge {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 25px;
+            background: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .message.sent {
+            justify-content: flex-end;
+        }
+
+        .message.received {
+            justify-content: flex-start;
+        }
+
+        .message-content {
+            max-width: 70%;
+        }
+
+        .message-bubble {
+            padding: 12px 18px;
+            border-radius: 18px;
+            font-size: 14px;
+            line-height: 1.5;
+            word-wrap: break-word;
+        }
+
+        .message.sent .message-bubble {
+            background: linear-gradient(135deg, #6c63ff, #5d5fef);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.received .message-bubble {
+            background: white;
+            color: #333;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .message-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 5px;
+            font-size: 11px;
+        }
+
+        .message.sent .message-meta {
+            justify-content: flex-end;
+        }
+
+        .message-time {
+            color: #999;
+        }
+
+        .message-status {
+            color: #48bb78;
+        }
+
+        .chat-input-container {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            gap: 15px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 30px;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: #6c63ff;
+            box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.1);
+        }
+
+        .chat-input:disabled {
+            background: #f5f5f5;
+            cursor: not-allowed;
+        }
+
+        .btn {
+            padding: 15px 25px;
+            border-radius: 30px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6c63ff, #5d5fef);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(108, 99, 255, 0.3);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .empty-state i {
+            font-size: 60px;
+            color: #ccc;
+            margin-bottom: 15px;
+        }
+
+        .empty-state h3 {
+            margin-bottom: 10px;
+            color: #666;
+        }
+
+        .empty-state p {
+            color: #999;
+            margin-bottom: 20px;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #6c63ff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .chat-container {
+                flex-direction: column;
+            }
+            
+            .experts-sidebar {
+                width: 100%;
+                max-height: 200px;
+            }
+            
+            .message-content {
+                max-width: 85%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div style="display: flex; align-items: center; gap: 20px;">
+                <a href="{% url 'accounts:user_dashboard' %}" class="back-link">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+                <a href="{% url 'accounts:index' %}" class="logo">
+                    <i class="fas fa-heart"></i> EmpathyQ
+                </a>
+            </div>
+            <span class="user-badge">
+                <i class="fas fa-user"></i> {{ request.user.username }}
+            </span>
+        </div>
+    </nav>
+
+    <div class="chat-container">
+        <!-- Sidebar with experts list -->
+        <div class="experts-sidebar">
+            <div class="sidebar-header">
+                <h3>
+                    <i class="fas fa-user-md"></i>
+                    Your Experts
+                </h3>
+            </div>
+            <div class="experts-list" id="expertsList">
+                {% if experts %}
+                    {% for expert in experts %}
+                    <a href="{% url 'user:expert_chat_with_expert' expert.id %}" 
+                       class="expert-item {% if selected_expert and selected_expert.id == expert.id %}active{% endif %}"
+                       data-expert-id="{{ expert.id }}">
+                        <div class="expert-avatar">
+                            {{ expert.name|first|upper }}
+                        </div>
+                        <div class="expert-info">
+                            <div class="expert-name">Dr. {{ expert.name }}</div>
+                            <div class="expert-specialty">{{ expert.specialization|default:"Therapist" }}</div>
+                        </div>
+                        {% if expert.unread_count %}
+                        <span class="unread-badge">{{ expert.unread_count }}</span>
+                        {% endif %}
+                    </a>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-state" style="padding: 30px 20px;">
+                        <i class="fas fa-user-md" style="font-size: 40px;"></i>
+                        <h4 style="margin: 10px 0;">No Experts Yet</h4>
+                        <p style="font-size: 13px;">Book a session to start chatting with an expert.</p>
+                        <a href="{% url 'user:book_session' %}" class="btn btn-primary" style="padding: 8px 15px; font-size: 13px;">
+                            Book a Session
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Chat Area -->
+        <div class="chat-area">
+            {% if selected_expert %}
+            <!-- Chat Header -->
+            <div class="chat-header">
+                <div class="selected-expert-info">
+                    <div class="selected-expert-avatar">
+                        {{ selected_expert.name|first|upper }}
+                    </div>
+                    <div class="selected-expert-details">
+                        <h4>Dr. {{ selected_expert.name }}</h4>
+                        <p>
+                            <i class="fas fa-star" style="color: #fbbf24;"></i>
+                            {{ selected_expert.specialization|default:"Therapist" }}
+                        </p>
+                    </div>
+                </div>
+                {% if has_booking %}
+                <span class="booking-badge">
+                    <i class="fas fa-check-circle"></i> Session Booked
+                </span>
+                {% endif %}
+            </div>
+
+            <!-- Chat Messages -->
+            <div class="chat-messages" id="chatMessages">
+                {% if messages %}
+                    {% for msg in messages %}
+                    <div class="message {% if msg.sender == request.user %}sent{% else %}received{% endif %}">
+                        <div class="message-content">
+                            <div class="message-bubble">
+                                {{ msg.message }}
+                            </div>
+                            <div class="message-meta">
+                                <span class="message-time">{{ msg.timestamp|time:"g:i A" }}</span>
+                                {% if msg.sender == request.user %}
+                                <span class="message-status">
+                                    {% if msg.is_read %}
+                                    <i class="fas fa-check-double"></i>
+                                    {% else %}
+                                    <i class="fas fa-check"></i>
+                                    {% endif %}
+                                </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-comments"></i>
+                    <h3>No messages yet</h3>
+                    <p>Start a conversation with Dr. {{ selected_expert.name }}</p>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Chat Input -->
+            <div class="chat-input-container">
+                <input type="text" 
+                       id="messageInput" 
+                       class="chat-input" 
+                       placeholder="Type your message..." 
+                       autocomplete="off"
+                       {% if not has_booking %}disabled title="Book a session to start chatting"{% endif %}>
+                <button class="btn btn-primary" 
+                        onclick="sendMessage()" 
+                        id="sendBtn"
+                        {% if not has_booking %}disabled{% endif %}>
+                    <i class="fas fa-paper-plane"></i> Send
+                </button>
+            </div>
+            {% else %}
+            <!-- No expert selected -->
+            <div class="empty-state">
+                <i class="fas fa-user-md"></i>
+                <h3>Select an Expert</h3>
+                <p>Choose an expert from the sidebar to start chatting</p>
+                {% if not experts %}
+                <a href="{% url 'user:book_session' %}" class="btn btn-primary" style="margin-top: 20px;">
+                    Book a Session
+                </a>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if selected_expert and has_booking %}
+    <script>
+        var expertId = "{{ selected_expert.id }}";
+        var csrfToken = "{{ csrf_token }}";
+        var refreshInterval;
+
+        // Use Django URL template tags to generate correct paths
+        var messagesUrl = "{% url 'user:expert_messages' 0 %}".replace('0', expertId);
+        var sendUrl = "{% url 'user:expert_send' %}";
+
+        console.log('Messages URL:', messagesUrl);  // Should show: /user/expert-chat/messages/5/
+        console.log('Send URL:', sendUrl);          // Should show: /user/expert-chat/send/
+
+        // Auto-refresh messages every 2 seconds
+        if (messagesUrl) {
+            refreshInterval = setInterval(refreshMessages, 2000);
+        }
+
+        function refreshMessages() {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        try {
+                            var data = JSON.parse(xhr.responseText);
+                            if (data.messages) {
+                                updateMessages(data.messages);
+                            }
+                        } catch (e) {
+                            console.error('Error parsing messages:', e);
+                        }
+                    } else {
+                        console.error('Error fetching messages:', xhr.status);
+                    }
+                }
+            };
+            // Add timestamp to prevent caching
+            xhr.open('GET', messagesUrl + '?t=' + new Date().getTime(), true);
+            xhr.send();
+        }
+
+        function updateMessages(newMessages) {
+            var messagesDiv = document.getElementById('chatMessages');
+            if (!messagesDiv) return;
+
+            // Clear current messages
+            messagesDiv.innerHTML = '';
+            
+            if (newMessages.length === 0) {
+                // Show empty state
+                var emptyDiv = document.createElement('div');
+                emptyDiv.className = 'empty-state';
+                emptyDiv.innerHTML = `
+                    <i class="fas fa-comments"></i>
+                    <h3>No messages yet</h3>
+                    <p>Start a conversation with Dr. {{ selected_expert.name }}</p>
+                `;
+                messagesDiv.appendChild(emptyDiv);
+            } else {
+                // Show messages
+                for (var i = 0; i < newMessages.length; i++) {
+                    var msg = newMessages[i];
+                    var messageDiv = document.createElement('div');
+                    messageDiv.className = 'message ' + (msg.is_me ? 'sent' : 'received');
+                    
+                    var readStatus = '';
+                    if (msg.is_me) {
+                        readStatus = msg.is_read ? 
+                            '<i class="fas fa-check-double"></i>' : 
+                            '<i class="fas fa-check"></i>';
+                    }
+                    
+                    messageDiv.innerHTML = 
+                        '<div class="message-content">' +
+                            '<div class="message-bubble">' + escapeHtml(msg.message) + '</div>' +
+                            '<div class="message-meta">' +
+                                '<span class="message-time">' + msg.time + '</span>' +
+                                (msg.is_me ? '<span class="message-status">' + readStatus + '</span>' : '') +
+                            '</div>' +
+                        '</div>';
+                    
+                    messagesDiv.appendChild(messageDiv);
+                }
+            }
+            
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function escapeHtml(unsafe) {
+            if (!unsafe) return '';
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        function sendMessage() {
+            var input = document.getElementById('messageInput');
+            var sendBtn = document.getElementById('sendBtn');
+            var message = input.value.trim();
+            
+            if (!message) return;
+            
+            input.disabled = true;
+            sendBtn.disabled = true;
+            
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    input.disabled = false;
+                    sendBtn.disabled = false;
+                    if (xhr.status === 200) {
+                        try {
+                            var data = JSON.parse(xhr.responseText);
+                            if (data.success) {
+                                input.value = '';
+                                refreshMessages();
+                            } else {
+                                alert('Error: ' + (data.error || 'Unknown error'));
+                            }
+                        } catch (e) {
+                            console.error('Error:', e);
+                            alert('Failed to send message');
+                        }
+                    } else {
+                        console.error('Network error:', xhr.status);
+                        alert('Network error. Please try again.');
+                    }
+                    input.focus();
+                }
+            };
+            
+            xhr.open('POST', sendUrl, true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.setRequestHeader('X-CSRFToken', csrfToken);
+            xhr.send(JSON.stringify({
+                expert_id: expertId,
+                message: message
+            }));
+        }
+
+        // Send on Enter key
+        document.getElementById('messageInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        // Scroll to bottom on load
+        window.onload = function() {
+            var messagesDiv = document.getElementById('chatMessages');
+            if (messagesDiv) {
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            }
+        };
+
+        // Cleanup interval on page unload
+        window.onbeforeunload = function() {
+            if (refreshInterval) {
+                clearInterval(refreshInterval);
+            }
+        };
+    </script>
+    {% endif %}
+</body>
+</html>

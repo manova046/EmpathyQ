@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report & Support - EmpathyQ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        .navbar {
+            background-color: #ffffff;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            padding: 15px 0;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: #5d5fef;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: #6c63ff;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #6c63ff;
+        }
+
+        .user-badge {
+            background-color: #6c63ff;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .user-badge i {
+            margin-right: 8px;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, #6c63ff, #5d5fef);
+            color: white;
+            padding: 120px 0 60px;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .page-header p {
+            font-size: 18px;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Chat Section */
+        .chat-section {
+            padding: 60px 0;
+            background: linear-gradient(135deg, #f5f7ff 0%, #f0f2ff 100%);
+            min-height: calc(100vh - 300px);
+        }
+
+        .chat-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 20px 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .chat-header-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .chat-header-info h2 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .chat-header-info p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .chat-messages {
+            height: 400px;
+            overflow-y: auto;
+            padding: 25px;
+            background: #f8f9fa;
+        }
+
+        .message {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .message.sent {
+            justify-content: flex-end;
+        }
+
+        .message.received {
+            justify-content: flex-start;
+        }
+
+        .message-bubble {
+            max-width: 70%;
+            padding: 12px 18px;
+            border-radius: 18px;
+            position: relative;
+        }
+
+        .message.sent .message-bubble {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.received .message-bubble {
+            background: white;
+            color: #333;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .message-time {
+            font-size: 11px;
+            margin-top: 5px;
+            opacity: 0.7;
+        }
+
+        .message.sent .message-time {
+            text-align: right;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .message.received .message-time {
+            color: #999;
+        }
+
+        .message-status {
+            font-size: 11px;
+            margin-left: 5px;
+        }
+
+        .chat-input-container {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            gap: 15px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 30px;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: #10b981;
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+        }
+
+        .btn {
+            padding: 15px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #6c63ff;
+            border: 2px solid #6c63ff;
+        }
+
+        .btn-secondary:hover {
+            background: #6c63ff;
+            color: white;
+        }
+
+        .chat-info {
+            margin-top: 30px;
+            text-align: center;
+            color: #777;
+            font-size: 14px;
+        }
+
+        .chat-info i {
+            color: #10b981;
+            margin-right: 5px;
+        }
+
+        .empty-messages {
+            text-align: center;
+            padding: 60px 20px;
+            color: #777;
+        }
+
+        .empty-messages i {
+            font-size: 48px;
+            color: #ddd;
+            margin-bottom: 15px;
+        }
+
+        .alert {
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #2a2a3c;
+            color: white;
+            padding: 30px 0;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            color: #bbb;
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 32px;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .chat-container {
+                border-radius: 0;
+            }
+            
+            .message-bubble {
+                max-width: 85%;
+            }
+
+            .chat-input-container {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="{% url 'accounts:index' %}" class="logo">
+                <i class="fas fa-heart"></i> EmpathyQ
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="{% url 'accounts:index' %}#home">Home</a></li>
+                <li><a href="{% url 'accounts:index' %}#about">About Us</a></li>
+                <li><a href="{% url 'accounts:index' %}#features">Features</a></li>
+                <li><a href="{% url 'accounts:index' %}#testimonials">Testimonials</a></li>
+                <li><a href="{% url 'accounts:index' %}#contact">Contact</a></li>
+            </ul>
+            
+            <span class="user-badge">
+                <i class="fas fa-user-circle"></i> {{ request.user.username }}
+            </span>
+        </div>
+    </nav>
+
+    
+    <section class="page-header">
+        <div class="container">
+            <h1>Report & Support</h1>
+            <p>Report bugs, complaints, or get technical support from our team</p>
+        </div>
+    </section>
+
+    
+    <section class="chat-section">
+        <div class="container">
+           
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        <i class="fas {% if message.tags == 'success' %}fa-check-circle{% else %}fa-exclamation-circle{% endif %}"></i>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <div class="chat-container">
+                <div class="chat-header">
+                    <div class="chat-header-icon">
+                        <i class="fas fa-flag"></i>
+                    </div>
+                    <div class="chat-header-info">
+                        <h2>Support Team</h2>
+                        <p>
+                            <i class="fas fa-circle" style="font-size: 10px; margin-right: 5px; color: #4caf50;"></i> 
+                            Online - We'll respond shortly
+                        </p>
+                    </div>
+                </div>
+
+                <div class="chat-messages" id="chatMessages">
+                    {% if conversation %}
+                        {% for msg in conversation %}
+                            <div class="message {% if msg.sender == request.user %}sent{% else %}received{% endif %}">
+                                <div class="message-bubble">
+                                    <p>{{ msg.message }}</p>
+                                    <div class="message-time">
+                                        {{ msg.timestamp|date:"g:i A, M d" }}
+                                        {% if msg.sender == request.user %}
+                                            <span class="message-status">
+                                                {% if msg.is_read %}
+                                                    <i class="fas fa-check-double" style="color: #4caf50;"></i>
+                                                {% else %}
+                                                    <i class="fas fa-check"></i>
+                                                {% endif %}
+                                            </span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="empty-messages">
+                            <i class="fas fa-flag"></i>
+                            <h3 style="margin-bottom: 10px;">No messages yet</h3>
+                            <p>Start a conversation to report an issue or get support</p>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <form method="post" action="{% url 'user:chat' %}" class="chat-input-container" id="messageForm">
+                    {% csrf_token %}
+                    <input type="text" name="message" class="chat-input" placeholder="Type your message here..." required autocomplete="off">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> Send Message
+                    </button>
+                </form>
+            </div>
+
+            <div class="chat-info">
+                <p>
+                    <i class="fas fa-shield-alt"></i> All messages are encrypted and confidential
+                    <span style="margin-left: 20px;">
+                        <i class="fas fa-clock"></i> Response time: Within a few hours
+                    </span>
+                </p>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="{% url 'accounts:user_dashboard' %}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </section>
+
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2025 EmpathyQ. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Scroll to bottom of chat
+        function scrollToBottom() {
+            const chatMessages = document.getElementById('chatMessages');
+            if (chatMessages) {
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        }
+
+        // Auto-scroll on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            scrollToBottom();
+        });
+
+        // Auto-refresh messages every 5 seconds
+        setInterval(function() {
+            fetch(window.location.href, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const newMessages = doc.getElementById('chatMessages');
+                const oldMessages = document.getElementById('chatMessages');
+                
+                if (newMessages && oldMessages) {
+                    oldMessages.innerHTML = newMessages.innerHTML;
+                    scrollToBottom();
+                }
+            })
+            .catch(error => console.log('Auto-refresh error:', error));
+        }, 5000);
+    </script>
+</body>
+</html>

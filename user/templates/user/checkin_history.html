@@ -1,0 +1,319 @@
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body {
+    background: linear-gradient(135deg, #eef2ff, #f8fafc);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.dashboard-container {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.dashboard-title {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* NEW: Dashboard Button Styles */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.btn-dashboard {
+    background: #4f46e5;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2);
+}
+
+.btn-dashboard:hover {
+    background: #4338ca;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
+}
+
+.btn-dashboard i {
+    font-size: 16px;
+}
+
+.btn-dashboard-outline {
+    background: transparent;
+    color: #4f46e5;
+    border: 2px solid #4f46e5;
+    padding: 10px 22px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-dashboard-outline:hover {
+    background: #4f46e5;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.header-dashboard-btn {
+    background: rgba(79, 70, 229, 0.1);
+    color: #4f46e5;
+    padding: 10px 20px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid rgba(79, 70, 229, 0.2);
+}
+
+.header-dashboard-btn:hover {
+    background: rgba(79, 70, 229, 0.2);
+    transform: translateX(-5px);
+}
+
+.button-group {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .button-group {
+        width: 100%;
+        justify-content: space-between;
+    }
+}
+
+.filter-box {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    margin-bottom: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: space-between;
+}
+
+.filter-box input,
+.filter-box select {
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.filter-box button {
+    background: #4f46e5;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.summary-card {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    margin-bottom: 30px;
+}
+
+.chart-container {
+    width: 100%;
+    max-width: 400px;
+    margin: auto;
+}
+
+.checkin-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.checkin-card {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+    transition: 0.3s ease;
+}
+
+.checkin-card:hover {
+    transform: translateY(-5px);
+}
+
+.details-btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 6px 14px;
+    background: #4f46e5;
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+}
+</style>
+
+<div class="dashboard-container">
+
+    <!-- NEW: Dashboard Header with Back Button -->
+    <div class="dashboard-header">
+        <a href="{% url 'accounts:user_dashboard' %}" class="btn-dashboard">
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-tachometer-alt"></i>
+            Back to Dashboard
+        </a>
+        
+        <div class="button-group">
+            <a href="{% url 'user:emotional_checkin' %}" class="header-dashboard-btn">
+                <i class="fas fa-plus-circle"></i>
+                New Check-in
+            </a>
+            <a href="{% url 'user:book_session' %}" class="header-dashboard-btn">
+                <i class="fas fa-calendar-plus"></i>
+                Book Session
+            </a>
+        </div>
+    </div>
+
+    <div class="dashboard-title">
+        <h2>Your Emotional Insights Dashboard</h2>
+        <p>Total Check-ins: <strong>{{ total_checkins }}</strong></p>
+    </div>
+
+    <!-- FILTER SECTION -->
+    <form method="GET" class="filter-box">
+        <div>
+            <label>From:</label>
+            <input type="date" name="start_date" value="{{ start_date }}">
+        </div>
+
+        <div>
+            <label>To:</label>
+            <input type="date" name="end_date" value="{{ end_date }}">
+        </div>
+
+        <div>
+            <label>Mood:</label>
+            <select name="mood">
+                <option value="">All</option>
+                <option value="low">Low</option>
+                <option value="stressed">Stressed</option>
+                <option value="calm">Calm</option>
+                <option value="motivated">Motivated</option>
+                <option value="anxious">Anxious</option>
+                <option value="neutral">Neutral</option>
+                <option value="irritable">Irritable</option>
+            </select>
+        </div>
+
+        <button type="submit">Apply Filter</button>
+    </form>
+
+    <!-- SUMMARY -->
+    {% if mood_insight %}
+    <div class="summary-card">
+        <h3>📊 Mood Insight</h3>
+        <p>{{ mood_insight }}</p>
+    </div>
+    {% endif %}
+
+    <!-- PIE CHART -->
+    <div class="summary-card">
+        <h3>Mood Distribution</h3>
+        <div class="chart-container">
+            <canvas id="moodChart"></canvas>
+        </div>
+    </div>
+
+    <!-- CHECKIN CARDS -->
+    <div class="checkin-grid">
+        {% for checkin in checkins %}
+        <div class="checkin-card">
+            <p><strong>{{ checkin.created_at|date:"M d, Y" }}</strong></p>
+            <p>Mood: {{ checkin.primary_mood|title }}</p>
+            <p>Intensity: {{ checkin.intensity_score }}/10</p>
+            <a href="{% url 'user:checkin_detail' checkin.id %}" class="details-btn">
+                View Details
+            </a>
+        </div>
+        {% empty %}
+        <p>No check-ins found.</p>
+        {% endfor %}
+    </div>
+
+    <!-- NEW: Bottom Dashboard Button -->
+    <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(0,0,0,0.05);">
+        <a href="{% url 'accounts:user_dashboard' %}" class="btn-dashboard-outline">
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-tachometer-alt"></i>
+            Back to Dashboard
+        </a>
+    </div>
+
+</div>
+
+<!-- Font Awesome for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<script>
+const ctx = document.getElementById('moodChart').getContext('2d');
+
+new Chart(ctx, {
+    type: 'pie',
+    data: {
+        labels: ['Low', 'Stressed', 'Calm', 'Motivated', 'Anxious', 'Neutral', 'Irritable'],
+        datasets: [{
+            data: [
+                {{ mood_data.low }},
+                {{ mood_data.stressed }},
+                {{ mood_data.calm }},
+                {{ mood_data.motivated }},
+                {{ mood_data.anxious }},
+                {{ mood_data.neutral }},
+                {{ mood_data.irritable }}
+            ],
+            backgroundColor: [
+                '#ef4444',
+                '#f97316',
+                '#22c55e',
+                '#3b82f6',
+                '#a855f7',
+                '#64748b',
+                '#e11d48'
+            ]
+        }]
+    }
+});
+</script>

@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progress Report - EmpathyQ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        .navbar {
+            background-color: #ffffff;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            padding: 15px 0;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: #5d5fef;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: #6c63ff;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #6c63ff;
+        }
+
+        .user-badge {
+            background-color: #6c63ff;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .user-badge i {
+            margin-right: 8px;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, #6c63ff, #5d5fef);
+            color: white;
+            padding: 120px 0 60px;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .page-header p {
+            font-size: 18px;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Report Section */
+        .report-section {
+            padding: 60px 0;
+            background: linear-gradient(135deg, #f5f7ff 0%, #f0f2ff 100%);
+            min-height: calc(100vh - 300px);
+        }
+
+        .report-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .report-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .report-header h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .report-header h2 i {
+            color: #6c63ff;
+        }
+
+        .report-date {
+            color: #6c63ff;
+            font-weight: 600;
+            padding: 8px 16px;
+            background: #f0f2ff;
+            border-radius: 30px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .summary-item {
+            text-align: center;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            transition: transform 0.3s;
+        }
+
+        .summary-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(108, 99, 255, 0.1);
+        }
+
+        .summary-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #6c63ff, #5d5fef);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            color: white;
+            font-size: 28px;
+        }
+
+        .summary-label {
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .summary-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .summary-unit {
+            font-size: 14px;
+            color: #777;
+            margin-left: 5px;
+        }
+
+        .section-title {
+            margin: 40px 0 20px;
+            font-size: 22px;
+            font-weight: 700;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: #6c63ff;
+        }
+
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #f8f9fa;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .stats-table tr {
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .stats-table tr:last-child {
+            border-bottom: none;
+        }
+
+        .stats-table td {
+            padding: 18px 25px;
+        }
+
+        .stats-table td:first-child {
+            font-weight: 600;
+            color: #555;
+            width: 60%;
+        }
+
+        .stats-table td:last-child {
+            text-align: right;
+            font-weight: 700;
+            color: #6c63ff;
+            width: 40%;
+        }
+
+        .badge-container {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 24px;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 600;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .badge i {
+            font-size: 16px;
+        }
+
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .badge-info {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        .insight-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .insight-card {
+            background: linear-gradient(135deg, #6c63ff, #5d5fef);
+            color: white;
+            border-radius: 20px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .insight-card::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .insight-icon {
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+
+        .insight-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .insight-text {
+            opacity: 0.9;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .progress-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            margin-top: 30px;
+        }
+
+        .progress-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .progress-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #6c63ff, #5d5fef);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+
+        .progress-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .progress-subtitle {
+            color: #777;
+            font-size: 14px;
+        }
+
+        .progress-bar-container {
+            height: 12px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0 15px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6c63ff, #5d5fef);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-stats {
+            display: flex;
+            justify-content: space-between;
+            color: #777;
+            font-size: 14px;
+        }
+
+        .progress-percentage {
+            font-size: 24px;
+            font-weight: 700;
+            color: #6c63ff;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6c63ff, #5d5fef);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(108, 99, 255, 0.2);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #6c63ff;
+            border: 2px solid #6c63ff;
+        }
+
+        .btn-secondary:hover {
+            background: #6c63ff;
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 40px;
+            background: white;
+            border-radius: 20px;
+        }
+
+        .empty-state i {
+            font-size: 64px;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+
+        .empty-state h3 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            color: #777;
+            margin-bottom: 25px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .footer {
+            background-color: #2a2a3c;
+            color: white;
+            padding: 30px 0;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            color: #bbb;
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .summary-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .insight-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 32px;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .report-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .report-card {
+                padding: 25px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media print {
+            .navbar, .footer, .action-buttons {
+                display: none;
+            }
+            
+            .page-header {
+                background: #6c63ff;
+                padding: 60px 0;
+            }
+            
+            .report-card {
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="{% url 'accounts:index' %}" class="logo">
+                <i class="fas fa-heart"></i> EmpathyQ
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="{% url 'accounts:index' %}#home">Home</a></li>
+                <li><a href="{% url 'accounts:index' %}#about">About Us</a></li>
+                <li><a href="{% url 'accounts:index' %}#features">Features</a></li>
+                <li><a href="{% url 'accounts:index' %}#testimonials">Testimonials</a></li>
+                <li><a href="{% url 'accounts:index' %}#contact">Contact</a></li>
+            </ul>
+            
+            <span class="user-badge">
+                <i class="fas fa-user-circle"></i> {{ request.user.username }}
+            </span>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Progress Report</h1>
+            <p>Comprehensive overview of your emotional wellness journey</p>
+        </div>
+    </section>
+
+    <!-- Report Section -->
+    <section class="report-section">
+        <div class="container">
+            {% if total_checkins > 0 %}
+                <!-- Main Report Card -->
+                <div class="report-card">
+                    <div class="report-header">
+                        <h2>
+                            <i class="fas fa-chart-bar"></i>
+                            Wellness Summary
+                        </h2>
+                        <span class="report-date">
+                            <i class="fas fa-calendar"></i> {% now "F j, Y" %}
+                        </span>
+                    </div>
+
+                    <!-- Summary Stats -->
+                    <div class="summary-grid">
+                        <div class="summary-item">
+                            <div class="summary-icon">
+                                <i class="fas fa-smile"></i>
+                            </div>
+                            <div class="summary-label">Total Check-ins</div>
+                            <div class="summary-value">{{ total_checkins|default:"0" }}</div>
+                        </div>
+                        
+                        <div class="summary-item">
+                            <div class="summary-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="summary-label">Average Intensity</div>
+                            <div class="summary-value">{{ avg_intensity|default:"0" }}<span class="summary-unit">/10</span></div>
+                        </div>
+                        
+                        <div class="summary-item">
+                            <div class="summary-icon">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <div class="summary-label">Most Common Mood</div>
+                            <div class="summary-value">{{ most_common_mood.primary_mood|title|default:"N/A" }}</div>
+                        </div>
+                    </div>
+
+                    <!-- Achievement Badges -->
+                    <div class="badge-container">
+                        {% if total_checkins >= 10 %}
+                            <span class="badge badge-success">
+                                <i class="fas fa-crown"></i> Consistency Champion - 10+ Check-ins
+                            </span>
+                        {% endif %}
+                        {% if completion_rate >= 75 %}
+                            <span class="badge badge-success">
+                                <i class="fas fa-check-circle"></i> Task Master - 75%+ Completion
+                            </span>
+                        {% endif %}
+                        {% if weekly_checkins >= 5 %}
+                            <span class="badge badge-info">
+                                <i class="fas fa-fire"></i> Weekly Warrior - 5+ Check-ins This Week
+                            </span>
+                        {% endif %}
+                    </div>
+
+                    <!-- Emotional Statistics -->
+                    <h3 class="section-title">
+                        <i class="fas fa-chart-pie"></i>
+                        Emotional Statistics
+                    </h3>
+                    
+                    <table class="stats-table">
+                        <tr>
+                            <td>Total Emotional Check-ins</td>
+                            <td>{{ total_checkins|default:"0" }} sessions</td>
+                        </tr>
+                        <tr>
+                            <td>Weekly Check-ins (Last 7 days)</td>
+                            <td>{{ weekly_checkins|default:"0" }} sessions</td>
+                        </tr>
+                        <tr>
+                            <td>Average Mood Intensity</td>
+                            <td>{{ avg_intensity|default:"0" }}/10</td>
+                        </tr>
+                        <tr>
+                            <td>Most Frequent Mood</td>
+                            <td>{{ most_common_mood.primary_mood|title|default:"N/A" }} ({{ most_common_mood.count|default:"0" }} times)</td>
+                        </tr>
+                    </table>
+
+                    <!-- Task Statistics -->
+                    <h3 class="section-title">
+                        <i class="fas fa-tasks"></i>
+                        Task Performance
+                    </h3>
+                    
+                    <table class="stats-table">
+                        <tr>
+                            <td>Total Tasks Assigned</td>
+                            <td>{{ total_tasks|default:"0" }} tasks</td>
+                        </tr>
+                        <tr>
+                            <td>Tasks Completed</td>
+                            <td>{{ completed_tasks|default:"0" }} tasks</td>
+                        </tr>
+                        <tr>
+                            <td>Tasks Pending</td>
+                            <td>{{ total_tasks|add:completed_tasks|default:"0" }} tasks</td>
+                        </tr>
+                        <tr>
+                            <td>Completion Rate</td>
+                            <td>{{ completion_rate|default:"0" }}%</td>
+                        </tr>
+                    </table>
+
+                    <!-- Session Statistics -->
+                    <h3 class="section-title">
+                        <i class="fas fa-calendar-check"></i>
+                        Session Statistics
+                    </h3>
+                    
+                    <table class="stats-table">
+                        <tr>
+                            <td>Total Sessions Booked</td>
+                            <td>{{ total_sessions|default:"0" }} sessions</td>
+                        </tr>
+                        <tr>
+                            <td>Sessions Completed</td>
+                            <td>{{ completed_sessions|default:"0" }} sessions</td>
+                        </tr>
+                    </table>
+
+                    <!-- Progress Bar -->
+                    <div class="progress-card">
+                        <div class="progress-header">
+                            <div class="progress-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div>
+                                <div class="progress-title">Overall Progress</div>
+                                <div class="progress-subtitle">Based on your engagement and task completion</div>
+                            </div>
+                        </div>
+                        
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" style="width: {{ completion_rate|default:'0' }}%;"></div>
+                        </div>
+                        <div class="progress-stats">
+                            <span>Started: {{ request.user.date_joined|date:"M Y" }}</span>
+                            <span class="progress-percentage">{{ completion_rate|default:"0" }}%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Insights Section -->
+                <div class="report-card">
+                    <h2 style="margin-bottom: 30px; display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-lightbulb" style="color: #6c63ff;"></i>
+                        Your Wellness Insights
+                    </h2>
+                    
+                    <div class="insight-grid">
+                        <div class="insight-card">
+                            <div class="insight-icon">
+                                <i class="fas fa-smile"></i>
+                            </div>
+                            <div class="insight-title">Mood Pattern</div>
+                            <div class="insight-text">
+                                {% if most_common_mood.primary_mood == 'calm' %}
+                                    You're maintaining excellent emotional balance. Keep up with your mindfulness practices!
+                                {% elif most_common_mood.primary_mood == 'motivated' %}
+                                    Your motivation is high! Channel this energy into achieving your goals.
+                                {% elif most_common_mood.primary_mood == 'anxious' %}
+                                    You've been feeling anxious. Remember to practice grounding exercises.
+                                {% elif most_common_mood.primary_mood == 'low' %}
+                                    You've been feeling low. Small wins and self-care can help lift your spirits.
+                                {% elif most_common_mood.primary_mood == 'stressed' %}
+                                    You're experiencing stress. Take short breaks and prioritize rest.
+                                {% else %}
+                                    You're showing good emotional awareness. Continue checking in regularly.
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="insight-card">
+                            <div class="insight-icon">
+                                <i class="fas fa-tasks"></i>
+                            </div>
+                            <div class="insight-title">Task Completion</div>
+                            <div class="insight-text">
+                                {% if completion_rate >= 75 %}
+                                    Excellent job completing tasks! You're very proactive in your wellness journey.
+                                {% elif completion_rate >= 50 %}
+                                    Good progress on tasks. Try to complete one more task today!
+                                {% elif completion_rate >= 25 %}
+                                    You're making progress. Set small, achievable daily goals.
+                                {% else %}
+                                    Start with one small task today. Every step counts!
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="insight-card">
+                            <div class="insight-icon">
+                                <i class="fas fa-calendar"></i>
+                            </div>
+                            <div class="insight-title">Check-in Consistency</div>
+                            <div class="insight-text">
+                                {% if weekly_checkins >= 5 %}
+                                    Amazing consistency! Regular check-ins help track your emotional patterns effectively.
+                                {% elif weekly_checkins >= 3 %}
+                                    Good consistency. Try to check in daily for better insights.
+                                {% else %}
+                                    Regular check-ins help track your progress. Try to check in more frequently.
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="insight-card">
+                            <div class="insight-icon">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <div class="insight-title">Wellness Score</div>
+                            <div class="insight-text">
+                                {% with score=avg_intensity|floatformat:0 %}
+                                    {% if score >= 8 %}
+                                        You're feeling intense emotions. Remember to practice self-care.
+                                    {% elif score >= 5 %}
+                                        You're experiencing moderate emotional intensity. This is normal and healthy.
+                                    {% else %}
+                                        You're feeling calm and balanced. Great job maintaining equilibrium!
+                                    {% endif %}
+                                {% endwith %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <a href="{% url 'user:track_progress' %}" class="btn btn-primary">
+                        <i class="fas fa-chart-line"></i> View Detailed Progress
+                    </a>
+                    <a href="{% url 'user:emotional_checkin' %}" class="btn btn-secondary">
+                        <i class="fas fa-plus-circle"></i> New Check-in
+                    </a>
+                    <a href="{% url 'accounts:user_dashboard' %}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to Dashboard
+                    </a>
+                    <button onclick="window.print()" class="btn btn-secondary">
+                        <i class="fas fa-print"></i> Print Report
+                    </button>
+                </div>
+
+            {% else %}
+                <!-- Empty State -->
+                <div class="empty-state">
+                    <i class="fas fa-file-alt"></i>
+                    <h3>No Report Available</h3>
+                    <p>You haven't completed any emotional check-ins yet. Start your journey to generate your first progress report.</p>
+                    <a href="{% url 'user:emotional_checkin' %}" class="btn btn-primary">
+                        <i class="fas fa-smile"></i> Complete First Check-in
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2025 EmpathyQ. All rights reserved. | Your trusted partner in mental wellness</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Auto-calculate pending tasks
+        document.addEventListener('DOMContentLoaded', function() {
+            const totalTasks = parseInt('{{ total_tasks|default:"0" }}');
+            const completedTasks = parseInt('{{ completed_tasks|default:"0" }}');
+            const pendingTasks = totalTasks - completedTasks;
+            
+            const pendingElements = document.querySelectorAll('.stats-table td:last-child');
+            pendingElements.forEach(element => {
+                if (element.textContent.includes('Tasks Pending')) {
+                    element.textContent = pendingTasks + ' tasks';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,4762 @@
+[
+  {
+    "model": "user.emotionaloption",
+    "pk": 1001,
+    "fields": {
+      "question": 101,
+      "option_text": "Very low energy - could barely move",
+      "mood": "tired",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1002,
+    "fields": {
+      "question": 101,
+      "option_text": "Low energy - feeling sluggish",
+      "mood": "tired",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1003,
+    "fields": {
+      "question": 101,
+      "option_text": "Medium energy - feeling okay",
+      "mood": "neutral",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1004,
+    "fields": {
+      "question": 101,
+      "option_text": "High energy - feeling active",
+      "mood": "energetic",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1005,
+    "fields": {
+      "question": 101,
+      "option_text": "Very high energy - bursting with energy",
+      "mood": "energetic",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1006,
+    "fields": {
+      "question": 102,
+      "option_text": "Happy and content",
+      "mood": "happy",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1007,
+    "fields": {
+      "question": 102,
+      "option_text": "Sad or down",
+      "mood": "low",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1008,
+    "fields": {
+      "question": 102,
+      "option_text": "Anxious or worried",
+      "mood": "anxious",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1009,
+    "fields": {
+      "question": 102,
+      "option_text": "Calm and peaceful",
+      "mood": "peaceful",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1010,
+    "fields": {
+      "question": 102,
+      "option_text": "Excited and enthusiastic",
+      "mood": "excited",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1011,
+    "fields": {
+      "question": 102,
+      "option_text": "Grateful and appreciative",
+      "mood": "grateful",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1012,
+    "fields": {
+      "question": 102,
+      "option_text": "Hopeful and optimistic",
+      "mood": "hopeful",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1013,
+    "fields": {
+      "question": 102,
+      "option_text": "Lonely and isolated",
+      "mood": "lonely",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1014,
+    "fields": {
+      "question": 102,
+      "option_text": "Overwhelmed by everything",
+      "mood": "overwhelmed",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1015,
+    "fields": {
+      "question": 103,
+      "option_text": "Unable to focus at all",
+      "mood": "confused",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1016,
+    "fields": {
+      "question": 103,
+      "option_text": "Struggling to concentrate",
+      "mood": "confused",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1017,
+    "fields": {
+      "question": 103,
+      "option_text": "Moderate focus",
+      "mood": "neutral",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1018,
+    "fields": {
+      "question": 103,
+      "option_text": "Good focus",
+      "mood": "motivated",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1019,
+    "fields": {
+      "question": 103,
+      "option_text": "Extremely focused and in flow",
+      "mood": "motivated",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1020,
+    "fields": {
+      "question": 104,
+      "option_text": "Deeply connected to others",
+      "mood": "loved",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1021,
+    "fields": {
+      "question": 104,
+      "option_text": "Somewhat connected",
+      "mood": "grateful",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1022,
+    "fields": {
+      "question": 104,
+      "option_text": "Neutral - neither connected nor disconnected",
+      "mood": "neutral",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1023,
+    "fields": {
+      "question": 104,
+      "option_text": "Feeling somewhat disconnected",
+      "mood": "lonely",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1024,
+    "fields": {
+      "question": 104,
+      "option_text": "Completely isolated and alone",
+      "mood": "lonely",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1025,
+    "fields": {
+      "question": 105,
+      "option_text": "No stress at all",
+      "mood": "peaceful",
+      "intensity_score": 1
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1026,
+    "fields": {
+      "question": 105,
+      "option_text": "Mild stress",
+      "mood": "stressed",
+      "intensity_score": 3
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1027,
+    "fields": {
+      "question": 105,
+      "option_text": "Moderate stress",
+      "mood": "stressed",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1028,
+    "fields": {
+      "question": 105,
+      "option_text": "High stress",
+      "mood": "stressed",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1029,
+    "fields": {
+      "question": 105,
+      "option_text": "Overwhelming stress",
+      "mood": "overwhelmed",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1030,
+    "fields": {
+      "question": 106,
+      "option_text": "Very optimistic - things look bright",
+      "mood": "hopeful",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1031,
+    "fields": {
+      "question": 106,
+      "option_text": "Somewhat optimistic",
+      "mood": "hopeful",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1032,
+    "fields": {
+      "question": 106,
+      "option_text": "Neutral about the future",
+      "mood": "neutral",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1033,
+    "fields": {
+      "question": 106,
+      "option_text": "Somewhat pessimistic",
+      "mood": "hopeless",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1034,
+    "fields": {
+      "question": 106,
+      "option_text": "Very pessimistic - no hope",
+      "mood": "hopeless",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1035,
+    "fields": {
+      "question": 107,
+      "option_text": "Taking excellent care of myself",
+      "mood": "proud",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1036,
+    "fields": {
+      "question": 107,
+      "option_text": "Doing okay with self-care",
+      "mood": "neutral",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1037,
+    "fields": {
+      "question": 107,
+      "option_text": "Neglecting myself a bit",
+      "mood": "tired",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1038,
+    "fields": {
+      "question": 107,
+      "option_text": "Completely neglecting self-care",
+      "mood": "low",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1039,
+    "fields": {
+      "question": 108,
+      "option_text": "Very supported by others",
+      "mood": "loved",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1040,
+    "fields": {
+      "question": 108,
+      "option_text": "Somewhat supported",
+      "mood": "grateful",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1041,
+    "fields": {
+      "question": 108,
+      "option_text": "Neutral - neither supported nor unsupported",
+      "mood": "neutral",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1042,
+    "fields": {
+      "question": 108,
+      "option_text": "Not very supported",
+      "mood": "lonely",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1043,
+    "fields": {
+      "question": 108,
+      "option_text": "Completely unsupported and alone",
+      "mood": "lonely",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1044,
+    "fields": {
+      "question": 109,
+      "option_text": "Very clear thinking",
+      "mood": "motivated",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1045,
+    "fields": {
+      "question": 109,
+      "option_text": "Fairly clear",
+      "mood": "neutral",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1046,
+    "fields": {
+      "question": 109,
+      "option_text": "A bit foggy",
+      "mood": "confused",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1047,
+    "fields": {
+      "question": 109,
+      "option_text": "Very foggy - can't think straight",
+      "mood": "confused",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1048,
+    "fields": {
+      "question": 110,
+      "option_text": "Excellent - best mood",
+      "mood": "happy",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1049,
+    "fields": {
+      "question": 110,
+      "option_text": "Good mood",
+      "mood": "happy",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1050,
+    "fields": {
+      "question": 110,
+      "option_text": "Okay - neutral",
+      "mood": "neutral",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1051,
+    "fields": {
+      "question": 110,
+      "option_text": "Not great",
+      "mood": "low",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1052,
+    "fields": {
+      "question": 110,
+      "option_text": "Terrible - worst mood",
+      "mood": "low",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1053,
+    "fields": {
+      "question": 111,
+      "option_text": "Experiencing lots of joy",
+      "mood": "happy",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1054,
+    "fields": {
+      "question": 111,
+      "option_text": "Some joyful moments",
+      "mood": "happy",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1055,
+    "fields": {
+      "question": 111,
+      "option_text": "Little joy recently",
+      "mood": "neutral",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1056,
+    "fields": {
+      "question": 111,
+      "option_text": "No joy at all",
+      "mood": "low",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1057,
+    "fields": {
+      "question": 112,
+      "option_text": "Completely overwhelmed",
+      "mood": "overwhelmed",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1058,
+    "fields": {
+      "question": 112,
+      "option_text": "Very overwhelmed",
+      "mood": "overwhelmed",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1059,
+    "fields": {
+      "question": 112,
+      "option_text": "Somewhat overwhelmed",
+      "mood": "stressed",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1060,
+    "fields": {
+      "question": 112,
+      "option_text": "Managing okay",
+      "mood": "neutral",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1061,
+    "fields": {
+      "question": 112,
+      "option_text": "Handling everything well",
+      "mood": "motivated",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1062,
+    "fields": {
+      "question": 113,
+      "option_text": "Completely peaceful mind",
+      "mood": "peaceful",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1063,
+    "fields": {
+      "question": 113,
+      "option_text": "Mostly peaceful",
+      "mood": "calm",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1064,
+    "fields": {
+      "question": 113,
+      "option_text": "Somewhat peaceful",
+      "mood": "neutral",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1065,
+    "fields": {
+      "question": 113,
+      "option_text": "Racing thoughts",
+      "mood": "anxious",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1066,
+    "fields": {
+      "question": 113,
+      "option_text": "Chaotic, noisy mind",
+      "mood": "overwhelmed",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1067,
+    "fields": {
+      "question": 114,
+      "option_text": "Highly motivated",
+      "mood": "motivated",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1068,
+    "fields": {
+      "question": 114,
+      "option_text": "Fairly motivated",
+      "mood": "motivated",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1069,
+    "fields": {
+      "question": 114,
+      "option_text": "Somewhat motivated",
+      "mood": "neutral",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1070,
+    "fields": {
+      "question": 114,
+      "option_text": "Not very motivated",
+      "mood": "tired",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1071,
+    "fields": {
+      "question": 114,
+      "option_text": "Completely unmotivated",
+      "mood": "low",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1072,
+    "fields": {
+      "question": 115,
+      "option_text": "Very appreciated",
+      "mood": "loved",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1073,
+    "fields": {
+      "question": 115,
+      "option_text": "Somewhat appreciated",
+      "mood": "grateful",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1074,
+    "fields": {
+      "question": 115,
+      "option_text": "Neutral - not sure",
+      "mood": "neutral",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1075,
+    "fields": {
+      "question": 115,
+      "option_text": "Not appreciated",
+      "mood": "lonely",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1076,
+    "fields": {
+      "question": 115,
+      "option_text": "Completely unappreciated",
+      "mood": "low",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1077,
+    "fields": {
+      "question": 116,
+      "option_text": "Very calm and relaxed body",
+      "mood": "peaceful",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1078,
+    "fields": {
+      "question": 116,
+      "option_text": "Mostly calm",
+      "mood": "calm",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1079,
+    "fields": {
+      "question": 116,
+      "option_text": "A bit restless",
+      "mood": "anxious",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1080,
+    "fields": {
+      "question": 116,
+      "option_text": "Very restless",
+      "mood": "anxious",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1081,
+    "fields": {
+      "question": 116,
+      "option_text": "Extremely agitated",
+      "mood": "stressed",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1082,
+    "fields": {
+      "question": 117,
+      "option_text": "Very hopeful about challenges",
+      "mood": "hopeful",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1083,
+    "fields": {
+      "question": 117,
+      "option_text": "Somewhat hopeful",
+      "mood": "hopeful",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1084,
+    "fields": {
+      "question": 117,
+      "option_text": "Neutral about challenges",
+      "mood": "neutral",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1085,
+    "fields": {
+      "question": 117,
+      "option_text": "Not very hopeful",
+      "mood": "hopeless",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1086,
+    "fields": {
+      "question": 117,
+      "option_text": "Completely hopeless",
+      "mood": "hopeless",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1087,
+    "fields": {
+      "question": 118,
+      "option_text": "Very easy to make decisions",
+      "mood": "motivated",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1088,
+    "fields": {
+      "question": 118,
+      "option_text": "Fairly easy",
+      "mood": "neutral",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1089,
+    "fields": {
+      "question": 118,
+      "option_text": "A bit difficult",
+      "mood": "confused",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1090,
+    "fields": {
+      "question": 118,
+      "option_text": "Very difficult",
+      "mood": "overwhelmed",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1091,
+    "fields": {
+      "question": 118,
+      "option_text": "Cannot decide anything",
+      "mood": "overwhelmed",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1092,
+    "fields": {
+      "question": 119,
+      "option_text": "Deeply connected to myself",
+      "mood": "peaceful",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1093,
+    "fields": {
+      "question": 119,
+      "option_text": "Somewhat connected",
+      "mood": "calm",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1094,
+    "fields": {
+      "question": 119,
+      "option_text": "Neutral - not sure",
+      "mood": "neutral",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1095,
+    "fields": {
+      "question": 119,
+      "option_text": "Disconnected from myself",
+      "mood": "confused",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1096,
+    "fields": {
+      "question": 119,
+      "option_text": "Completely lost touch with myself",
+      "mood": "hopeless",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1097,
+    "fields": {
+      "question": 120,
+      "option_text": "Not worrying at all",
+      "mood": "peaceful",
+      "intensity_score": 1
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1098,
+    "fields": {
+      "question": 120,
+      "option_text": "Worrying a little",
+      "mood": "anxious",
+      "intensity_score": 3
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1099,
+    "fields": {
+      "question": 120,
+      "option_text": "Moderate worry",
+      "mood": "anxious",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1100,
+    "fields": {
+      "question": 120,
+      "option_text": "Worrying a lot",
+      "mood": "anxious",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1101,
+    "fields": {
+      "question": 120,
+      "option_text": "Constant, overwhelming worry",
+      "mood": "overwhelmed",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1102,
+    "fields": {
+      "question": 121,
+      "option_text": "Extremely grateful",
+      "mood": "grateful",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1103,
+    "fields": {
+      "question": 121,
+      "option_text": "Very grateful",
+      "mood": "grateful",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1104,
+    "fields": {
+      "question": 121,
+      "option_text": "Somewhat grateful",
+      "mood": "happy",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1105,
+    "fields": {
+      "question": 121,
+      "option_text": "Not very grateful",
+      "mood": "neutral",
+      "intensity_score": 3
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1106,
+    "fields": {
+      "question": 121,
+      "option_text": "Not grateful at all",
+      "mood": "low",
+      "intensity_score": 2
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1107,
+    "fields": {
+      "question": 122,
+      "option_text": "Extremely energized",
+      "mood": "energetic",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1108,
+    "fields": {
+      "question": 122,
+      "option_text": "Very energized",
+      "mood": "energetic",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1109,
+    "fields": {
+      "question": 122,
+      "option_text": "Moderately energized",
+      "mood": "neutral",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1110,
+    "fields": {
+      "question": 122,
+      "option_text": "Low energy",
+      "mood": "tired",
+      "intensity_score": 3
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1111,
+    "fields": {
+      "question": 122,
+      "option_text": "Completely drained",
+      "mood": "tired",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1112,
+    "fields": {
+      "question": 123,
+      "option_text": "Completely understood",
+      "mood": "loved",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1113,
+    "fields": {
+      "question": 123,
+      "option_text": "Mostly understood",
+      "mood": "grateful",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1114,
+    "fields": {
+      "question": 123,
+      "option_text": "Somewhat understood",
+      "mood": "neutral",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1115,
+    "fields": {
+      "question": 123,
+      "option_text": "Not very understood",
+      "mood": "lonely",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1116,
+    "fields": {
+      "question": 123,
+      "option_text": "Completely misunderstood",
+      "mood": "lonely",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1117,
+    "fields": {
+      "question": 124,
+      "option_text": "Extremely confident",
+      "mood": "proud",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1118,
+    "fields": {
+      "question": 124,
+      "option_text": "Very confident",
+      "mood": "motivated",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1119,
+    "fields": {
+      "question": 124,
+      "option_text": "Moderately confident",
+      "mood": "neutral",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1120,
+    "fields": {
+      "question": 124,
+      "option_text": "Not very confident",
+      "mood": "anxious",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1121,
+    "fields": {
+      "question": 124,
+      "option_text": "Not confident at all",
+      "mood": "low",
+      "intensity_score": 3
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1122,
+    "fields": {
+      "question": 125,
+      "option_text": "Not distracted at all",
+      "mood": "motivated",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1123,
+    "fields": {
+      "question": 125,
+      "option_text": "Mildly distracted",
+      "mood": "neutral",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1124,
+    "fields": {
+      "question": 125,
+      "option_text": "Moderately distracted",
+      "mood": "confused",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1125,
+    "fields": {
+      "question": 125,
+      "option_text": "Very distracted",
+      "mood": "overwhelmed",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1126,
+    "fields": {
+      "question": 125,
+      "option_text": "Cannot focus at all",
+      "mood": "overwhelmed",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1127,
+    "fields": {
+      "question": 126,
+      "option_text": "Extremely patient",
+      "mood": "peaceful",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1128,
+    "fields": {
+      "question": 126,
+      "option_text": "Very patient",
+      "mood": "calm",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1129,
+    "fields": {
+      "question": 126,
+      "option_text": "Moderately patient",
+      "mood": "neutral",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1130,
+    "fields": {
+      "question": 126,
+      "option_text": "A bit impatient",
+      "mood": "irritable",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1131,
+    "fields": {
+      "question": 126,
+      "option_text": "Very impatient",
+      "mood": "irritable",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1132,
+    "fields": {
+      "question": 127,
+      "option_text": "Not lonely at all",
+      "mood": "loved",
+      "intensity_score": 1
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1133,
+    "fields": {
+      "question": 127,
+      "option_text": "Slightly lonely",
+      "mood": "lonely",
+      "intensity_score": 3
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1134,
+    "fields": {
+      "question": 127,
+      "option_text": "Moderately lonely",
+      "mood": "lonely",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1135,
+    "fields": {
+      "question": 127,
+      "option_text": "Very lonely",
+      "mood": "lonely",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1136,
+    "fields": {
+      "question": 127,
+      "option_text": "Extremely lonely and isolated",
+      "mood": "lonely",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1137,
+    "fields": {
+      "question": 128,
+      "option_text": "Looking forward to many things",
+      "mood": "excited",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1138,
+    "fields": {
+      "question": 128,
+      "option_text": "Looking forward to some things",
+      "mood": "hopeful",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1139,
+    "fields": {
+      "question": 128,
+      "option_text": "Not looking forward to much",
+      "mood": "neutral",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1140,
+    "fields": {
+      "question": 128,
+      "option_text": "Not looking forward to anything",
+      "mood": "low",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1141,
+    "fields": {
+      "question": 129,
+      "option_text": "Managing emotions very well",
+      "mood": "proud",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1142,
+    "fields": {
+      "question": 129,
+      "option_text": "Managing fairly well",
+      "mood": "calm",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1143,
+    "fields": {
+      "question": 129,
+      "option_text": "Managing okay",
+      "mood": "neutral",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1144,
+    "fields": {
+      "question": 129,
+      "option_text": "Struggling with emotions",
+      "mood": "overwhelmed",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1145,
+    "fields": {
+      "question": 129,
+      "option_text": "Completely overwhelmed by emotions",
+      "mood": "overwhelmed",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1146,
+    "fields": {
+      "question": 130,
+      "option_text": "Completely safe and secure",
+      "mood": "peaceful",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1147,
+    "fields": {
+      "question": 130,
+      "option_text": "Very safe",
+      "mood": "calm",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1148,
+    "fields": {
+      "question": 130,
+      "option_text": "Moderately safe",
+      "mood": "neutral",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1149,
+    "fields": {
+      "question": 130,
+      "option_text": "A bit unsafe",
+      "mood": "anxious",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1150,
+    "fields": {
+      "question": 130,
+      "option_text": "Very unsafe",
+      "mood": "anxious",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1151,
+    "fields": {
+      "question": 131,
+      "option_text": "Very curious",
+      "mood": "excited",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1152,
+    "fields": {
+      "question": 131,
+      "option_text": "Somewhat curious",
+      "mood": "motivated",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1153,
+    "fields": {
+      "question": 131,
+      "option_text": "A little curious",
+      "mood": "neutral",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1154,
+    "fields": {
+      "question": 131,
+      "option_text": "Not curious at all",
+      "mood": "tired",
+      "intensity_score": 2
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1155,
+    "fields": {
+      "question": 132,
+      "option_text": "Not comparing at all",
+      "mood": "proud",
+      "intensity_score": 1
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1156,
+    "fields": {
+      "question": 132,
+      "option_text": "Comparing a little",
+      "mood": "neutral",
+      "intensity_score": 3
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1157,
+    "fields": {
+      "question": 132,
+      "option_text": "Comparing somewhat",
+      "mood": "anxious",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1158,
+    "fields": {
+      "question": 132,
+      "option_text": "Comparing a lot",
+      "mood": "low",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1159,
+    "fields": {
+      "question": 132,
+      "option_text": "Constantly comparing",
+      "mood": "low",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1160,
+    "fields": {
+      "question": 133,
+      "option_text": "Very well rested",
+      "mood": "energetic",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1161,
+    "fields": {
+      "question": 133,
+      "option_text": "Fairly rested",
+      "mood": "neutral",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1162,
+    "fields": {
+      "question": 133,
+      "option_text": "Somewhat rested",
+      "mood": "neutral",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1163,
+    "fields": {
+      "question": 133,
+      "option_text": "Not very rested",
+      "mood": "tired",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1164,
+    "fields": {
+      "question": 133,
+      "option_text": "Exhausted - no rest",
+      "mood": "tired",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1165,
+    "fields": {
+      "question": 134,
+      "option_text": "Very hopeful about growth",
+      "mood": "hopeful",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1166,
+    "fields": {
+      "question": 134,
+      "option_text": "Somewhat hopeful",
+      "mood": "hopeful",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1167,
+    "fields": {
+      "question": 134,
+      "option_text": "Neutral about growth",
+      "mood": "neutral",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1168,
+    "fields": {
+      "question": 134,
+      "option_text": "Not very hopeful",
+      "mood": "low",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1169,
+    "fields": {
+      "question": 134,
+      "option_text": "Hopeless about growth",
+      "mood": "hopeless",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1170,
+    "fields": {
+      "question": 135,
+      "option_text": "Not irritable at all",
+      "mood": "peaceful",
+      "intensity_score": 1
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1171,
+    "fields": {
+      "question": 135,
+      "option_text": "Slightly irritable",
+      "mood": "irritable",
+      "intensity_score": 3
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1172,
+    "fields": {
+      "question": 135,
+      "option_text": "Moderately irritable",
+      "mood": "irritable",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1173,
+    "fields": {
+      "question": 135,
+      "option_text": "Very irritable",
+      "mood": "irritable",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1174,
+    "fields": {
+      "question": 135,
+      "option_text": "Extremely irritable",
+      "mood": "irritable",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1175,
+    "fields": {
+      "question": 136,
+      "option_text": "Enjoying activities very much",
+      "mood": "happy",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1176,
+    "fields": {
+      "question": 136,
+      "option_text": "Enjoying somewhat",
+      "mood": "happy",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1177,
+    "fields": {
+      "question": 136,
+      "option_text": "Neutral about activities",
+      "mood": "neutral",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1178,
+    "fields": {
+      "question": 136,
+      "option_text": "Not enjoying much",
+      "mood": "low",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1179,
+    "fields": {
+      "question": 136,
+      "option_text": "Not enjoying anything",
+      "mood": "low",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1180,
+    "fields": {
+      "question": 137,
+      "option_text": "Very clear mentally",
+      "mood": "motivated",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1181,
+    "fields": {
+      "question": 137,
+      "option_text": "Fairly clear",
+      "mood": "neutral",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1182,
+    "fields": {
+      "question": 137,
+      "option_text": "Slightly foggy",
+      "mood": "confused",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1183,
+    "fields": {
+      "question": 137,
+      "option_text": "Very foggy",
+      "mood": "confused",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1184,
+    "fields": {
+      "question": 137,
+      "option_text": "Completely foggy",
+      "mood": "overwhelmed",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1185,
+    "fields": {
+      "question": 138,
+      "option_text": "Completely in control",
+      "mood": "proud",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1186,
+    "fields": {
+      "question": 138,
+      "option_text": "Mostly in control",
+      "mood": "calm",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1187,
+    "fields": {
+      "question": 138,
+      "option_text": "Somewhat in control",
+      "mood": "neutral",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1188,
+    "fields": {
+      "question": 138,
+      "option_text": "Losing control",
+      "mood": "overwhelmed",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1189,
+    "fields": {
+      "question": 138,
+      "option_text": "Completely out of control",
+      "mood": "overwhelmed",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1190,
+    "fields": {
+      "question": 139,
+      "option_text": "Very interested in socializing",
+      "mood": "excited",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1191,
+    "fields": {
+      "question": 139,
+      "option_text": "Somewhat interested",
+      "mood": "happy",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1192,
+    "fields": {
+      "question": 139,
+      "option_text": "Neutral about socializing",
+      "mood": "neutral",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1193,
+    "fields": {
+      "question": 139,
+      "option_text": "Not very interested",
+      "mood": "tired",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1194,
+    "fields": {
+      "question": 139,
+      "option_text": "Want to be completely alone",
+      "mood": "low",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1195,
+    "fields": {
+      "question": 140,
+      "option_text": "Complete inner peace",
+      "mood": "peaceful",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1196,
+    "fields": {
+      "question": 140,
+      "option_text": "Much inner peace",
+      "mood": "peaceful",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1197,
+    "fields": {
+      "question": 140,
+      "option_text": "Some inner peace",
+      "mood": "calm",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1198,
+    "fields": {
+      "question": 140,
+      "option_text": "Little inner peace",
+      "mood": "anxious",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1199,
+    "fields": {
+      "question": 140,
+      "option_text": "No inner peace at all",
+      "mood": "overwhelmed",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1200,
+    "fields": {
+      "question": 141,
+      "option_text": "Very proud of recent accomplishment",
+      "mood": "proud",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1201,
+    "fields": {
+      "question": 141,
+      "option_text": "Somewhat proud",
+      "mood": "proud",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1202,
+    "fields": {
+      "question": 141,
+      "option_text": "Not particularly proud",
+      "mood": "neutral",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1203,
+    "fields": {
+      "question": 141,
+      "option_text": "Nothing to feel proud about",
+      "mood": "low",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1204,
+    "fields": {
+      "question": 142,
+      "option_text": "Not dwelling on past at all",
+      "mood": "peaceful",
+      "intensity_score": 1
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1205,
+    "fields": {
+      "question": 142,
+      "option_text": "Dwelling a little",
+      "mood": "neutral",
+      "intensity_score": 3
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1206,
+    "fields": {
+      "question": 142,
+      "option_text": "Dwelling somewhat",
+      "mood": "low",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1207,
+    "fields": {
+      "question": 142,
+      "option_text": "Dwelling a lot",
+      "mood": "low",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1208,
+    "fields": {
+      "question": 142,
+      "option_text": "Constantly stuck in past",
+      "mood": "hopeless",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1209,
+    "fields": {
+      "question": 143,
+      "option_text": "Very excited about plans",
+      "mood": "excited",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1210,
+    "fields": {
+      "question": 143,
+      "option_text": "Somewhat excited",
+      "mood": "happy",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1211,
+    "fields": {
+      "question": 143,
+      "option_text": "A little excited",
+      "mood": "hopeful",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1212,
+    "fields": {
+      "question": 143,
+      "option_text": "Not excited",
+      "mood": "neutral",
+      "intensity_score": 3
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1213,
+    "fields": {
+      "question": 143,
+      "option_text": "No plans to look forward to",
+      "mood": "low",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1214,
+    "fields": {
+      "question": 144,
+      "option_text": "Very compassionate with myself",
+      "mood": "proud",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1215,
+    "fields": {
+      "question": 144,
+      "option_text": "Somewhat compassionate",
+      "mood": "calm",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1216,
+    "fields": {
+      "question": 144,
+      "option_text": "Neutral toward myself",
+      "mood": "neutral",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1217,
+    "fields": {
+      "question": 144,
+      "option_text": "Hard on myself",
+      "mood": "stressed",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1218,
+    "fields": {
+      "question": 144,
+      "option_text": "Very self-critical",
+      "mood": "low",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1219,
+    "fields": {
+      "question": 145,
+      "option_text": "Not overwhelmed by thoughts",
+      "mood": "peaceful",
+      "intensity_score": 1
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1220,
+    "fields": {
+      "question": 145,
+      "option_text": "Slightly overwhelmed",
+      "mood": "anxious",
+      "intensity_score": 3
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1221,
+    "fields": {
+      "question": 145,
+      "option_text": "Moderately overwhelmed",
+      "mood": "overwhelmed",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1222,
+    "fields": {
+      "question": 145,
+      "option_text": "Very overwhelmed",
+      "mood": "overwhelmed",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1223,
+    "fields": {
+      "question": 145,
+      "option_text": "Completely overwhelmed",
+      "mood": "overwhelmed",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1224,
+    "fields": {
+      "question": 146,
+      "option_text": "Deeply connected to nature",
+      "mood": "peaceful",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1225,
+    "fields": {
+      "question": 146,
+      "option_text": "Somewhat connected",
+      "mood": "calm",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1226,
+    "fields": {
+      "question": 146,
+      "option_text": "A little connected",
+      "mood": "neutral",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1227,
+    "fields": {
+      "question": 146,
+      "option_text": "Not connected to nature",
+      "mood": "neutral",
+      "intensity_score": 2
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1228,
+    "fields": {
+      "question": 147,
+      "option_text": "Very much looking forward",
+      "mood": "hopeful",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1229,
+    "fields": {
+      "question": 147,
+      "option_text": "Somewhat looking forward",
+      "mood": "hopeful",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1230,
+    "fields": {
+      "question": 147,
+      "option_text": "Neutral about future",
+      "mood": "neutral",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1231,
+    "fields": {
+      "question": 147,
+      "option_text": "Not looking forward",
+      "mood": "low",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1232,
+    "fields": {
+      "question": 147,
+      "option_text": "Dreading the future",
+      "mood": "hopeless",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1233,
+    "fields": {
+      "question": 148,
+      "option_text": "Not frustrated at all",
+      "mood": "peaceful",
+      "intensity_score": 1
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1234,
+    "fields": {
+      "question": 148,
+      "option_text": "Slightly frustrated",
+      "mood": "irritable",
+      "intensity_score": 3
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1235,
+    "fields": {
+      "question": 148,
+      "option_text": "Moderately frustrated",
+      "mood": "irritable",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1236,
+    "fields": {
+      "question": 148,
+      "option_text": "Very frustrated",
+      "mood": "irritable",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1237,
+    "fields": {
+      "question": 148,
+      "option_text": "Extremely frustrated",
+      "mood": "stressed",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1238,
+    "fields": {
+      "question": 149,
+      "option_text": "Completely like myself",
+      "mood": "proud",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1239,
+    "fields": {
+      "question": 149,
+      "option_text": "Mostly like myself",
+      "mood": "calm",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1240,
+    "fields": {
+      "question": 149,
+      "option_text": "Somewhat like myself",
+      "mood": "neutral",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1241,
+    "fields": {
+      "question": 149,
+      "option_text": "Not like myself",
+      "mood": "confused",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1242,
+    "fields": {
+      "question": 149,
+      "option_text": "Completely unlike myself",
+      "mood": "low",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1243,
+    "fields": {
+      "question": 150,
+      "option_text": "Very hopeful about relationships",
+      "mood": "hopeful",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1244,
+    "fields": {
+      "question": 150,
+      "option_text": "Somewhat hopeful",
+      "mood": "hopeful",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1245,
+    "fields": {
+      "question": 150,
+      "option_text": "Neutral about relationships",
+      "mood": "neutral",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1246,
+    "fields": {
+      "question": 150,
+      "option_text": "Not very hopeful",
+      "mood": "low",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1247,
+    "fields": {
+      "question": 150,
+      "option_text": "Hopeless about relationships",
+      "mood": "hopeless",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1248,
+    "fields": {
+      "question": 151,
+      "option_text": "No physical tension",
+      "mood": "peaceful",
+      "intensity_score": 1
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1249,
+    "fields": {
+      "question": 151,
+      "option_text": "Mild tension",
+      "mood": "neutral",
+      "intensity_score": 3
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1250,
+    "fields": {
+      "question": 151,
+      "option_text": "Moderate tension",
+      "mood": "stressed",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1251,
+    "fields": {
+      "question": 151,
+      "option_text": "High tension",
+      "mood": "stressed",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1252,
+    "fields": {
+      "question": 151,
+      "option_text": "Extreme tension",
+      "mood": "overwhelmed",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1253,
+    "fields": {
+      "question": 152,
+      "option_text": "Very inspired",
+      "mood": "excited",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1254,
+    "fields": {
+      "question": 152,
+      "option_text": "Somewhat inspired",
+      "mood": "motivated",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1255,
+    "fields": {
+      "question": 152,
+      "option_text": "A little inspired",
+      "mood": "hopeful",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1256,
+    "fields": {
+      "question": 152,
+      "option_text": "Not inspired",
+      "mood": "neutral",
+      "intensity_score": 3
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1257,
+    "fields": {
+      "question": 153,
+      "option_text": "Not worrying about future",
+      "mood": "peaceful",
+      "intensity_score": 1
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1258,
+    "fields": {
+      "question": 153,
+      "option_text": "Worrying a little",
+      "mood": "anxious",
+      "intensity_score": 3
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1259,
+    "fields": {
+      "question": 153,
+      "option_text": "Moderate worry",
+      "mood": "anxious",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1260,
+    "fields": {
+      "question": 153,
+      "option_text": "Worrying a lot",
+      "mood": "anxious",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1261,
+    "fields": {
+      "question": 153,
+      "option_text": "Constant worry",
+      "mood": "overwhelmed",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1262,
+    "fields": {
+      "question": 154,
+      "option_text": "Very content",
+      "mood": "happy",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1263,
+    "fields": {
+      "question": 154,
+      "option_text": "Somewhat content",
+      "mood": "grateful",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1264,
+    "fields": {
+      "question": 154,
+      "option_text": "Neutral about life",
+      "mood": "neutral",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1265,
+    "fields": {
+      "question": 154,
+      "option_text": "Not content",
+      "mood": "low",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1266,
+    "fields": {
+      "question": 154,
+      "option_text": "Very discontent",
+      "mood": "hopeless",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1267,
+    "fields": {
+      "question": 155,
+      "option_text": "Feel very heard",
+      "mood": "loved",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1268,
+    "fields": {
+      "question": 155,
+      "option_text": "Somewhat heard",
+      "mood": "grateful",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1269,
+    "fields": {
+      "question": 155,
+      "option_text": "Neutral - not sure",
+      "mood": "neutral",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1270,
+    "fields": {
+      "question": 155,
+      "option_text": "Not heard",
+      "mood": "lonely",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1271,
+    "fields": {
+      "question": 155,
+      "option_text": "Completely unheard",
+      "mood": "lonely",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1272,
+    "fields": {
+      "question": 156,
+      "option_text": "Lots of energy for hobbies",
+      "mood": "energetic",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1273,
+    "fields": {
+      "question": 156,
+      "option_text": "Some energy for hobbies",
+      "mood": "motivated",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1274,
+    "fields": {
+      "question": 156,
+      "option_text": "Little energy",
+      "mood": "neutral",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1275,
+    "fields": {
+      "question": 156,
+      "option_text": "No energy for hobbies",
+      "mood": "tired",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1276,
+    "fields": {
+      "question": 157,
+      "option_text": "Very accepting of emotions",
+      "mood": "peaceful",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1277,
+    "fields": {
+      "question": 157,
+      "option_text": "Mostly accepting",
+      "mood": "calm",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1278,
+    "fields": {
+      "question": 157,
+      "option_text": "Somewhat accepting",
+      "mood": "neutral",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1279,
+    "fields": {
+      "question": 157,
+      "option_text": "Struggling to accept",
+      "mood": "stressed",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1280,
+    "fields": {
+      "question": 157,
+      "option_text": "Rejecting my emotions",
+      "mood": "irritable",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1281,
+    "fields": {
+      "question": 158,
+      "option_text": "Strong sense of belonging",
+      "mood": "loved",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1282,
+    "fields": {
+      "question": 158,
+      "option_text": "Some sense of belonging",
+      "mood": "grateful",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1283,
+    "fields": {
+      "question": 158,
+      "option_text": "Neutral about belonging",
+      "mood": "neutral",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1284,
+    "fields": {
+      "question": 158,
+      "option_text": "Don't feel I belong",
+      "mood": "lonely",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1285,
+    "fields": {
+      "question": 158,
+      "option_text": "Completely out of place",
+      "mood": "lonely",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1286,
+    "fields": {
+      "question": 159,
+      "option_text": "Very passionate about something",
+      "mood": "excited",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1287,
+    "fields": {
+      "question": 159,
+      "option_text": "Somewhat passionate",
+      "mood": "motivated",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1288,
+    "fields": {
+      "question": 159,
+      "option_text": "A little passionate",
+      "mood": "hopeful",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1289,
+    "fields": {
+      "question": 159,
+      "option_text": "Not passionate about anything",
+      "mood": "neutral",
+      "intensity_score": 3
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1290,
+    "fields": {
+      "question": 160,
+      "option_text": "No self-doubt",
+      "mood": "proud",
+      "intensity_score": 1
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1291,
+    "fields": {
+      "question": 160,
+      "option_text": "A little self-doubt",
+      "mood": "neutral",
+      "intensity_score": 3
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1292,
+    "fields": {
+      "question": 160,
+      "option_text": "Moderate self-doubt",
+      "mood": "anxious",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1293,
+    "fields": {
+      "question": 160,
+      "option_text": "Lots of self-doubt",
+      "mood": "low",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1294,
+    "fields": {
+      "question": 160,
+      "option_text": "Consumed by self-doubt",
+      "mood": "hopeless",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1295,
+    "fields": {
+      "question": 161,
+      "option_text": "Life feels very balanced",
+      "mood": "peaceful",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1296,
+    "fields": {
+      "question": 161,
+      "option_text": "Fairly balanced",
+      "mood": "calm",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1297,
+    "fields": {
+      "question": 161,
+      "option_text": "Somewhat balanced",
+      "mood": "neutral",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1298,
+    "fields": {
+      "question": 161,
+      "option_text": "A bit unbalanced",
+      "mood": "stressed",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1299,
+    "fields": {
+      "question": 161,
+      "option_text": "Life feels chaotic",
+      "mood": "overwhelmed",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1300,
+    "fields": {
+      "question": 162,
+      "option_text": "Growing a lot",
+      "mood": "proud",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1301,
+    "fields": {
+      "question": 162,
+      "option_text": "Growing somewhat",
+      "mood": "hopeful",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1302,
+    "fields": {
+      "question": 162,
+      "option_text": "Not sure about growth",
+      "mood": "neutral",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1303,
+    "fields": {
+      "question": 162,
+      "option_text": "Not growing",
+      "mood": "low",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1304,
+    "fields": {
+      "question": 162,
+      "option_text": "Feeling stagnant",
+      "mood": "hopeless",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1305,
+    "fields": {
+      "question": 163,
+      "option_text": "Not affected by others' moods",
+      "mood": "peaceful",
+      "intensity_score": 1
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1306,
+    "fields": {
+      "question": 163,
+      "option_text": "A little affected",
+      "mood": "neutral",
+      "intensity_score": 3
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1307,
+    "fields": {
+      "question": 163,
+      "option_text": "Moderately affected",
+      "mood": "anxious",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1308,
+    "fields": {
+      "question": 163,
+      "option_text": "Very affected",
+      "mood": "stressed",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1309,
+    "fields": {
+      "question": 163,
+      "option_text": "Completely absorbed others' moods",
+      "mood": "overwhelmed",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1310,
+    "fields": {
+      "question": 164,
+      "option_text": "Very playful",
+      "mood": "happy",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1311,
+    "fields": {
+      "question": 164,
+      "option_text": "Somewhat playful",
+      "mood": "excited",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1312,
+    "fields": {
+      "question": 164,
+      "option_text": "A little playful",
+      "mood": "neutral",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1313,
+    "fields": {
+      "question": 164,
+      "option_text": "Not playful at all",
+      "mood": "tired",
+      "intensity_score": 3
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1314,
+    "fields": {
+      "question": 165,
+      "option_text": "No emotional weight",
+      "mood": "peaceful",
+      "intensity_score": 1
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1315,
+    "fields": {
+      "question": 165,
+      "option_text": "Light emotional weight",
+      "mood": "neutral",
+      "intensity_score": 3
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1316,
+    "fields": {
+      "question": 165,
+      "option_text": "Moderate emotional weight",
+      "mood": "stressed",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1317,
+    "fields": {
+      "question": 165,
+      "option_text": "Heavy emotional weight",
+      "mood": "overwhelmed",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1318,
+    "fields": {
+      "question": 165,
+      "option_text": "Crushing emotional burden",
+      "mood": "hopeless",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1319,
+    "fields": {
+      "question": 166,
+      "option_text": "Very optimistic about health",
+      "mood": "hopeful",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1320,
+    "fields": {
+      "question": 166,
+      "option_text": "Somewhat optimistic",
+      "mood": "hopeful",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1321,
+    "fields": {
+      "question": 166,
+      "option_text": "Neutral about health",
+      "mood": "neutral",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1322,
+    "fields": {
+      "question": 166,
+      "option_text": "Worried about health",
+      "mood": "anxious",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1323,
+    "fields": {
+      "question": 166,
+      "option_text": "Very worried about health",
+      "mood": "anxious",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1324,
+    "fields": {
+      "question": 167,
+      "option_text": "Very in tune with body",
+      "mood": "peaceful",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1325,
+    "fields": {
+      "question": 167,
+      "option_text": "Somewhat in tune",
+      "mood": "calm",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1326,
+    "fields": {
+      "question": 167,
+      "option_text": "A little in tune",
+      "mood": "neutral",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1327,
+    "fields": {
+      "question": 167,
+      "option_text": "Not in tune with body",
+      "mood": "confused",
+      "intensity_score": 3
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1328,
+    "fields": {
+      "question": 168,
+      "option_text": "Not holding back",
+      "mood": "peaceful",
+      "intensity_score": 1
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1329,
+    "fields": {
+      "question": 168,
+      "option_text": "Holding back a little",
+      "mood": "neutral",
+      "intensity_score": 3
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1330,
+    "fields": {
+      "question": 168,
+      "option_text": "Holding back somewhat",
+      "mood": "anxious",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1331,
+    "fields": {
+      "question": 168,
+      "option_text": "Holding back a lot",
+      "mood": "stressed",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1332,
+    "fields": {
+      "question": 168,
+      "option_text": "Bottling everything up",
+      "mood": "overwhelmed",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1333,
+    "fields": {
+      "question": 169,
+      "option_text": "Deeply connected to purpose",
+      "mood": "proud",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1334,
+    "fields": {
+      "question": 169,
+      "option_text": "Somewhat connected",
+      "mood": "hopeful",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1335,
+    "fields": {
+      "question": 169,
+      "option_text": "Unsure of purpose",
+      "mood": "confused",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1336,
+    "fields": {
+      "question": 169,
+      "option_text": "Disconnected from purpose",
+      "mood": "low",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1337,
+    "fields": {
+      "question": 169,
+      "option_text": "No sense of purpose",
+      "mood": "hopeless",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1338,
+    "fields": {
+      "question": 170,
+      "option_text": "Making great progress",
+      "mood": "proud",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1339,
+    "fields": {
+      "question": 170,
+      "option_text": "Making some progress",
+      "mood": "hopeful",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1340,
+    "fields": {
+      "question": 170,
+      "option_text": "Making little progress",
+      "mood": "neutral",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1341,
+    "fields": {
+      "question": 170,
+      "option_text": "No progress",
+      "mood": "low",
+      "intensity_score": 3
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1342,
+    "fields": {
+      "question": 171,
+      "option_text": "Not falling behind",
+      "mood": "proud",
+      "intensity_score": 1
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1343,
+    "fields": {
+      "question": 171,
+      "option_text": "Slightly behind",
+      "mood": "neutral",
+      "intensity_score": 3
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1344,
+    "fields": {
+      "question": 171,
+      "option_text": "Somewhat behind",
+      "mood": "stressed",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1345,
+    "fields": {
+      "question": 171,
+      "option_text": "Very behind",
+      "mood": "overwhelmed",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1346,
+    "fields": {
+      "question": 171,
+      "option_text": "Completely falling behind",
+      "mood": "hopeless",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1347,
+    "fields": {
+      "question": 172,
+      "option_text": "Very forgiving of myself",
+      "mood": "peaceful",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1348,
+    "fields": {
+      "question": 172,
+      "option_text": "Somewhat forgiving",
+      "mood": "calm",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1349,
+    "fields": {
+      "question": 172,
+      "option_text": "Neutral toward myself",
+      "mood": "neutral",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1350,
+    "fields": {
+      "question": 172,
+      "option_text": "Hard to forgive myself",
+      "mood": "low",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1351,
+    "fields": {
+      "question": 172,
+      "option_text": "Cannot forgive myself",
+      "mood": "hopeless",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1352,
+    "fields": {
+      "question": 173,
+      "option_text": "Not feeling like giving up",
+      "mood": "hopeful",
+      "intensity_score": 1
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1353,
+    "fields": {
+      "question": 173,
+      "option_text": "Sometimes feel like giving up",
+      "mood": "low",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1354,
+    "fields": {
+      "question": 173,
+      "option_text": "Often feel like giving up",
+      "mood": "hopeless",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1355,
+    "fields": {
+      "question": 173,
+      "option_text": "Constantly feel like giving up",
+      "mood": "hopeless",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1356,
+    "fields": {
+      "question": 174,
+      "option_text": "Very excited to learn",
+      "mood": "excited",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1357,
+    "fields": {
+      "question": 174,
+      "option_text": "Somewhat excited",
+      "mood": "motivated",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1358,
+    "fields": {
+      "question": 174,
+      "option_text": "A little excited",
+      "mood": "hopeful",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1359,
+    "fields": {
+      "question": 174,
+      "option_text": "Not excited to learn",
+      "mood": "tired",
+      "intensity_score": 2
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1360,
+    "fields": {
+      "question": 175,
+      "option_text": "Strong support system",
+      "mood": "loved",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1361,
+    "fields": {
+      "question": 175,
+      "option_text": "Some support",
+      "mood": "grateful",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1362,
+    "fields": {
+      "question": 175,
+      "option_text": "Limited support",
+      "mood": "neutral",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1363,
+    "fields": {
+      "question": 175,
+      "option_text": "Very little support",
+      "mood": "lonely",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1364,
+    "fields": {
+      "question": 175,
+      "option_text": "No support system",
+      "mood": "lonely",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1365,
+    "fields": {
+      "question": 176,
+      "option_text": "Not avoiding emotions",
+      "mood": "peaceful",
+      "intensity_score": 1
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1366,
+    "fields": {
+      "question": 176,
+      "option_text": "Avoiding a little",
+      "mood": "neutral",
+      "intensity_score": 3
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1367,
+    "fields": {
+      "question": 176,
+      "option_text": "Avoiding somewhat",
+      "mood": "anxious",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1368,
+    "fields": {
+      "question": 176,
+      "option_text": "Avoiding a lot",
+      "mood": "stressed",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1369,
+    "fields": {
+      "question": 176,
+      "option_text": "Constantly avoiding",
+      "mood": "overwhelmed",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1370,
+    "fields": {
+      "question": 177,
+      "option_text": "Very hopeful about solutions",
+      "mood": "hopeful",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1371,
+    "fields": {
+      "question": 177,
+      "option_text": "Somewhat hopeful",
+      "mood": "hopeful",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1372,
+    "fields": {
+      "question": 177,
+      "option_text": "Neutral about solutions",
+      "mood": "neutral",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1373,
+    "fields": {
+      "question": 177,
+      "option_text": "Not very hopeful",
+      "mood": "low",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1374,
+    "fields": {
+      "question": 177,
+      "option_text": "No hope for solutions",
+      "mood": "hopeless",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1375,
+    "fields": {
+      "question": 178,
+      "option_text": "Completely authentic",
+      "mood": "proud",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1376,
+    "fields": {
+      "question": 178,
+      "option_text": "Mostly authentic",
+      "mood": "peaceful",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1377,
+    "fields": {
+      "question": 178,
+      "option_text": "Somewhat authentic",
+      "mood": "neutral",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1378,
+    "fields": {
+      "question": 178,
+      "option_text": "Not very authentic",
+      "mood": "confused",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1379,
+    "fields": {
+      "question": 178,
+      "option_text": "Completely inauthentic",
+      "mood": "low",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1380,
+    "fields": {
+      "question": 179,
+      "option_text": "Don't feel judged",
+      "mood": "peaceful",
+      "intensity_score": 1
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1381,
+    "fields": {
+      "question": 179,
+      "option_text": "Feel judged a little",
+      "mood": "neutral",
+      "intensity_score": 3
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1382,
+    "fields": {
+      "question": 179,
+      "option_text": "Feel judged somewhat",
+      "mood": "anxious",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1383,
+    "fields": {
+      "question": 179,
+      "option_text": "Feel judged a lot",
+      "mood": "stressed",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1384,
+    "fields": {
+      "question": 179,
+      "option_text": "Constantly feel judged",
+      "mood": "overwhelmed",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1385,
+    "fields": {
+      "question": 180,
+      "option_text": "Exceeding expectations",
+      "mood": "proud",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1386,
+    "fields": {
+      "question": 180,
+      "option_text": "Meeting expectations",
+      "mood": "satisfied",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1387,
+    "fields": {
+      "question": 180,
+      "option_text": "Sometimes meeting expectations",
+      "mood": "neutral",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1388,
+    "fields": {
+      "question": 180,
+      "option_text": "Falling short of expectations",
+      "mood": "stressed",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1389,
+    "fields": {
+      "question": 180,
+      "option_text": "Failing all expectations",
+      "mood": "hopeless",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1390,
+    "fields": {
+      "question": 181,
+      "option_text": "Very playful mood",
+      "mood": "happy",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1391,
+    "fields": {
+      "question": 181,
+      "option_text": "Somewhat playful",
+      "mood": "excited",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1392,
+    "fields": {
+      "question": 181,
+      "option_text": "A little playful",
+      "mood": "calm",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1393,
+    "fields": {
+      "question": 181,
+      "option_text": "Not playful at all",
+      "mood": "tired",
+      "intensity_score": 2
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1394,
+    "fields": {
+      "question": 182,
+      "option_text": "Not in a rut",
+      "mood": "hopeful",
+      "intensity_score": 1
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1395,
+    "fields": {
+      "question": 182,
+      "option_text": "Slightly in a rut",
+      "mood": "neutral",
+      "intensity_score": 3
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1396,
+    "fields": {
+      "question": 182,
+      "option_text": "Moderately in a rut",
+      "mood": "low",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1397,
+    "fields": {
+      "question": 182,
+      "option_text": "Deeply in a rut",
+      "mood": "hopeless",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1398,
+    "fields": {
+      "question": 182,
+      "option_text": "Stuck and can't get out",
+      "mood": "hopeless",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1399,
+    "fields": {
+      "question": 183,
+      "option_text": "Thriving in all areas",
+      "mood": "proud",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1400,
+    "fields": {
+      "question": 183,
+      "option_text": "Thriving in some areas",
+      "mood": "happy",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1401,
+    "fields": {
+      "question": 183,
+      "option_text": "Doing okay",
+      "mood": "neutral",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1402,
+    "fields": {
+      "question": 183,
+      "option_text": "Just surviving",
+      "mood": "tired",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1403,
+    "fields": {
+      "question": 183,
+      "option_text": "Struggling to survive",
+      "mood": "low",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1404,
+    "fields": {
+      "question": 184,
+      "option_text": "Very connected to values",
+      "mood": "proud",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1405,
+    "fields": {
+      "question": 184,
+      "option_text": "Somewhat connected",
+      "mood": "peaceful",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1406,
+    "fields": {
+      "question": 184,
+      "option_text": "Unsure of my values",
+      "mood": "confused",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1407,
+    "fields": {
+      "question": 184,
+      "option_text": "Disconnected from values",
+      "mood": "low",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1408,
+    "fields": {
+      "question": 185,
+      "option_text": "Very much looking forward",
+      "mood": "hopeful",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1409,
+    "fields": {
+      "question": 185,
+      "option_text": "Somewhat looking forward",
+      "mood": "hopeful",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1410,
+    "fields": {
+      "question": 185,
+      "option_text": "Neutral about tomorrow",
+      "mood": "neutral",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1411,
+    "fields": {
+      "question": 185,
+      "option_text": "Not looking forward",
+      "mood": "low",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1412,
+    "fields": {
+      "question": 185,
+      "option_text": "Dreading tomorrow",
+      "mood": "hopeless",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1413,
+    "fields": {
+      "question": 186,
+      "option_text": "Very productive",
+      "mood": "proud",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1414,
+    "fields": {
+      "question": 186,
+      "option_text": "Somewhat productive",
+      "mood": "motivated",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1415,
+    "fields": {
+      "question": 186,
+      "option_text": "A little productive",
+      "mood": "neutral",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1416,
+    "fields": {
+      "question": 186,
+      "option_text": "Not productive",
+      "mood": "tired",
+      "intensity_score": 3
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1417,
+    "fields": {
+      "question": 187,
+      "option_text": "Not procrastinating",
+      "mood": "motivated",
+      "intensity_score": 1
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1418,
+    "fields": {
+      "question": 187,
+      "option_text": "Procrastinating a little",
+      "mood": "neutral",
+      "intensity_score": 3
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1419,
+    "fields": {
+      "question": 187,
+      "option_text": "Procrastinating somewhat",
+      "mood": "stressed",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1420,
+    "fields": {
+      "question": 187,
+      "option_text": "Procrastinating a lot",
+      "mood": "overwhelmed",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1421,
+    "fields": {
+      "question": 187,
+      "option_text": "Can't stop procrastinating",
+      "mood": "hopeless",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1422,
+    "fields": {
+      "question": 188,
+      "option_text": "Very creative",
+      "mood": "excited",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1423,
+    "fields": {
+      "question": 188,
+      "option_text": "Somewhat creative",
+      "mood": "happy",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1424,
+    "fields": {
+      "question": 188,
+      "option_text": "A little creative",
+      "mood": "neutral",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1425,
+    "fields": {
+      "question": 188,
+      "option_text": "Not feeling creative",
+      "mood": "tired",
+      "intensity_score": 2
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1426,
+    "fields": {
+      "question": 189,
+      "option_text": "Very analytical",
+      "mood": "motivated",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1427,
+    "fields": {
+      "question": 189,
+      "option_text": "Somewhat analytical",
+      "mood": "neutral",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1428,
+    "fields": {
+      "question": 189,
+      "option_text": "A little analytical",
+      "mood": "neutral",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1429,
+    "fields": {
+      "question": 189,
+      "option_text": "Not analytical at all",
+      "mood": "tired",
+      "intensity_score": 2
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1430,
+    "fields": {
+      "question": 190,
+      "option_text": "Very intuitive",
+      "mood": "peaceful",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1431,
+    "fields": {
+      "question": 190,
+      "option_text": "Somewhat intuitive",
+      "mood": "calm",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1432,
+    "fields": {
+      "question": 190,
+      "option_text": "A little intuitive",
+      "mood": "neutral",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1433,
+    "fields": {
+      "question": 190,
+      "option_text": "Not intuitive",
+      "mood": "confused",
+      "intensity_score": 2
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1434,
+    "fields": {
+      "question": 191,
+      "option_text": "Very patient",
+      "mood": "peaceful",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1435,
+    "fields": {
+      "question": 191,
+      "option_text": "Somewhat patient",
+      "mood": "calm",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1436,
+    "fields": {
+      "question": 191,
+      "option_text": "A little patient",
+      "mood": "neutral",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1437,
+    "fields": {
+      "question": 191,
+      "option_text": "Not patient",
+      "mood": "irritable",
+      "intensity_score": 3
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1438,
+    "fields": {
+      "question": 192,
+      "option_text": "Not impulsive",
+      "mood": "peaceful",
+      "intensity_score": 1
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1439,
+    "fields": {
+      "question": 192,
+      "option_text": "A little impulsive",
+      "mood": "neutral",
+      "intensity_score": 3
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1440,
+    "fields": {
+      "question": 192,
+      "option_text": "Somewhat impulsive",
+      "mood": "excited",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1441,
+    "fields": {
+      "question": 192,
+      "option_text": "Very impulsive",
+      "mood": "energetic",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1442,
+    "fields": {
+      "question": 192,
+      "option_text": "Extremely impulsive",
+      "mood": "stressed",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1443,
+    "fields": {
+      "question": 193,
+      "option_text": "Very resilient",
+      "mood": "proud",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1444,
+    "fields": {
+      "question": 193,
+      "option_text": "Somewhat resilient",
+      "mood": "hopeful",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1445,
+    "fields": {
+      "question": 193,
+      "option_text": "A little resilient",
+      "mood": "neutral",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1446,
+    "fields": {
+      "question": 193,
+      "option_text": "Not very resilient",
+      "mood": "low",
+      "intensity_score": 3
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1447,
+    "fields": {
+      "question": 194,
+      "option_text": "Very vulnerable",
+      "mood": "vulnerable",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1448,
+    "fields": {
+      "question": 194,
+      "option_text": "Somewhat vulnerable",
+      "mood": "vulnerable",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1449,
+    "fields": {
+      "question": 194,
+      "option_text": "A little vulnerable",
+      "mood": "neutral",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1450,
+    "fields": {
+      "question": 194,
+      "option_text": "Not vulnerable",
+      "mood": "protected",
+      "intensity_score": 2
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1451,
+    "fields": {
+      "question": 195,
+      "option_text": "Very strong",
+      "mood": "proud",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1452,
+    "fields": {
+      "question": 195,
+      "option_text": "Somewhat strong",
+      "mood": "hopeful",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1453,
+    "fields": {
+      "question": 195,
+      "option_text": "A little strong",
+      "mood": "neutral",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1454,
+    "fields": {
+      "question": 195,
+      "option_text": "Not feeling strong",
+      "mood": "low",
+      "intensity_score": 3
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1455,
+    "fields": {
+      "question": 196,
+      "option_text": "Not feeling weak",
+      "mood": "proud",
+      "intensity_score": 1
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1456,
+    "fields": {
+      "question": 196,
+      "option_text": "A little weak",
+      "mood": "tired",
+      "intensity_score": 3
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1457,
+    "fields": {
+      "question": 196,
+      "option_text": "Somewhat weak",
+      "mood": "low",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1458,
+    "fields": {
+      "question": 196,
+      "option_text": "Very weak",
+      "mood": "hopeless",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1459,
+    "fields": {
+      "question": 197,
+      "option_text": "Very understood",
+      "mood": "loved",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1460,
+    "fields": {
+      "question": 197,
+      "option_text": "Somewhat understood",
+      "mood": "grateful",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1461,
+    "fields": {
+      "question": 197,
+      "option_text": "A little understood",
+      "mood": "neutral",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1462,
+    "fields": {
+      "question": 197,
+      "option_text": "Not understood",
+      "mood": "lonely",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1463,
+    "fields": {
+      "question": 198,
+      "option_text": "Not misunderstood",
+      "mood": "peaceful",
+      "intensity_score": 1
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1464,
+    "fields": {
+      "question": 198,
+      "option_text": "A little misunderstood",
+      "mood": "neutral",
+      "intensity_score": 3
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1465,
+    "fields": {
+      "question": 198,
+      "option_text": "Somewhat misunderstood",
+      "mood": "lonely",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1466,
+    "fields": {
+      "question": 198,
+      "option_text": "Very misunderstood",
+      "mood": "lonely",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1467,
+    "fields": {
+      "question": 198,
+      "option_text": "Completely misunderstood",
+      "mood": "hopeless",
+      "intensity_score": 9
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1468,
+    "fields": {
+      "question": 199,
+      "option_text": "Very accepted",
+      "mood": "loved",
+      "intensity_score": 8
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1469,
+    "fields": {
+      "question": 199,
+      "option_text": "Somewhat accepted",
+      "mood": "grateful",
+      "intensity_score": 6
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1470,
+    "fields": {
+      "question": 199,
+      "option_text": "A little accepted",
+      "mood": "neutral",
+      "intensity_score": 4
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1471,
+    "fields": {
+      "question": 199,
+      "option_text": "Not accepted",
+      "mood": "lonely",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1472,
+    "fields": {
+      "question": 200,
+      "option_text": "Not rejected",
+      "mood": "loved",
+      "intensity_score": 1
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1473,
+    "fields": {
+      "question": 200,
+      "option_text": "A little rejected",
+      "mood": "lonely",
+      "intensity_score": 3
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1474,
+    "fields": {
+      "question": 200,
+      "option_text": "Somewhat rejected",
+      "mood": "lonely",
+      "intensity_score": 5
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1475,
+    "fields": {
+      "question": 200,
+      "option_text": "Very rejected",
+      "mood": "hopeless",
+      "intensity_score": 7
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 1476,
+    "fields": {
+      "question": 200,
+      "option_text": "Completely rejected",
+      "mood": "hopeless",
+      "intensity_score": 9
+    }
+  }
+]

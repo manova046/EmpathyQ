@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Settings - EmpathyQ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7ff 0%, #f0f2ff 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            background: white;
+            padding: 25px 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header h1 i {
+            color: #6c63ff;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6c63ff, #5d5fef);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(108, 99, 255, 0.2);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+
+        .btn-secondary:hover {
+            background: #f8f9fa;
+        }
+
+        .btn-save {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-save:hover {
+            background: #45a049;
+        }
+
+        .btn-add {
+            background: #6c63ff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-add:hover {
+            background: #5a52d5;
+        }
+
+        .btn-remove {
+            background: #ff4444;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+
+        .btn-remove:hover {
+            background: #cc0000;
+        }
+
+        .profile-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f2ff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: #6c63ff;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .profile-photo-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+        }
+
+        .profile-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #6c63ff;
+        }
+
+        .profile-photo-placeholder {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6c63ff, #5d5fef);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 48px;
+            font-weight: 600;
+            border: 4px solid #6c63ff;
+        }
+
+        .photo-upload-label {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c63ff;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            border: 2px solid #6c63ff;
+        }
+
+        .photo-upload-label i {
+            font-size: 18px;
+        }
+
+        .cover-photo-container {
+            width: 100%;
+            height: 200px;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .cover-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .cover-photo-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .cover-upload-label {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: #6c63ff;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #6c63ff;
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            width: auto;
+            margin-right: 5px;
+        }
+
+        .items-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            min-height: 50px;
+        }
+
+        .item-tag {
+            background: #6c63ff;
+            color: white;
+            padding: 6px 15px;
+            border-radius: 30px;
+            font-size: 13px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .item-tag i {
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .item-tag i:hover {
+            color: #ff4444;
+        }
+
+        .add-item-form {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .add-item-form select,
+        .add-item-form input {
+            flex: 1;
+        }
+
+        .phone-number-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .phone-number-item input[type="text"] {
+            flex: 2;
+        }
+
+        .phone-number-item select {
+            flex: 1;
+        }
+
+        .phone-number-item .checkbox-label {
+            flex: 0 0 auto;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f2ff;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #6c63ff;
+            text-decoration: none;
+            font-weight: 500;
+            margin-top: 20px;
+            padding: 10px 20px;
+            border-radius: 30px;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            background: #f0f2ff;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .view-profile-btn {
+            background: #6c63ff;
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-left: 15px;
+        }
+
+        .view-profile-btn:hover {
+            background: #5a52d5;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .action-buttons .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <h1>
+                    <i class="fas fa-user-cog"></i>
+                    Profile Settings
+                </h1>
+                <a href="{% url 'expert:my_profile' %}" class="view-profile-btn">
+                    <i class="fas fa-eye"></i> View Public Profile
+                </a>
+            </div>
+            <a href="{% url 'accounts:expert_dashboard' %}" class="btn btn-primary">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+
+        <!-- Success/Error Messages -->
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            <i class="fas fa-{% if message.tags == 'success' %}check-circle{% else %}exclamation-circle{% endif %}"></i>
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- Profile Photos -->
+            <div class="profile-section">
+                <div class="section-title">
+                    <i class="fas fa-camera"></i>
+                    Profile Photos
+                </div>
+
+                <!-- Cover Photo -->
+                <div class="cover-photo-container">
+                    {% if profile.cover_photo %}
+                        <img src="{{ profile.cover_photo.url }}" alt="Cover Photo" class="cover-photo">
+                    {% else %}
+                        <div class="cover-photo-placeholder"></div>
+                    {% endif %}
+                    <label for="cover_photo" class="cover-upload-label">
+                        <i class="fas fa-camera"></i> Change Cover
+                    </label>
+                    <input type="file" id="cover_photo" name="cover_photo" accept="image/*" style="display: none;">
+                </div>
+
+                <!-- Profile Photo -->
+                <div class="profile-header">
+                    <div class="profile-photo-container">
+                        {% if profile.profile_photo %}
+                            <img src="{{ profile.profile_photo.url }}" alt="Profile Photo" class="profile-photo">
+                        {% else %}
+                            <div class="profile-photo-placeholder">
+                                {{ request.user.get_full_name|default:request.user.username|make_list|first|upper }}
+                            </div>
+                        {% endif %}
+                        <label for="profile_photo" class="photo-upload-label">
+                            <i class="fas fa-camera"></i>
+                        </label>
+                        <input type="file" id="profile_photo" name="profile_photo" accept="image/*" style="display: none;">
+                    </div>
+                    <div class="profile-info">
+                        <h2>Dr. {{ request.user.get_full_name|default:request.user.username }}</h2>
+                        <p><i class="fas fa-envelope" style="color: #6c63ff;"></i> {{ request.user.email }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Basic Information -->
+            <div class="profile-section">
+                <div class="section-title">
+                    <i class="fas fa-user"></i>
+                    Basic Information
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label><i class="fas fa-user-md"></i> Professional Title</label>
+                        <input type="text" name="professional_title" value="{{ profile.professional_title|default:'' }}" placeholder="e.g., Clinical Psychologist, Licensed Therapist">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-calendar"></i> Years of Experience</label>
+                        <input type="number" name="experience_years" value="{{ profile.experience_years|default:'0' }}" min="0" max="50">
+                    </div>
+                    <div class="form-group full-width">
+                        <label><i class="fas fa-align-left"></i> Bio / About Me</label>
+                        <textarea name="about_me" placeholder="Write a brief description about yourself, your expertise, and approach...">{{ profile.about_me|default:'' }}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phone Numbers -->
+            <div class="profile-section">
+                <div class="section-title">
+                    <i class="fas fa-phone"></i>
+                    Phone Numbers
+                </div>
+
+                <div id="phone-numbers-container">
+                    {% if profile.phone_numbers %}
+                        {% for phone in profile.phone_numbers %}
+                        <div class="phone-number-item">
+                            <input type="text" name="phone_numbers[]" value="{{ phone.number }}" placeholder="Phone number">
+                            <select name="phone_types[]">
+                                <option value="mobile" {% if phone.type == 'mobile' %}selected{% endif %}>Mobile</option>
+                                <option value="work" {% if phone.type == 'work' %}selected{% endif %}>Work</option>
+                                <option value="home" {% if phone.type == 'home' %}selected{% endif %}>Home</option>
+                                <option value="whatsapp" {% if phone.type == 'whatsapp' %}selected{% endif %}>WhatsApp</option>
+                            </select>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="primary_phones[]" value="{{ forloop.counter0 }}" {% if phone.is_primary %}checked{% endif %}> Primary
+                            </label>
+                            <button type="button" class="btn-remove" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                <button type="button" class="btn-add" onclick="addPhoneNumber()">
+                    <i class="fas fa-plus"></i> Add Phone Number
+                </button>
+            </div>
+
+            <!-- Specializations -->
+            <div class="profile-section">
+                <div class="section-title">
+                    <i class="fas fa-star"></i>
+                    Specializations
+                </div>
+
+                <div id="specializations-container" class="items-container">
+                    {% for spec in profile.get_specializations_list %}
+                        <span class="item-tag">
+                            {{ spec }}
+                            <i class="fas fa-times" onclick="removeItem(this, 'specializations')"></i>
+                        </span>
+                    {% endfor %}
+                </div>
+
+                <div class="add-item-form">
+                    <select id="specialization-select">
+                        <option value="">Select Specialization</option>
+                        <option value="Clinical Psychology">Clinical Psychology</option>
+                        <option value="Counseling Psychology">Counseling Psychology</option>
+                        <option value="Child Psychology">Child Psychology</option>
+                        <option value="Adolescent Psychology">Adolescent Psychology</option>
+                        <option value="Forensic Psychology">Forensic Psychology</option>
+                        <option value="Health Psychology">Health Psychology</option>
+                        <option value="Neuropsychology">Neuropsychology</option>
+                        <option value="School Psychology">School Psychology</option>
+                        <option value="Sports Psychology">Sports Psychology</option>
+                        <option value="Trauma Psychology">Trauma Psychology</option>
+                        <option value="Addiction Counseling">Addiction Counseling</option>
+                        <option value="Marriage & Family Therapy">Marriage & Family Therapy</option>
+                        <option value="Career Counseling">Career Counseling</option>
+                        <option value="Grief Counseling">Grief Counseling</option>
+                        <option value="Eating Disorders">Eating Disorders</option>
+                        <option value="OCD & Anxiety">OCD & Anxiety</option>
+                        <option value="PTSD & Trauma">PTSD & Trauma</option>
+                        <option value="Depression & Mood Disorders">Depression & Mood Disorders</option>
+                    </select>
+                    <button type="button" class="btn-add" onclick="addSpecialization()">
+                        <i class="fas fa-plus"></i> Add
+                    </button>
+                </div>
+                <input type="hidden" name="specializations" id="specializations-input" value="{{ profile.specializations|default:'' }}">
+            </div>
+
+            <!-- Areas of Expertise -->
+            <div class="profile-section">
+                <div class="section-title">
+                    <i class="fas fa-brain"></i>
+                    Areas of Expertise
+                </div>
+
+                <div id="expertise-container" class="items-container">
+                    {% for exp in profile.get_expertise_list %}
+                        <span class="item-tag">
+                            {{ exp }}
+                            <i class="fas fa-times" onclick="removeItem(this, 'expertise')"></i>
+                        </span>
+                    {% endfor %}
+                </div>
+
+                <div class="add-item-form">
+                    <select id="expertise-select">
+                        <option value="">Select Expertise Area</option>
+                        <option value="Anxiety Management">Anxiety Management</option>
+                        <option value="Depression Treatment">Depression Treatment</option>
+                        <option value="Stress Management">Stress Management</option>
+                        <option value="Trauma Recovery">Trauma Recovery</option>
+                        <option value="PTSD Treatment">PTSD Treatment</option>
+                        <option value="OCD Treatment">OCD Treatment</option>
+                        <option value="Panic Disorders">Panic Disorders</option>
+                        <option value="Phobia Treatment">Phobia Treatment</option>
+                        <option value="Bipolar Disorder">Bipolar Disorder</option>
+                        <option value="Eating Disorders">Eating Disorders</option>
+                        <option value="Addiction Recovery">Addiction Recovery</option>
+                        <option value="Relationship Issues">Relationship Issues</option>
+                        <option value="Family Conflict">Family Conflict</option>
+                        <option value="Parenting Support">Parenting Support</option>
+                        <option value="Adolescent Issues">Adolescent Issues</option>
+                        <option value="Grief & Loss">Grief & Loss</option>
+                        <option value="Self Esteem">Self Esteem</option>
+                        <option value="Anger Management">Anger Management</option>
+                        <option value="Sleep Disorders">Sleep Disorders</option>
+                        <option value="Workplace Stress">Workplace Stress</option>
+                        <option value="Professional Burnout">Professional Burnout</option>
+                        <option value="Life Transitions">Life Transitions</option>
+                        <option value="Identity Issues">Identity Issues</option>
+                        <option value="Cultural Issues">Cultural Issues</option>
+                        <option value="LGBTQ+ Support">LGBTQ+ Support</option>
+                    </select>
+                    <button type="button" class="btn-add" onclick="addExpertise()">
+                        <i class="fas fa-plus"></i> Add
+                    </button>
+                </div>
+                <input type="hidden" name="expertise_areas" id="expertise-input" value="{{ profile.expertise_areas|default:'' }}">
+            </div>
+
+            <!-- Languages -->
+            <div class="profile-section">
+                <div class="section-title">
+                    <i class="fas fa-globe"></i>
+                    Languages
+                </div>
+
+                <div id="languages-container" class="items-container">
+                    {% for lang in profile.get_languages_list %}
+                        <span class="item-tag">
+                            {{ lang }}
+                            <i class="fas fa-times" onclick="removeItem(this, 'languages')"></i>
+                        </span>
+                    {% endfor %}
+                </div>
+
+                <div class="add-item-form">
+                    <select id="language-select">
+                        <option value="">Select Language</option>
+                        <option value="English">English</option>
+                        <option value="Spanish">Spanish</option>
+                        <option value="French">French</option>
+                        <option value="German">German</option>
+                        <option value="Italian">Italian</option>
+                        <option value="Portuguese">Portuguese</option>
+                        <option value="Russian">Russian</option>
+                        <option value="Chinese">Chinese</option>
+                        <option value="Japanese">Japanese</option>
+                        <option value="Korean">Korean</option>
+                        <option value="Arabic">Arabic</option>
+                        <option value="Hindi">Hindi</option>
+                        <option value="Bengali">Bengali</option>
+                        <option value="Urdu">Urdu</option>
+                        <option value="Punjabi">Punjabi</option>
+                        <option value="Tamil">Tamil</option>
+                        <option value="Telugu">Telugu</option>
+                        <option value="Malayalam">Malayalam</option>
+                    </select>
+                    <button type="button" class="btn-add" onclick="addLanguage()">
+                        <i class="fas fa-plus"></i> Add
+                    </button>
+                </div>
+                <input type="hidden" name="languages" id="languages-input" value="{{ profile.languages|default:'' }}">
+            </div>
+
+            <!-- Qualifications -->
+            <div class="profile-section">
+                <div class="section-title">
+                    <i class="fas fa-graduation-cap"></i>
+                    Qualifications
+                </div>
+
+                <div id="qualifications-container" class="items-container" style="flex-direction: column; align-items: stretch;">
+                    {% for qual in profile.get_qualifications_list %}
+                        <div class="item-tag" style="justify-content: space-between; width: 100%;">
+                            {{ qual }}
+                            <i class="fas fa-times" onclick="this.parentElement.remove(); updateQualificationsInput();"></i>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="add-item-form">
+                    <input type="text" id="qualification-input" placeholder="Enter qualification (e.g., PhD in Clinical Psychology)">
+                    <button type="button" class="btn-add" onclick="addQualification()">
+                        <i class="fas fa-plus"></i> Add
+                    </button>
+                </div>
+                <textarea name="qualifications" id="qualifications-input" style="display: none;">{{ profile.qualifications|default:'' }}</textarea>
+            </div>
+
+            <!-- Consultation Settings -->
+            <div class="profile-section">
+                <div class="section-title">
+                    <i class="fas fa-clock"></i>
+                    Consultation Settings
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label><i class="fas fa-dollar-sign"></i> Consultation Fee ($)</label>
+                        <input type="number" name="consultation_fee" value="{{ profile.consultation_fee|default:'50' }}" min="0" step="5">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-hourglass"></i> Session Duration (minutes)</label>
+                        <select name="session_duration">
+                            <option value="30" {% if profile.session_duration == 30 %}selected{% endif %}>30 minutes</option>
+                            <option value="45" {% if profile.session_duration == 45 %}selected{% endif %}>45 minutes</option>
+                            <option value="60" {% if profile.session_duration == 60 %}selected{% endif %}>60 minutes</option>
+                            <option value="90" {% if profile.session_duration == 90 %}selected{% endif %}>90 minutes</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-video"></i> Available Services</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="video_enabled" {% if profile.video_enabled %}checked{% endif %}> Video Consultation
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="chat_enabled" {% if profile.chat_enabled %}checked{% endif %}> Chat Support
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="phone_enabled" {% if profile.phone_enabled %}checked{% endif %}> Phone Call
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-calendar-check"></i> Booking Options</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="instant_booking" {% if profile.instant_booking %}checked{% endif %}> Allow instant booking
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group full-width">
+                        <label><i class="fas fa-exclamation-triangle"></i> Cancellation Policy</label>
+                        <textarea name="cancellation_policy">{{ profile.cancellation_policy|default:'24 hours notice required for cancellation' }}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Privacy Settings -->
+            <div class="profile-section">
+                <div class="section-title">
+                    <i class="fas fa-shield-alt"></i>
+                    Privacy Settings
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="is_profile_public" {% if profile.is_profile_public %}checked{% endif %}> Make profile public
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="show_email" {% if profile.show_email %}checked{% endif %}> Show email on profile
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="show_phone" {% if profile.show_phone %}checked{% endif %}> Show phone numbers on profile
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <a href="{% url 'accounts:expert_dashboard' %}" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Cancel
+                </a>
+                <button type="submit" class="btn btn-save">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+            </div>
+        </form>
+
+        <a href="{% url 'accounts:expert_dashboard' %}" class="back-link">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+    </div>
+
+    <script>
+        // Auto-hide messages after 5 seconds
+        setTimeout(function () {
+            document.querySelectorAll('.alert').forEach(function (alert) {
+                if (alert) {
+                    alert.style.transition = 'opacity 0.5s';
+                    alert.style.opacity = '0';
+                    setTimeout(() => alert.remove(), 500);
+                }
+            });
+        }, 5000);
+
+        // Add Phone Number
+        function addPhoneNumber() {
+            const container = document.getElementById('phone-numbers-container');
+            const newPhone = document.createElement('div');
+            newPhone.className = 'phone-number-item';
+            newPhone.innerHTML = `
+                <input type="text" name="phone_numbers[]" placeholder="Phone number">
+                <select name="phone_types[]">
+                    <option value="mobile">Mobile</option>
+                    <option value="work">Work</option>
+                    <option value="home">Home</option>
+                    <option value="whatsapp">WhatsApp</option>
+                </select>
+                <label class="checkbox-label">
+                    <input type="checkbox" name="primary_phones[]" value="${container.children.length}"> Primary
+                </label>
+                <button type="button" class="btn-remove" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
+            `;
+            container.appendChild(newPhone);
+        }
+
+        // Add Specialization
+        function addSpecialization() {
+            const select = document.getElementById('specialization-select');
+            const value = select.value;
+            const text = select.options[select.selectedIndex].text;
+            
+            if (value) {
+                const container = document.getElementById('specializations-container');
+                const tag = document.createElement('span');
+                tag.className = 'item-tag';
+                tag.innerHTML = `${text} <i class="fas fa-times" onclick="removeItem(this, 'specializations')"></i>`;
+                container.appendChild(tag);
+                
+                updateSpecializationsInput();
+                select.value = '';
+            }
+        }
+
+        // Add Expertise
+        function addExpertise() {
+            const select = document.getElementById('expertise-select');
+            const value = select.value;
+            const text = select.options[select.selectedIndex].text;
+            
+            if (value) {
+                const container = document.getElementById('expertise-container');
+                const tag = document.createElement('span');
+                tag.className = 'item-tag';
+                tag.innerHTML = `${text} <i class="fas fa-times" onclick="removeItem(this, 'expertise')"></i>`;
+                container.appendChild(tag);
+                
+                updateExpertiseInput();
+                select.value = '';
+            }
+        }
+
+        // Add Language
+        function addLanguage() {
+            const select = document.getElementById('language-select');
+            const value = select.value;
+            const text = select.options[select.selectedIndex].text;
+            
+            if (value) {
+                const container = document.getElementById('languages-container');
+                const tag = document.createElement('span');
+                tag.className = 'item-tag';
+                tag.innerHTML = `${text} <i class="fas fa-times" onclick="removeItem(this, 'languages')"></i>`;
+                container.appendChild(tag);
+                
+                updateLanguagesInput();
+                select.value = '';
+            }
+        }
+
+        // Add Qualification
+        function addQualification() {
+            const input = document.getElementById('qualification-input');
+            const value = input.value.trim();
+            
+            if (value) {
+                const container = document.getElementById('qualifications-container');
+                const div = document.createElement('div');
+                div.className = 'item-tag';
+                div.style.justifyContent = 'space-between';
+                div.style.width = '100%';
+                div.innerHTML = `${value} <i class="fas fa-times" onclick="this.parentElement.remove(); updateQualificationsInput();"></i>`;
+                container.appendChild(div);
+                
+                input.value = '';
+                updateQualificationsInput();
+            }
+        }
+
+        // Remove Item
+        function removeItem(element, type) {
+            element.parentElement.remove();
+            if (type === 'specializations') updateSpecializationsInput();
+            if (type === 'expertise') updateExpertiseInput();
+            if (type === 'languages') updateLanguagesInput();
+        }
+
+        // Update Hidden Inputs
+        function updateSpecializationsInput() {
+            const container = document.getElementById('specializations-container');
+            const tags = container.querySelectorAll('.item-tag');
+            const values = Array.from(tags).map(tag => tag.childNodes[0].nodeValue.trim());
+            document.getElementById('specializations-input').value = values.join(', ');
+        }
+
+        function updateExpertiseInput() {
+            const container = document.getElementById('expertise-container');
+            const tags = container.querySelectorAll('.item-tag');
+            const values = Array.from(tags).map(tag => tag.childNodes[0].nodeValue.trim());
+            document.getElementById('expertise-input').value = values.join(', ');
+        }
+
+        function updateLanguagesInput() {
+            const container = document.getElementById('languages-container');
+            const tags = container.querySelectorAll('.item-tag');
+            const values = Array.from(tags).map(tag => tag.childNodes[0].nodeValue.trim());
+            document.getElementById('languages-input').value = values.join(', ');
+        }
+
+        function updateQualificationsInput() {
+            const container = document.getElementById('qualifications-container');
+            const items = container.querySelectorAll('.item-tag');
+            const values = Array.from(items).map(item => item.childNodes[0].nodeValue.trim());
+            document.getElementById('qualifications-input').value = values.join('\n');
+        }
+
+        // Initialize hidden inputs on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateSpecializationsInput();
+            updateExpertiseInput();
+            updateLanguagesInput();
+            updateQualificationsInput();
+        });
+    </script>
+</body>
+</html>

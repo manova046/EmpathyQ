@@ -1,0 +1,542 @@
+[
+  {
+    "model": "user.emotionaloption",
+    "pk": 1,
+    "fields": {
+      "question": 1,
+      "option_text": "A slow emotional drama",
+      "mood": "low"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 2,
+    "fields": {
+      "question": 1,
+      "option_text": "A light-hearted comedy",
+      "mood": "calm"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 3,
+    "fields": {
+      "question": 1,
+      "option_text": "An intense thriller or horror",
+      "mood": "stressed"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 4,
+    "fields": {
+      "question": 1,
+      "option_text": "An inspiring or motivational movie",
+      "mood": "motivated"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 5,
+    "fields": {
+      "question": 2,
+      "option_text": "Resting or doing nothing",
+      "mood": "low"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 6,
+    "fields": {
+      "question": 2,
+      "option_text": "Doing something relaxing",
+      "mood": "calm"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 7,
+    "fields": {
+      "question": 2,
+      "option_text": "Finishing pending tasks",
+      "mood": "stressed"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 8,
+    "fields": {
+      "question": 2,
+      "option_text": "Starting something new",
+      "mood": "motivated"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 9,
+    "fields": {
+      "question": 3,
+      "option_text": "Listening to sad or melancholic songs",
+      "mood": "low"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 10,
+    "fields": {
+      "question": 3,
+      "option_text": "Listening to calming music or nature sounds",
+      "mood": "calm"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 11,
+    "fields": {
+      "question": 3,
+      "option_text": "Listening to energetic or aggressive music",
+      "mood": "stressed"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 12,
+    "fields": {
+      "question": 3,
+      "option_text": "Listening to upbeat or empowering music",
+      "mood": "motivated"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 13,
+    "fields": {
+      "question": 4,
+      "option_text": "Staying in bed longer",
+      "mood": "low"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 14,
+    "fields": {
+      "question": 4,
+      "option_text": "Taking a warm bath or shower",
+      "mood": "calm"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 15,
+    "fields": {
+      "question": 4,
+      "option_text": "Organizing or cleaning your space",
+      "mood": "stressed"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 16,
+    "fields": {
+      "question": 4,
+      "option_text": "Exercising or working out",
+      "mood": "motivated"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 17,
+    "fields": {
+      "question": 5,
+      "option_text": "Reading poetry or emotional literature",
+      "mood": "low"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 18,
+    "fields": {
+      "question": 5,
+      "option_text": "Reading a light novel or magazine",
+      "mood": "calm"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 19,
+    "fields": {
+      "question": 5,
+      "option_text": "Reading news or current events",
+      "mood": "stressed"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 20,
+    "fields": {
+      "question": 5,
+      "option_text": "Reading self-help or educational material",
+      "mood": "motivated"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 21,
+    "fields": {
+      "question": 6,
+      "option_text": "Skipping meals or eating very little",
+      "mood": "low"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 22,
+    "fields": {
+      "question": 6,
+      "option_text": "Light snacks or comfort food",
+      "mood": "calm"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 23,
+    "fields": {
+      "question": 6,
+      "option_text": "Quick, convenient meals",
+      "mood": "stressed"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 24,
+    "fields": {
+      "question": 6,
+      "option_text": "Healthy, balanced meals",
+      "mood": "motivated"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 25,
+    "fields": {
+      "question": 7,
+      "option_text": "Lying down or minimal movement",
+      "mood": "low"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 26,
+    "fields": {
+      "question": 7,
+      "option_text": "Gentle stretching or yoga",
+      "mood": "calm"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 27,
+    "fields": {
+      "question": 7,
+      "option_text": "Pacing or fidgeting",
+      "mood": "stressed"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 28,
+    "fields": {
+      "question": 7,
+      "option_text": "Vigorous exercise or sports",
+      "mood": "motivated"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 29,
+    "fields": {
+      "question": 8,
+      "option_text": "Withdrawing from others",
+      "mood": "low"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 30,
+    "fields": {
+      "question": 8,
+      "option_text": "Meditating or deep breathing",
+      "mood": "calm"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 31,
+    "fields": {
+      "question": 8,
+      "option_text": "Venting or talking quickly",
+      "mood": "stressed"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 32,
+    "fields": {
+      "question": 8,
+      "option_text": "Planning or brainstorming ideas",
+      "mood": "motivated"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 33,
+    "fields": {
+      "question": 9,
+      "option_text": "Watching nostalgic or sentimental shows",
+      "mood": "low"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 34,
+    "fields": {
+      "question": 9,
+      "option_text": "Watching comedy or light entertainment",
+      "mood": "calm"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 35,
+    "fields": {
+      "question": 9,
+      "option_text": "Watching suspenseful or crime shows",
+      "mood": "stressed"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 36,
+    "fields": {
+      "question": 9,
+      "option_text": "Watching documentaries or educational content",
+      "mood": "motivated"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 37,
+    "fields": {
+      "question": 10,
+      "option_text": "Closing curtains and staying indoors",
+      "mood": "low"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 38,
+    "fields": {
+      "question": 10,
+      "option_text": "Spending time in nature",
+      "mood": "calm"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 39,
+    "fields": {
+      "question": 10,
+      "option_text": "Busy urban environments",
+      "mood": "stressed"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 40,
+    "fields": {
+      "question": 10,
+      "option_text": "Visiting new places or exploring",
+      "mood": "motivated"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 41,
+    "fields": {
+      "question": 11,
+      "option_text": "Avoiding all tasks",
+      "mood": "low"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 42,
+    "fields": {
+      "question": 11,
+      "option_text": "Simple, repetitive tasks",
+      "mood": "calm"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 43,
+    "fields": {
+      "question": 11,
+      "option_text": "Multitasking or juggling multiple things",
+      "mood": "stressed"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 44,
+    "fields": {
+      "question": 11,
+      "option_text": "Tackling challenging projects",
+      "mood": "motivated"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 45,
+    "fields": {
+      "question": 12,
+      "option_text": "Pajamas or loungewear all day",
+      "mood": "low"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 46,
+    "fields": {
+      "question": 12,
+      "option_text": "Casual, comfortable clothes",
+      "mood": "calm"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 47,
+    "fields": {
+      "question": 12,
+      "option_text": "Neat, pressed work clothes",
+      "mood": "stressed"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 48,
+    "fields": {
+      "question": 12,
+      "option_text": "Activewear or performance gear",
+      "mood": "motivated"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 49,
+    "fields": {
+      "question": 13,
+      "option_text": "Isolating from everyone",
+      "mood": "low"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 50,
+    "fields": {
+      "question": 13,
+      "option_text": "Quiet, alone time",
+      "mood": "calm"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 51,
+    "fields": {
+      "question": 13,
+      "option_text": "Short, business-like interactions",
+      "mood": "stressed"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 52,
+    "fields": {
+      "question": 13,
+      "option_text": "Socializing with friends or networking",
+      "mood": "motivated"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 53,
+    "fields": {
+      "question": 14,
+      "option_text": "Scrolling social media passively",
+      "mood": "low"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 54,
+    "fields": {
+      "question": 14,
+      "option_text": "Gentle hobbies like gardening or knitting",
+      "mood": "calm"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 55,
+    "fields": {
+      "question": 14,
+      "option_text": "Checking emails or messages frequently",
+      "mood": "stressed"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 56,
+    "fields": {
+      "question": 14,
+      "option_text": "Learning a new skill or hobby",
+      "mood": "motivated"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 57,
+    "fields": {
+      "question": 15,
+      "option_text": "Oversleeping or napping excessively",
+      "mood": "low"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 58,
+    "fields": {
+      "question": 15,
+      "option_text": "Getting extra sleep",
+      "mood": "calm"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 59,
+    "fields": {
+      "question": 15,
+      "option_text": "Difficulty sleeping",
+      "mood": "stressed"
+    }
+  },
+  {
+    "model": "user.emotionaloption",
+    "pk": 60,
+    "fields": {
+      "question": 15,
+      "option_text": "Waking up early with energy",
+      "mood": "motivated"
+    }
+  }
+]

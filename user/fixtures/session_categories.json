@@ -1,0 +1,242 @@
+[
+    {
+        "model": "user.sessioncategory",
+        "pk": 1,
+        "fields": {
+            "name": "Individual Therapy",
+            "icon": "fas fa-user"
+        }
+    },
+    {
+        "model": "user.sessioncategory",
+        "pk": 2,
+        "fields": {
+            "name": "Couples Counseling",
+            "icon": "fas fa-heart"
+        }
+    },
+    {
+        "model": "user.sessioncategory",
+        "pk": 3,
+        "fields": {
+            "name": "Group Session",
+            "icon": "fas fa-users"
+        }
+    },
+    {
+        "model": "user.sessioncategory",
+        "pk": 4,
+        "fields": {
+            "name": "Career Coaching",
+            "icon": "fas fa-briefcase"
+        }
+    },
+    {
+        "model": "user.sessioncategory",
+        "pk": 5,
+        "fields": {
+            "name": "Stress Management",
+            "icon": "fas fa-spa"
+        }
+    },
+    {
+        "model": "user.sessioncategory",
+        "pk": 6,
+        "fields": {
+            "name": "Anxiety & Depression",
+            "icon": "fas fa-brain"
+        }
+    },
+    {
+        "model": "user.sessioncategory",
+        "pk": 7,
+        "fields": {
+            "name": "Trauma & PTSD",
+            "icon": "fas fa-shield-alt"
+        }
+    },
+    {
+        "model": "user.sessioncategory",
+        "pk": 8,
+        "fields": {
+            "name": "Grief & Loss",
+            "icon": "fas fa-heart-broken"
+        }
+    },
+    {
+        "model": "user.sessioncategory",
+        "pk": 9,
+        "fields": {
+            "name": "Addiction Recovery",
+            "icon": "fas fa-hand-holding-heart"
+        }
+    },
+    {
+        "model": "user.sessioncategory",
+        "pk": 10,
+        "fields": {
+            "name": "Eating Disorders",
+            "icon": "fas fa-utensils"
+        }
+    },
+    {
+        "model": "user.sessioncategory",
+        "pk": 11,
+        "fields": {
+            "name": "Sleep Therapy",
+            "icon": "fas fa-moon"
+        }
+    },
+    {
+        "model": "user.sessioncategory",
+        "pk": 12,
+        "fields": {
+            "name": "Anger Management",
+            "icon": "fas fa-fire"
+        }
+    },
+    {
+        "model": "user.sessioncategory",
+        "pk": 13,
+        "fields": {
+            "name": "Self-Esteem Building",
+            "icon": "fas fa-star"
+        }
+    },
+    {
+        "model": "user.sessioncategory",
+        "pk": 14,
+        "fields": {
+            "name": "Life Transitions",
+            "icon": "fas fa-sync-alt"
+        }
+    },
+    {
+        "model": "user.sessioncategory",
+        "pk": 15,
+        "fields": {
+            "name": "Parenting Support",
+            "icon": "fas fa-child"
+        }
+    },
+    {
+        "model": "user.sessioncategory",
+        "pk": 16,
+        "fields": {
+            "name": "Adolescent Therapy",
+            "icon": "fas fa-smile"
+        }
+    },
+    {
+        "model": "user.sessioncategory",
+        "pk": 17,
+        "fields": {
+            "name": "Elderly Care",
+            "icon": "fas fa-home"
+        }
+    },
+    {
+        "model": "user.sessioncategory",
+        "pk": 18,
+        "fields": {
+            "name": "Mindfulness & Meditation",
+            "icon": "fas fa-om"
+        }
+    },
+    {
+        "model": "user.sessioncategory",
+        "pk": 19,
+        "fields": {
+            "name": "Work-Life Balance",
+            "icon": "fas fa-balance-scale"
+        }
+    },
+    {
+        "model": "user.sessioncategory",
+        "pk": 20,
+        "fields": {
+            "name": "Relationship Issues",
+            "icon": "fas fa-handshake"
+        }
+    },
+    {
+        "model": "user.sessioncategory",
+        "pk": 21,
+        "fields": {
+            "name": "Family Conflict",
+            "icon": "fas fa-home"
+        }
+    },
+    {
+        "model": "user.sessioncategory",
+        "pk": 22,
+        "fields": {
+            "name": "Social Anxiety",
+            "icon": "fas fa-users-slash"
+        }
+    },
+    {
+        "model": "user.sessioncategory",
+        "pk": 23,
+        "fields": {
+            "name": "Panic Disorders",
+            "icon": "fas fa-exclamation-triangle"
+        }
+    },
+    {
+        "model": "user.sessioncategory",
+        "pk": 24,
+        "fields": {
+            "name": "OCD & Phobias",
+            "icon": "fas fa-sync"
+        }
+    },
+    {
+        "model": "user.sessioncategory",
+        "pk": 25,
+        "fields": {
+            "name": "Bipolar Disorder",
+            "icon": "fas fa-chart-line"
+        }
+    },
+    {
+        "model": "user.sessioncategory",
+        "pk": 26,
+        "fields": {
+            "name": "Postpartum Depression",
+            "icon": "fas fa-baby"
+        }
+    },
+    {
+        "model": "user.sessioncategory",
+        "pk": 27,
+        "fields": {
+            "name": "Chronic Pain Management",
+            "icon": "fas fa-notes-medical"
+        }
+    },
+    {
+        "model": "user.sessioncategory",
+        "pk": 28,
+        "fields": {
+            "name": "LGBTQ+ Support",
+            "icon": "fas fa-rainbow"
+        }
+    },
+    {
+        "model": "user.sessioncategory",
+        "pk": 29,
+        "fields": {
+            "name": "Cultural Adjustment",
+            "icon": "fas fa-globe-asia"
+        }
+    },
+    {
+        "model": "user.sessioncategory",
+        "pk": 30,
+        "fields": {
+            "name": "Spiritual Counseling",
+            "icon": "fas fa-pray"
+        }
+    }
+]
