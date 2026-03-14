@@ -1,635 +1,611 @@
 <!-- user/templates/user/emotional_checkin.html -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emotional Check-In | EmpathyQ</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+{% extends 'base.html' %}
 
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 30px 20px;
-        }
+{% block title %}Emotional Check-In | EmpathyQ{% endblock %}
 
+{% block extra_css %}
+<style>
+    .container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 20px;
+    }
+
+    /* Main Card */
+    .checkin-card {
+        background: white;
+        border-radius: 24px;
+        padding: 40px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        animation: slideUp 0.5s ease-out;
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Header */
+    .header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .header h2 {
+        font-size: 32px;
+        font-weight: 700;
+        color: #1a1a2c;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .header h2 i {
+        color: #667eea;
+        font-size: 32px;
+    }
+
+    .header p {
+        color: #64748b;
+        font-size: 16px;
+        line-height: 1.6;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    /* Progress Bar */
+    .progress-container {
+        margin-bottom: 30px;
+        background: #f1f5f9;
+        border-radius: 30px;
+        height: 8px;
+        overflow: hidden;
+    }
+
+    .progress-bar {
+        height: 100%;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        border-radius: 30px;
+        transition: width 0.3s ease;
+        width: 0%;
+    }
+
+    .question-counter {
+        text-align: right;
+        font-size: 14px;
+        color: #64748b;
+        margin-bottom: 10px;
+        font-weight: 500;
+    }
+
+    /* Error Message */
+    .error {
+        background: #fee2e2;
+        color: #991b1b;
+        padding: 15px 20px;
+        border-radius: 12px;
+        margin-bottom: 25px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        border-left: 4px solid #dc2626;
+        animation: shake 0.5s ease;
+    }
+
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+    }
+
+    .error i {
+        font-size: 20px;
+        color: #dc2626;
+    }
+
+    /* Question Cards */
+    .question {
+        background: #f8fafc;
+        border-radius: 16px;
+        padding: 25px;
+        margin-bottom: 20px;
+        border: 2px solid transparent;
+        transition: all 0.3s ease;
+        animation: fadeIn 0.5s ease-out;
+        animation-fill-mode: both;
+    }
+
+    .question:hover {
+        border-color: #667eea;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px -5px rgba(102, 126, 234, 0.2);
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Stagger animation for questions */
+    {% for question in questions %}
+    .question:nth-child({{ forloop.counter }}) {
+        animation-delay: {{ forloop.counter|add:"0.1" }}s;
+    }
+    {% endfor %}
+
+    .question-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .question-number {
+        width: 32px;
+        height: 32px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 600;
+        font-size: 16px;
+        box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+    }
+
+    .question p {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1a1a2c;
+        margin: 0;
+        flex: 1;
+    }
+
+    /* Options Grid */
+    .options {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 12px;
+        margin-top: 15px;
+    }
+
+    .option {
+        position: relative;
+        display: flex;
+        align-items: center;
+        padding: 12px 16px;
+        background: white;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .option:hover {
+        border-color: #667eea;
+        background: #f0f4ff;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+    }
+
+    .option input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .option input[type="radio"]:checked + .option-content {
+        color: #667eea;
+    }
+
+    .option input[type="radio"]:checked ~ .radio-custom {
+        background: #667eea;
+        border-color: #667eea;
+    }
+
+    .option input[type="radio"]:checked + .option-content .radio-custom {
+        background: #667eea;
+        border-color: #667eea;
+    }
+
+    .option-content {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        cursor: pointer;
+    }
+
+    .radio-custom {
+        width: 20px;
+        height: 20px;
+        border: 2px solid #cbd5e1;
+        border-radius: 50%;
+        transition: all 0.2s ease;
+        position: relative;
+    }
+
+    .radio-custom::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        width: 10px;
+        height: 10px;
+        background: white;
+        border-radius: 50%;
+        transition: transform 0.2s ease;
+    }
+
+    input[type="radio"]:checked + .option-content .radio-custom {
+        background: #667eea;
+        border-color: #667eea;
+    }
+
+    input[type="radio"]:checked + .option-content .radio-custom::after {
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    .option-text {
+        font-size: 15px;
+        color: #475569;
+        font-weight: 500;
+        flex: 1;
+    }
+
+    /* Empty state for options */
+    .no-options {
+        color: #94a3b8;
+        font-style: italic;
+        padding: 15px;
+        text-align: center;
+        background: #f1f5f9;
+        border-radius: 8px;
+        font-size: 14px;
+    }
+
+    /* Submit Button */
+    .submit-btn {
+        width: 100%;
+        padding: 16px 30px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border: none;
+        border-radius: 40px;
+        font-size: 18px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        box-shadow: 0 10px 20px -5px rgba(102, 126, 234, 0.4);
+    }
+
+    .submit-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 30px -5px rgba(102, 126, 234, 0.6);
+    }
+
+    .submit-btn:active {
+        transform: translateY(0);
+    }
+
+    .submit-btn i {
+        font-size: 20px;
+        transition: transform 0.3s ease;
+    }
+
+    .submit-btn:hover i {
+        transform: translateX(5px);
+    }
+
+    .submit-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    /* Mood Icons for options (optional enhancement) */
+    .mood-icon {
+        font-size: 18px;
+        opacity: 0.7;
+        transition: opacity 0.2s ease;
+    }
+
+    .option:hover .mood-icon {
+        opacity: 1;
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+    }
+
+    .empty-state i {
+        font-size: 48px;
+        color: #cbd5e1;
+        margin-bottom: 15px;
+    }
+
+    .empty-state h3 {
+        color: #64748b;
+        margin-bottom: 10px;
+    }
+
+    .empty-state p {
+        color: #94a3b8;
+    }
+
+    /* Loading State */
+    .loading {
+        opacity: 0.7;
+        pointer-events: none;
+    }
+
+    /* Success Animation */
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+
+    .submit-success {
+        animation: pulse 0.5s ease;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
         .container {
-            max-width: 800px;
-            margin: 0 auto;
+            padding: 15px;
+            margin: 20px auto;
         }
 
-        /* Back to Dashboard Button */
-        .back-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: white;
-            text-decoration: none;
-            margin-bottom: 20px;
-            font-size: 14px;
-            font-weight: 500;
-            padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 30px;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .back-link:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: translateX(-5px);
-        }
-
-        .back-link i {
-            font-size: 14px;
-        }
-
-        /* Main Card */
         .checkin-card {
-            background: white;
-            border-radius: 24px;
-            padding: 40px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            animation: slideUp 0.5s ease-out;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Header */
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
+            padding: 25px;
         }
 
         .header h2 {
-            font-size: 32px;
-            font-weight: 700;
-            color: #1a1a2c;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+            font-size: 28px;
         }
 
         .header h2 i {
-            color: #667eea;
-            font-size: 32px;
+            font-size: 28px;
         }
 
         .header p {
-            color: #64748b;
-            font-size: 16px;
-            line-height: 1.6;
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
-        /* Progress Bar */
-        .progress-container {
-            margin-bottom: 30px;
-            background: #f1f5f9;
-            border-radius: 30px;
-            height: 8px;
-            overflow: hidden;
-        }
-
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            border-radius: 30px;
-            transition: width 0.3s ease;
-            width: 0%;
-        }
-
-        .question-counter {
-            text-align: right;
             font-size: 14px;
-            color: #64748b;
-            margin-bottom: 10px;
-            font-weight: 500;
         }
 
-        /* Error Message */
-        .error {
-            background: #fee2e2;
-            color: #991b1b;
-            padding: 15px 20px;
-            border-radius: 12px;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border-left: 4px solid #dc2626;
-            animation: shake 0.5s ease;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
-
-        .error i {
-            font-size: 20px;
-            color: #dc2626;
-        }
-
-        /* Question Cards */
         .question {
-            background: #f8fafc;
-            border-radius: 16px;
-            padding: 25px;
-            margin-bottom: 20px;
-            border: 2px solid transparent;
-            transition: all 0.3s ease;
-            animation: fadeIn 0.5s ease-out;
-            animation-fill-mode: both;
-        }
-
-        .question:hover {
-            border-color: #667eea;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px -5px rgba(102, 126, 234, 0.2);
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Stagger animation for questions */
-        {% for question in questions %}
-        .question:nth-child({{ forloop.counter }}) {
-            animation-delay: {{ forloop.counter|add:"0.1" }}s;
-        }
-        {% endfor %}
-
-        .question-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .question-number {
-            width: 32px;
-            height: 32px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-            font-size: 16px;
-            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+            padding: 20px;
         }
 
         .question p {
-            font-size: 18px;
-            font-weight: 600;
-            color: #1a1a2c;
-            margin: 0;
-            flex: 1;
+            font-size: 16px;
         }
 
-        /* Options Grid */
         .options {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 12px;
-            margin-top: 15px;
+            grid-template-columns: 1fr;
         }
 
         .option {
-            position: relative;
-            display: flex;
-            align-items: center;
-            padding: 12px 16px;
-            background: white;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s ease;
+            padding: 10px 14px;
         }
 
-        .option:hover {
-            border-color: #667eea;
-            background: #f0f4ff;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        .submit-btn {
+            padding: 14px 25px;
+            font-size: 16px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .checkin-card {
+            padding: 20px;
         }
 
-        .option input[type="radio"] {
-            position: absolute;
-            opacity: 0;
-            width: 0;
-            height: 0;
+        .header h2 {
+            font-size: 24px;
         }
 
-        .option input[type="radio"]:checked + .option-content {
-            color: #667eea;
-        }
-
-        .option input[type="radio"]:checked ~ .radio-custom {
-            background: #667eea;
-            border-color: #667eea;
-        }
-
-        .option input[type="radio"]:checked + .option-content .radio-custom {
-            background: #667eea;
-            border-color: #667eea;
-        }
-
-        .option-content {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            width: 100%;
-            cursor: pointer;
-        }
-
-        .radio-custom {
-            width: 20px;
-            height: 20px;
-            border: 2px solid #cbd5e1;
-            border-radius: 50%;
-            transition: all 0.2s ease;
-            position: relative;
-        }
-
-        .radio-custom::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            width: 10px;
-            height: 10px;
-            background: white;
-            border-radius: 50%;
-            transition: transform 0.2s ease;
-        }
-
-        input[type="radio"]:checked + .option-content .radio-custom {
-            background: #667eea;
-            border-color: #667eea;
-        }
-
-        input[type="radio"]:checked + .option-content .radio-custom::after {
-            transform: translate(-50%, -50%) scale(1);
-        }
-
-        .option-text {
-            font-size: 15px;
-            color: #475569;
-            font-weight: 500;
-            flex: 1;
-        }
-
-        /* Empty state for options */
-        .no-options {
-            color: #94a3b8;
-            font-style: italic;
-            padding: 15px;
-            text-align: center;
-            background: #f1f5f9;
-            border-radius: 8px;
+        .question-number {
+            width: 28px;
+            height: 28px;
             font-size: 14px;
         }
 
-        /* Submit Button */
-        .submit-btn {
-            width: 100%;
-            padding: 16px 30px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            border-radius: 40px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            box-shadow: 0 10px 20px -5px rgba(102, 126, 234, 0.4);
+        .option-text {
+            font-size: 14px;
         }
+    }
+</style>
+{% endblock %}
 
-        .submit-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px -5px rgba(102, 126, 234, 0.6);
-        }
-
-        .submit-btn:active {
-            transform: translateY(0);
-        }
-
-        .submit-btn i {
-            font-size: 20px;
-            transition: transform 0.3s ease;
-        }
-
-        .submit-btn:hover i {
-            transform: translateX(5px);
-        }
-
-        .submit-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* Mood Icons for options (optional enhancement) */
-        .mood-icon {
-            font-size: 18px;
-            opacity: 0.7;
-            transition: opacity 0.2s ease;
-        }
-
-        .option:hover .mood-icon {
-            opacity: 1;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            body {
-                padding: 20px 15px;
-            }
-
-            .checkin-card {
-                padding: 25px;
-            }
-
-            .header h2 {
-                font-size: 28px;
-            }
-
-            .header h2 i {
-                font-size: 28px;
-            }
-
-            .header p {
-                font-size: 14px;
-            }
-
-            .question {
-                padding: 20px;
-            }
-
-            .question p {
-                font-size: 16px;
-            }
-
-            .options {
-                grid-template-columns: 1fr;
-            }
-
-            .option {
-                padding: 10px 14px;
-            }
-
-            .submit-btn {
-                padding: 14px 25px;
-                font-size: 16px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .checkin-card {
-                padding: 20px;
-            }
-
-            .header h2 {
-                font-size: 24px;
-            }
-
-            .question-number {
-                width: 28px;
-                height: 28px;
-                font-size: 14px;
-            }
-
-            .option-text {
-                font-size: 14px;
-            }
-        }
-
-        /* Loading State */
-        .loading {
-            opacity: 0.7;
-            pointer-events: none;
-        }
-
-        /* Success Animation */
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        .submit-success {
-            animation: pulse 0.5s ease;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <!-- Back to Dashboard Button -->
-        <a href="{% url 'accounts:user_dashboard' %}" class="back-link">
-            <i class="fas fa-arrow-left"></i>
-            <i class="fas fa-tachometer-alt"></i>
-            Back to Dashboard
-        </a>
-
-        <!-- Main Check-In Card -->
-        <div class="checkin-card">
-            <div class="header">
-                <h2>
-                    <i class="fas fa-heart"></i>
-                    Emotional Check-In
-                </h2>
-                <p>
-                    Take a moment to check in with yourself. Select the option that best describes how you feel right now.
-                </p>
-            </div>
-
-            <!-- Progress Bar -->
-            {% if questions %}
-            <div class="question-counter">
-                <i class="fas fa-tasks" style="color: #667eea;"></i>
-                {{ questions|length }} question{{ questions|length|pluralize }}
-            </div>
-            <div class="progress-container">
-                <div class="progress-bar" id="progressBar" style="width: 0%;"></div>
-            </div>
-            {% endif %}
-
-            <!-- Error Message -->
-            {% if error %}
-                <div class="error">
-                    <i class="fas fa-exclamation-circle"></i>
-                    {{ error }}
-                </div>
-            {% endif %}
-
-            <!-- Check-In Form -->
-            <form method="POST" id="checkinForm">
-                {% csrf_token %}
-
-                {% for question in questions %}
-                    <div class="question" data-question-id="{{ question.id }}">
-                        <div class="question-header">
-                            <span class="question-number">{{ forloop.counter }}</span>
-                            <p>{{ question.question_text }}</p>
-                        </div>
-                        
-                        <div class="options">
-                            {% for option in question.options.all %}
-                                <label class="option">
-                                    <input type="radio" 
-                                           name="question_{{ question.id }}" 
-                                           value="{{ option.id }}" 
-                                           required
-                                           onchange="updateProgress()">
-                                    <span class="option-content">
-                                        <span class="radio-custom"></span>
-                                        <span class="option-text">
-                                            {% if option.mood %}
-                                                {% if option.mood == 'happy' %}
-                                                    <i class="fas fa-smile mood-icon" style="color: #fbbf24; margin-right: 8px;"></i>
-                                                {% elif option.mood == 'sad' %}
-                                                    <i class="fas fa-frown mood-icon" style="color: #60a5fa; margin-right: 8px;"></i>
-                                                {% elif option.mood == 'anxious' %}
-                                                    <i class="fas fa-brain mood-icon" style="color: #a78bfa; margin-right: 8px;"></i>
-                                                {% elif option.mood == 'calm' %}
-                                                    <i class="fas fa-leaf mood-icon" style="color: #34d399; margin-right: 8px;"></i>
-                                                {% elif option.mood == 'energetic' %}
-                                                    <i class="fas fa-bolt mood-icon" style="color: #fbbf24; margin-right: 8px;"></i>
-                                                {% elif option.mood == 'tired' %}
-                                                    <i class="fas fa-bed mood-icon" style="color: #9ca3af; margin-right: 8px;"></i>
-                                                {% endif %}
-                                            {% endif %}
-                                            {{ option.option_text }}
-                                        </span>
-                                    </span>
-                                </label>
-                            {% empty %}
-                                <div class="no-options">
-                                    <i class="fas fa-info-circle"></i>
-                                    No options available for this question.
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                {% empty %}
-                    <div class="empty-state" style="text-align: center; padding: 40px 20px;">
-                        <i class="fas fa-clipboard-list" style="font-size: 48px; color: #cbd5e1; margin-bottom: 15px;"></i>
-                        <h3 style="color: #64748b; margin-bottom: 10px;">No Questions Available</h3>
-                        <p style="color: #94a3b8;">Please check back later for your emotional check-in.</p>
-                    </div>
-                {% endfor %}
-
-                {% if questions %}
-                <button type="submit" class="submit-btn" id="submitBtn">
-                    <span>Submit Check-In</span>
-                    <i class="fas fa-arrow-right"></i>
-                </button>
-                {% endif %}
-            </form>
+{% block content %}
+<div class="container">
+    <!-- Main Check-In Card -->
+    <div class="checkin-card">
+        <div class="header">
+            <h2>
+                <i class="fas fa-heart"></i>
+                Emotional Check-In
+            </h2>
+            <p>
+                Take a moment to check in with yourself. Select the option that best describes how you feel right now.
+            </p>
         </div>
+
+        <!-- Progress Bar -->
+        {% if questions %}
+        <div class="question-counter">
+            <i class="fas fa-tasks" style="color: #667eea;"></i>
+            {{ questions|length }} question{{ questions|length|pluralize }}
+        </div>
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar" style="width: 0%;"></div>
+        </div>
+        {% endif %}
+
+        <!-- Error Message -->
+        {% if error %}
+            <div class="error">
+                <i class="fas fa-exclamation-circle"></i>
+                {{ error }}
+            </div>
+        {% endif %}
+
+        <!-- Check-In Form -->
+        <form method="POST" id="checkinForm">
+            {% csrf_token %}
+
+            {% for question in questions %}
+                <div class="question" data-question-id="{{ question.id }}">
+                    <div class="question-header">
+                        <span class="question-number">{{ forloop.counter }}</span>
+                        <p>{{ question.question_text }}</p>
+                    </div>
+                    
+                    <div class="options">
+                        {% for option in question.options.all %}
+                            <label class="option">
+                                <input type="radio" 
+                                       name="question_{{ question.id }}" 
+                                       value="{{ option.id }}" 
+                                       required
+                                       onchange="updateProgress()">
+                                <span class="option-content">
+                                    <span class="radio-custom"></span>
+                                    <span class="option-text">
+                                        {% if option.mood %}
+                                            {% if option.mood == 'happy' %}
+                                                <i class="fas fa-smile mood-icon" style="color: #fbbf24; margin-right: 8px;"></i>
+                                            {% elif option.mood == 'sad' %}
+                                                <i class="fas fa-frown mood-icon" style="color: #60a5fa; margin-right: 8px;"></i>
+                                            {% elif option.mood == 'anxious' %}
+                                                <i class="fas fa-brain mood-icon" style="color: #a78bfa; margin-right: 8px;"></i>
+                                            {% elif option.mood == 'calm' %}
+                                                <i class="fas fa-leaf mood-icon" style="color: #34d399; margin-right: 8px;"></i>
+                                            {% elif option.mood == 'energetic' %}
+                                                <i class="fas fa-bolt mood-icon" style="color: #fbbf24; margin-right: 8px;"></i>
+                                            {% elif option.mood == 'tired' %}
+                                                <i class="fas fa-bed mood-icon" style="color: #9ca3af; margin-right: 8px;"></i>
+                                            {% endif %}
+                                        {% endif %}
+                                        {{ option.option_text }}
+                                    </span>
+                                </span>
+                            </label>
+                        {% empty %}
+                            <div class="no-options">
+                                <i class="fas fa-info-circle"></i>
+                                No options available for this question.
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% empty %}
+                <div class="empty-state">
+                    <i class="fas fa-clipboard-list"></i>
+                    <h3>No Questions Available</h3>
+                    <p>Please check back later for your emotional check-in.</p>
+                </div>
+            {% endfor %}
+
+            {% if questions %}
+            <button type="submit" class="submit-btn" id="submitBtn">
+                <span>Submit Check-In</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+            {% endif %}
+        </form>
     </div>
+</div>
+{% endblock %}
 
-    <script>
-        // Update progress bar based on answered questions
-        function updateProgress() {
-            const totalQuestions = {{ questions|length }};
-            if (totalQuestions === 0) return;
-            
-            const answeredQuestions = document.querySelectorAll('input[type="radio"]:checked').length;
-            const progress = (answeredQuestions / totalQuestions) * 100;
-            
-            const progressBar = document.getElementById('progressBar');
-            if (progressBar) {
-                progressBar.style.width = progress + '%';
-            }
+{% block extra_js %}
+<script>
+    // Update progress bar based on answered questions
+    function updateProgress() {
+        const totalQuestions = {{ questions|length }};
+        if (totalQuestions === 0) return;
+        
+        const answeredQuestions = document.querySelectorAll('input[type="radio"]:checked').length;
+        const progress = (answeredQuestions / totalQuestions) * 100;
+        
+        const progressBar = document.getElementById('progressBar');
+        if (progressBar) {
+            progressBar.style.width = progress + '%';
         }
+    }
 
-        // Form submission handling
-        document.getElementById('checkinForm')?.addEventListener('submit', function(e) {
-            const submitBtn = document.getElementById('submitBtn');
-            const totalQuestions = {{ questions|length }};
-            const answeredQuestions = document.querySelectorAll('input[type="radio"]:checked').length;
-            
-            if (answeredQuestions < totalQuestions) {
+    // Form submission handling
+    document.getElementById('checkinForm')?.addEventListener('submit', function(e) {
+        const submitBtn = document.getElementById('submitBtn');
+        const totalQuestions = {{ questions|length }};
+        const answeredQuestions = document.querySelectorAll('input[type="radio"]:checked').length;
+        
+        if (answeredQuestions < totalQuestions) {
+            e.preventDefault();
+            alert('Please answer all questions before submitting.');
+            return;
+        }
+        
+        // Show loading state
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+        submitBtn.disabled = true;
+        submitBtn.classList.add('loading');
+        
+        // Optional: Add success animation after submission
+        setTimeout(() => {
+            submitBtn.classList.add('submit-success');
+        }, 100);
+    });
+
+    // Initialize progress bar on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        updateProgress();
+        
+        // Add smooth scroll for better UX
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                alert('Please answer all questions before submitting.');
-                return;
-            }
-            
-            // Show loading state
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
-            submitBtn.disabled = true;
-            submitBtn.classList.add('loading');
-            
-            // Optional: Add success animation after submission
-            setTimeout(() => {
-                submitBtn.classList.add('submit-success');
-            }, 100);
-        });
-
-        // Initialize progress bar on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            updateProgress();
-            
-            // Add smooth scroll for better UX
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const target = document.querySelector(this.getAttribute('href'));
-                    if (target) {
-                        target.scrollIntoView({ behavior: 'smooth' });
-                    }
-                });
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
             });
         });
+    });
 
-        // Add keyboard navigation
-        document.addEventListener('keydown', function(e) {
-            // Submit on Ctrl+Enter
-            if (e.ctrlKey && e.key === 'Enter') {
-                const submitBtn = document.getElementById('submitBtn');
-                if (submitBtn && !submitBtn.disabled) {
-                    document.getElementById('checkinForm').requestSubmit();
-                }
+    // Add keyboard navigation
+    document.addEventListener('keydown', function(e) {
+        // Submit on Ctrl+Enter
+        if (e.ctrlKey && e.key === 'Enter') {
+            const submitBtn = document.getElementById('submitBtn');
+            if (submitBtn && !submitBtn.disabled) {
+                document.getElementById('checkinForm').requestSubmit();
             }
-        });
-    </script>
-</body>
-</html>
+        }
+    });
+</script>
+{% endblock %}

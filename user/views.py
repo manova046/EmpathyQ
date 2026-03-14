@@ -1163,97 +1163,9 @@ def book_session(request):
     return render(request, 'user/book_session.html', context)
 
 
-@login_required
-def payment_callback(request):
-    """Handle Razorpay payment callback"""
-    import razorpay
-    import json
-    from django.conf import settings
-    from django.views.decorators.csrf import csrf_exempt
-    
-    if request.method == 'POST':
-        try:
-            # Get payment details
-            razorpay_payment_id = request.POST.get('razorpay_payment_id')
-            razorpay_order_id = request.POST.get('razorpay_order_id')
-            razorpay_signature = request.POST.get('razorpay_signature')
-            
-            # Get booking from session
-            booking_id = request.session.get('booking_id')
-            
-            if not booking_id:
-                messages.error(request, 'Booking information not found.')
-                return redirect('user:booking_history')
-            
-            # Get the booking
-            booking = SessionBooking.objects.get(id=booking_id)
-            
-            # Verify payment signature
-            client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
-            
-            params_dict = {
-                'razorpay_order_id': razorpay_order_id,
-                'razorpay_payment_id': razorpay_payment_id,
-                'razorpay_signature': razorpay_signature
-            }
-            
-            # Verify signature
-            try:
-                client.utility.verify_payment_signature(params_dict)
-                
-                # Payment successful - update booking
-                booking.payment_status = 'paid'
-                booking.save()
-                
-                # Clear session data
-                del request.session['razorpay_order_id']
-                del request.session['booking_id']
-                
-                messages.success(request, 'Booking confirmed successfully! Payment completed.')
-                return redirect('user:booking_confirmation', booking_id=booking.id)
-                
-            except razorpay.errors.SignatureVerificationError:
-                # Payment failed - cancel booking and release slot
-                booking.status = 'cancelled'
-                booking.save()
-                
-                # Release the slot
-                if booking.slot:
-                    booking.slot.is_booked = False
-                    booking.slot.save()
-                
-                messages.error(request, 'Payment verification failed. Booking cancelled.')
-                return redirect('user:book_session')
-                
-        except SessionBooking.DoesNotExist:
-            messages.error(request, 'Booking not found.')
-            return redirect('user:book_session')
-        except Exception as e:
-            messages.error(request, f'Error processing payment: {str(e)}')
-            return redirect('user:book_session')
-    
-    return redirect('user:book_session')
 
 
 
-
-
-@login_required
-def booking_confirmation(request, booking_id):
-    """Show booking confirmation after successful payment"""
-    try:
-        booking = SessionBooking.objects.get(id=booking_id, seeker=request.user)
-        
-        context = {
-            'booking': booking,
-        }
-        return render(request, 'user/booking_confirmation.html', context)
-    except SessionBooking.DoesNotExist:
-        messages.error(request, 'Booking not found.')
-        return redirect('user:booking_history')
-    
-
-    
 def get_specialization_icon(specialization):
     """Return appropriate icon for specialization"""
     icon_map = {
@@ -1452,12 +1364,10 @@ def create_booking(request):
 
 
 
-
 @login_required
 def my_sessions(request):
     """View user's booked sessions"""
     from datetime import datetime, timedelta
-
     from django.db.models import Q
     
     today = timezone.now().date()
@@ -1488,8 +1398,8 @@ def my_sessions(request):
         # Add attribute to check if already reviewed
         session.already_reviewed = session.id in reviewed_session_ids
         
-        # Consider pending and confirmed as upcoming if date is future or today
-        if session.status in ['pending', 'confirmed'] and session_datetime.date() >= today:
+        # Consider pending, confirmed, and paid as upcoming if date is future or today
+        if session.status in ['pending', 'confirmed', 'paid'] and session_datetime.date() >= today:
             upcoming_sessions.append(session)
         else:
             past_sessions.append(session)
@@ -1497,15 +1407,16 @@ def my_sessions(request):
     # Count by status for stats
     pending_count = all_sessions.filter(status='pending').count()
     confirmed_count = all_sessions.filter(status='confirmed').count()
+    paid_count = all_sessions.filter(status='paid').count()  # ADD THIS
     completed_count = all_sessions.filter(status='completed').count()
     cancelled_count = all_sessions.filter(status='cancelled').count()
     
     print(f"Upcoming: {len(upcoming_sessions)}, Past: {len(past_sessions)}")
-    print(f"Pending: {pending_count}, Confirmed: {confirmed_count}, Completed: {completed_count}, Cancelled: {cancelled_count}")
+    print(f"Pending: {pending_count}, Confirmed: {confirmed_count}, Paid: {paid_count}, Completed: {completed_count}, Cancelled: {cancelled_count}")
     
     # Check for sessions that need meeting links
     for session in upcoming_sessions:
-        if session.status == 'confirmed' and not session.meeting_link:
+        if session.status in ['confirmed', 'paid'] and not session.meeting_link:
             # Generate meeting link if missing
             import uuid
             session.meeting_link = f"https://meet.jit.si/empathyq-{session.id}-{uuid.uuid4().hex[:8]}"
@@ -1517,6 +1428,7 @@ def my_sessions(request):
         'past_sessions': past_sessions,
         'pending_count': pending_count,
         'confirmed_count': confirmed_count,
+        'paid_count': paid_count,  # ADD THIS
         'completed_count': completed_count,
         'cancelled_count': cancelled_count,
         'total_sessions': all_sessions.count(),
@@ -1612,8 +1524,8 @@ def join_session(request, booking_id):
     """Join a video session"""
     booking = get_object_or_404(SessionBooking, id=booking_id, user=request.user)
     
-    # Check if session is confirmed and not in the past
-    if booking.status != 'confirmed':
+    # FIX: Check if session is confirmed OR paid
+    if booking.status not in ['confirmed', 'paid']:  # ← FIXED: Include paid status
         messages.error(request, 'This session is not confirmed yet.')
         return redirect('user:my_sessions')
     
@@ -2962,3 +2874,341 @@ def get_session_details(request, session_id):
         return JsonResponse({'success': False, 'error': 'Session not found'}, status=404)
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)}, status=500)
+    
+
+
+
+
+
+def approve_session(request, booking_id):
+    """Approve a session request"""
+    if request.method == 'GET':
+        booking = get_object_or_404(SessionBooking, id=booking_id)
+        
+        # Check if the logged-in expert owns this booking
+        if booking.therapist.user != request.user:
+            messages.error(request, 'You are not authorized to approve this session.')
+            return redirect('expert:session_requests')
+        
+        # Confirm the booking (this sets the fee from therapist settings)
+        booking.confirm_booking()
+        
+        # Generate meeting link if needed
+        if not booking.meeting_link:
+            booking.generate_meeting_link()
+        
+        messages.success(request, f'Session with {booking.user.username} has been confirmed. Payment is now pending from user.')
+        
+    return redirect('expert:session_requests')
+
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse, HttpResponse
+from django.views.decorators.http import require_POST
+from .utils import RazorpayClient
+from user.models import Payment
+from expert.models import TherapistSettings, ExpertProfileSettings
+import json
+from decimal import Decimal
+import logging
+
+logger = logging.getLogger(__name__)
+@login_required
+def initiate_payment(request, booking_id):
+    """Initiate payment for a booking"""
+    try:
+        booking = get_object_or_404(SessionBooking, id=booking_id, user=request.user)
+        
+        # Check if booking is confirmed (approved by expert)
+        if booking.status != 'confirmed':
+            if booking.status == 'paid':
+                messages.success(request, 'Payment already completed for this booking.')
+                return redirect('user:payment_success', booking_id=booking.id)
+            elif booking.status == 'pending':
+                messages.warning(request, 'Please wait for the expert to confirm your session before making payment.')
+                return redirect('user:my_sessions')
+            else:
+                messages.error(request, 'This session is not ready for payment.')
+                return redirect('user:my_sessions')
+        
+        # Handle existing payment records
+        if hasattr(booking, 'payment'):
+            existing_payment = booking.payment
+            
+            if existing_payment.status == 'paid':
+                messages.success(request, 'Payment already completed for this booking.')
+                return redirect('user:payment_success', booking_id=booking.id)
+            
+            elif existing_payment.status == 'created':
+                # Reuse existing payment
+                return render_payment_page(request, booking, existing_payment)
+            
+            elif existing_payment.status == 'failed':
+                # Delete failed payment
+                existing_payment.delete()
+        
+        # Ensure fee is set
+        if not booking.consultation_fee or booking.consultation_fee == 0:
+            # Try to get fee from multiple sources
+            fee = None
+            try:
+                from expert.models import ExpertProfileSettings
+                profile_settings = ExpertProfileSettings.objects.get(therapist=booking.therapist)
+                if profile_settings.consultation_fee and profile_settings.consultation_fee > 0:
+                    fee = profile_settings.consultation_fee
+            except:
+                pass
+            
+            if not fee:
+                try:
+                    from expert.models import TherapistSettings
+                    therapist_settings = TherapistSettings.objects.get(therapist=booking.therapist)
+                    if therapist_settings.consultation_fee and therapist_settings.consultation_fee > 0:
+                        fee = therapist_settings.consultation_fee
+                except:
+                    pass
+            
+            if not fee:
+                fee = Decimal('300.00')  # Default
+            
+            booking.consultation_fee = fee
+            booking.save()
+        
+        # Create Razorpay order
+        razorpay_client = RazorpayClient()
+        order = razorpay_client.create_order(float(booking.consultation_fee))
+        
+        if not order:
+            messages.error(request, 'Failed to create payment order. Please try again.')
+            return redirect('user:my_sessions')
+        
+        # Create payment record
+        payment = Payment.objects.create(
+            booking=booking,
+            razorpay_order_id=order['id'],
+            amount=booking.consultation_fee,
+            currency=order['currency'],
+            status='created'
+        )
+        
+        return render_payment_page(request, booking, payment)
+        
+    except Exception as e:
+        logger.error(f"Payment initiation failed: {str(e)}")
+        messages.error(request, f'Payment initiation failed: {str(e)}')
+        return redirect('user:payment_failed', booking_id=booking_id)
+
+def get_therapist_fee(therapist):
+    """Helper function to get therapist's fee from various sources"""
+    from expert.models import TherapistSettings, ExpertProfileSettings
+    from decimal import Decimal
+    
+    fee = Decimal('500.00')  # Default
+    
+    # ===== FIXED: Prioritize ExpertProfileSettings (what expert sees in profile) =====
+    try:
+        # Try ExpertProfileSettings FIRST (this is what experts set in profile_settings)
+        profile_settings = ExpertProfileSettings.objects.get(therapist=therapist)
+        if profile_settings.consultation_fee:
+            fee = profile_settings.consultation_fee
+            print(f"Fee from ExpertProfileSettings: {fee}")
+    except ExpertProfileSettings.DoesNotExist:
+        try:
+            # Try TherapistSettings SECOND (legacy)
+            therapist_settings = TherapistSettings.objects.get(therapist=therapist)
+            if therapist_settings.consultation_fee:
+                fee = therapist_settings.consultation_fee
+                print(f"Fee from TherapistSettings: {fee}")
+        except TherapistSettings.DoesNotExist:
+            # Try therapist model's session_fee if exists
+            if hasattr(therapist, 'session_fee') and therapist.session_fee:
+                fee = therapist.session_fee
+                print(f"Fee from therapist.session_fee: {fee}")
+    
+    return fee
+
+def render_payment_page(request, booking, payment):
+    """Helper function to render payment page"""
+    context = {
+        'booking': booking,
+        'therapist': booking.therapist,
+        'razorpay_key_id': settings.RAZORPAY_KEY_ID,
+        'razorpay_order_id': payment.razorpay_order_id,
+        'amount': int(float(payment.amount) * 100),  # Amount in paise
+        'currency': payment.currency,
+        'callback_url': request.build_absolute_uri(reverse('user:payment_callback')),
+        'user': request.user
+    }
+    return render(request, 'user/payment_page.html', context)
+
+
+@csrf_exempt
+@require_POST
+def payment_callback(request):
+    """Handle Razorpay payment callback"""
+    try:
+        # Get payment details from Razorpay
+        razorpay_order_id = request.POST.get('razorpay_order_id')
+        razorpay_payment_id = request.POST.get('razorpay_payment_id')
+        razorpay_signature = request.POST.get('razorpay_signature')
+        
+        print(f"=== PAYMENT CALLBACK RECEIVED ===")
+        print(f"Order ID: {razorpay_order_id}")
+        print(f"Payment ID: {razorpay_payment_id}")
+        print(f"Signature: {razorpay_signature}")
+        
+        logger.info(f"Payment callback received - Order: {razorpay_order_id}, Payment: {razorpay_payment_id}")
+        
+        # Find the payment record
+        payment = get_object_or_404(Payment, razorpay_order_id=razorpay_order_id)
+        print(f"Found payment record: {payment.id}, status: {payment.status}")
+        
+        # ===== FIX: Skip verification for test/mock payments =====
+        # Check if this is a test payment (pay_test_ prefix)
+        if razorpay_payment_id and razorpay_payment_id.startswith('pay_test_'):
+            print("⚠️ Test payment detected - skipping signature verification")
+            # Mark payment as paid directly
+            payment.mark_as_paid(razorpay_payment_id, razorpay_signature)
+            
+            # Get booking
+            booking = payment.booking
+            
+            logger.info(f"Test payment successful for booking: {booking.id}")
+            print(f"Test payment successful for booking {booking.id}")
+            
+            return redirect('user:payment_success', booking_id=booking.id)
+        
+        # For real payments, verify signature
+        razorpay_client = RazorpayClient()
+        is_verified = razorpay_client.verify_payment(
+            razorpay_order_id,
+            razorpay_payment_id,
+            razorpay_signature
+        )
+        
+        print(f"Payment verified: {is_verified}")
+        
+        if is_verified:
+            # Mark payment as paid
+            payment.mark_as_paid(razorpay_payment_id, razorpay_signature)
+            
+            # Get booking
+            booking = payment.booking
+            
+            logger.info(f"Payment verified successfully for booking: {booking.id}")
+            print(f"Payment successful for booking {booking.id}")
+            
+            return redirect('user:payment_success', booking_id=booking.id)
+        else:
+            payment.status = 'failed'
+            payment.save()
+            logger.error(f"Payment verification failed for order: {razorpay_order_id}")
+            print(f"Payment verification failed")
+            return redirect('user:payment_failed', booking_id=payment.booking.id)
+            
+    except Exception as e:
+        logger.error(f"Payment callback error: {str(e)}")
+        print(f"Payment callback exception: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        
+        # Try to get booking_id from the order
+        booking_id = 0
+        try:
+            razorpay_order_id = request.POST.get('razorpay_order_id')
+            if razorpay_order_id:
+                payment = Payment.objects.filter(razorpay_order_id=razorpay_order_id).first()
+                if payment:
+                    booking_id = payment.booking.id
+        except:
+            pass
+            
+        return redirect('user:payment_failed', booking_id=booking_id)
+
+def send_payment_confirmation_email(booking):
+    """Send payment confirmation email"""
+    try:
+        from django.core.mail import send_mail
+        from django.template.loader import render_to_string
+        from django.utils.html import strip_tags
+        
+        subject = f'Payment Confirmed: Session with {booking.therapist.name}'
+        
+        context = {
+            'user': booking.user,
+            'booking': booking,
+            'therapist': booking.therapist,
+        }
+        
+        html_message = render_to_string('emails/payment_confirmation.html', context)
+        plain_message = strip_tags(html_message)
+        
+        send_mail(
+            subject,
+            plain_message,
+            settings.DEFAULT_FROM_EMAIL,
+            [booking.user.email],
+            html_message=html_message,
+            fail_silently=True,
+        )
+    except Exception as e:
+        logger.error(f"Email notification failed: {str(e)}")
+
+@login_required
+def payment_success(request, booking_id):
+    """Payment success page"""
+    booking = get_object_or_404(SessionBooking, id=booking_id, user=request.user)
+    
+    # Ensure payment is marked as paid
+    if hasattr(booking, 'payment') and booking.payment.status == 'paid':
+        context = {
+            'booking': booking,
+            'payment': booking.payment
+        }
+        return render(request, 'user/payment_success.html', context)
+    else:
+        messages.warning(request, 'Payment status is pending verification.')
+        return redirect('user:my_sessions')
+
+@login_required
+def payment_failed(request, booking_id):
+    """Payment failed page"""
+    booking = None
+    error_message = request.GET.get('error', 'Payment could not be processed')
+    
+    if booking_id and booking_id != 0:
+        try:
+            booking = SessionBooking.objects.get(id=booking_id, user=request.user)
+            print(f"Payment failed page - Booking {booking_id}: fee={booking.consultation_fee}")
+        except SessionBooking.DoesNotExist:
+            pass
+    
+    return render(request, 'user/payment_failed.html', {
+        'booking': booking,
+        'error_message': error_message
+    })
+
+@login_required
+def retry_payment(request, booking_id):
+    """Retry failed payment"""
+    booking = get_object_or_404(SessionBooking, id=booking_id, user=request.user)
+    
+    # ===== FIXED: Better handling of existing payments =====
+    # Check if payment exists
+    if hasattr(booking, 'payment'):
+        existing_payment = booking.payment
+        
+        if existing_payment.status == 'failed':
+            # Delete the old failed payment
+            logger.info(f"Retry: Deleting failed payment {existing_payment.id}")
+            existing_payment.delete()
+        elif existing_payment.status == 'created':
+            # Payment was created but never completed
+            logger.info(f"Retry: Deleting stale payment {existing_payment.id}")
+            existing_payment.delete()
+        elif existing_payment.status == 'paid':
+            # Already paid, redirect to success
+            messages.success(request, 'Payment already completed.')
+            return redirect('user:payment_success', booking_id=booking.id)
+    
+    # Create new payment
+    return initiate_payment(request, booking_id)

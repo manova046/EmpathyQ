@@ -1,0 +1,502 @@
+{% extends 'base.html' %}
+
+{% block title %}Analytics & Reports - EmpathyQ{% endblock %}
+
+{% block extra_css %}
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+        background: linear-gradient(135deg, #f5f7ff 0%, #f0f2ff 100%);
+        min-height: 100vh;
+        padding: 40px 20px;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    /* Header */
+    .header {
+        background: white;
+        border-radius: 20px;
+        padding: 25px 35px;
+        margin-bottom: 30px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        animation: slideDown 0.5s ease;
+    }
+
+    @keyframes slideDown {
+        from {
+            transform: translateY(-20px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .header h1 {
+        font-size: 32px;
+        color: #333;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .header h1 i {
+        color: #6c63ff;
+    }
+
+    .btn {
+        padding: 12px 25px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #6c63ff, #5d5fef);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(108, 99, 255, 0.2);
+    }
+
+    .btn-secondary {
+        background: white;
+        color: #6c63ff;
+        border: 2px solid #6c63ff;
+    }
+
+    .btn-secondary:hover {
+        background: #6c63ff;
+        color: white;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 25px;
+        margin-bottom: 30px;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: transform 0.3s;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .stat-info h3 {
+        font-size: 16px;
+        color: #666;
+        margin-bottom: 10px;
+        font-weight: 500;
+    }
+
+    .stat-number {
+        font-size: 32px;
+        font-weight: 700;
+        color: #333;
+    }
+
+    .stat-icon {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #6c63ff20, #5d5fef20);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #6c63ff;
+        font-size: 28px;
+    }
+
+    /* Charts Section */
+    .charts-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+        margin-bottom: 30px;
+    }
+
+    .chart-card {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    }
+
+    .chart-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #f0f2ff;
+    }
+
+    .chart-header h2 {
+        font-size: 20px;
+        color: #333;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .chart-header h2 i {
+        color: #6c63ff;
+    }
+
+    /* Table Styles */
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th {
+        text-align: left;
+        padding: 15px;
+        color: #666;
+        font-weight: 600;
+        font-size: 14px;
+        border-bottom: 2px solid #f0f2ff;
+    }
+
+    td {
+        padding: 15px;
+        border-bottom: 1px solid #f0f2ff;
+    }
+
+    /* Rating Stars - Matching profile.html */
+    .stars {
+        color: #fbbf24;
+        font-size: 24px;
+    }
+
+    .stars i {
+        margin: 0 2px;
+    }
+
+    /* Rating Distribution Bars */
+    .rating-distribution {
+        margin-top: 30px;
+        text-align: left;
+    }
+
+    .rating-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 12px;
+    }
+
+    .rating-label {
+        min-width: 60px;
+        font-weight: 600;
+        color: #475569;
+        font-size: 15px;
+    }
+
+    .rating-bar-container {
+        flex: 1;
+        height: 10px;
+        background: #e2e8f0;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .rating-bar {
+        height: 100%;
+        background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        border-radius: 10px;
+    }
+
+    .rating-count {
+        min-width: 40px;
+        color: #64748b;
+        font-size: 14px;
+        font-weight: 500;
+        text-align: right;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #999;
+    }
+
+    .empty-state i {
+        font-size: 64px;
+        margin-bottom: 20px;
+        color: #ccc;
+    }
+
+    .empty-state h4 {
+        color: #333;
+        margin-bottom: 10px;
+        font-size: 20px;
+    }
+
+    .empty-state p {
+        color: #94a3b8;
+        max-width: 300px;
+        margin: 0 auto;
+    }
+
+    @media (max-width: 768px) {
+        .stats-grid,
+        .charts-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .header {
+            flex-direction: column;
+            gap: 15px;
+            text-align: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <h1>
+            <i class="fas fa-chart-line"></i>
+            Analytics & Reports
+        </h1>
+        <!-- Removed Back to Dashboard button -->
+    </div>
+
+    <!-- Stats Overview -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-info">
+                <h3>Total Sessions</h3>
+                <div class="stat-number">{{ total_sessions|default:"0" }}</div>
+            </div>
+            <div class="stat-icon">
+                <i class="fas fa-calendar"></i>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-info">
+                <h3>Completed Sessions</h3>
+                <div class="stat-number">{{ completed_sessions|default:"0" }}</div>
+            </div>
+            <div class="stat-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-info">
+                <h3>Cancelled Sessions</h3>
+                <div class="stat-number">{{ cancelled_sessions|default:"0" }}</div>
+            </div>
+            <div class="stat-icon">
+                <i class="fas fa-times-circle"></i>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-info">
+                <h3>Average Rating</h3>
+                <div class="stat-number">{{ avg_rating|default:"0" }} ★</div>
+            </div>
+            <div class="stat-icon">
+                <i class="fas fa-star"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="charts-grid">
+        <!-- Monthly Sessions Chart -->
+        <div class="chart-card">
+            <div class="chart-header">
+                <h2>
+                    <i class="fas fa-calendar-alt"></i>
+                    Monthly Sessions
+                </h2>
+                <span class="badge">Last 6 months</span>
+            </div>
+            {% if monthly_sessions %}
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th>Sessions</th>
+                            <th>Earnings</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for month in monthly_sessions %}
+                        <tr>
+                            <td>{{ month.month }}</td>
+                            <td>{{ month.count }}</td>
+                            <td>${{ month.earnings }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-state" style="padding: 40px 20px;">
+                <i class="fas fa-chart-bar"></i>
+                <p>No monthly data available yet</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Reviews Chart - Updated to match profile.html styling -->
+        <div class="chart-card">
+            <div class="chart-header">
+                <h2>
+                    <i class="fas fa-star"></i>
+                    Reviews Overview
+                </h2>
+                <span class="badge">Total: {{ total_reviews|default:"0" }}</span>
+            </div>
+            
+            {% if total_reviews and total_reviews > 0 %}
+            <div style="text-align: center; padding: 20px 10px;">
+                <!-- Average Rating Big Number -->
+                <div style="font-size: 56px; font-weight: 700; color: #667eea; margin-bottom: 10px; line-height: 1.2;">
+                    {{ avg_rating|default:"0"|floatformat:1 }}
+                    <span style="font-size: 24px; color: #94a3b8; font-weight: 400;">/ 5</span>
+                </div>
+                
+                <!-- Star Rating -->
+                <div class="stars" style="font-size: 28px; margin-bottom: 15px;">
+                    {% for i in "12345"|make_list %}
+                        {% if forloop.counter <= avg_rating|floatformat:0 %}
+                            <i class="fas fa-star"></i>
+                        {% else %}
+                            <i class="far fa-star"></i>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                
+                <!-- Review Count -->
+                <p style="color: #64748b; font-size: 16px; margin-bottom: 25px;">
+                    Based on <strong>{{ total_reviews }}</strong> review{{ total_reviews|pluralize }}
+                </p>
+                
+                <!-- Rating Distribution Bars - Simplified without custom filters -->
+                <div class="rating-distribution">
+                    <!-- 5 Star Rating -->
+                    <div class="rating-row">
+                        <span class="rating-label">5 ★</span>
+                        <div class="rating-bar-container">
+                            {% if total_reviews > 0 %}
+                            <div class="rating-bar" style="width: {% widthratio rating_counts.5|default:0 total_reviews 100 %}%;"></div>
+                            {% endif %}
+                        </div>
+                        <span class="rating-count">{{ rating_counts.5|default:"0" }}</span>
+                    </div>
+                    
+                    <!-- 4 Star Rating -->
+                    <div class="rating-row">
+                        <span class="rating-label">4 ★</span>
+                        <div class="rating-bar-container">
+                            {% if total_reviews > 0 %}
+                            <div class="rating-bar" style="width: {% widthratio rating_counts.4|default:0 total_reviews 100 %}%;"></div>
+                            {% endif %}
+                        </div>
+                        <span class="rating-count">{{ rating_counts.4|default:"0" }}</span>
+                    </div>
+                    
+                    <!-- 3 Star Rating -->
+                    <div class="rating-row">
+                        <span class="rating-label">3 ★</span>
+                        <div class="rating-bar-container">
+                            {% if total_reviews > 0 %}
+                            <div class="rating-bar" style="width: {% widthratio rating_counts.3|default:0 total_reviews 100 %}%;"></div>
+                            {% endif %}
+                        </div>
+                        <span class="rating-count">{{ rating_counts.3|default:"0" }}</span>
+                    </div>
+                    
+                    <!-- 2 Star Rating -->
+                    <div class="rating-row">
+                        <span class="rating-label">2 ★</span>
+                        <div class="rating-bar-container">
+                            {% if total_reviews > 0 %}
+                            <div class="rating-bar" style="width: {% widthratio rating_counts.2|default:0 total_reviews 100 %}%;"></div>
+                            {% endif %}
+                        </div>
+                        <span class="rating-count">{{ rating_counts.2|default:"0" }}</span>
+                    </div>
+                    
+                    <!-- 1 Star Rating -->
+                    <div class="rating-row">
+                        <span class="rating-label">1 ★</span>
+                        <div class="rating-bar-container">
+                            {% if total_reviews > 0 %}
+                            <div class="rating-bar" style="width: {% widthratio rating_counts.1|default:0 total_reviews 100 %}%;"></div>
+                            {% endif %}
+                        </div>
+                        <span class="rating-count">{{ rating_counts.1|default:"0" }}</span>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="empty-state" style="padding: 50px 20px;">
+                <i class="fas fa-star" style="font-size: 64px; color: #cbd5e1; margin-bottom: 20px;"></i>
+                <h4>No Reviews Yet</h4>
+                <p>You haven't received any reviews yet. Reviews will appear here after clients complete sessions.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Back Link removed -->
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Auto-hide messages after 5 seconds
+    setTimeout(function() {
+        document.querySelectorAll('.alert').forEach(function(alert) {
+            if (alert) {
+                alert.style.transition = 'opacity 0.5s';
+                alert.style.opacity = '0';
+                setTimeout(() => alert.remove(), 500);
+            }
+        });
+    }, 5000);
+</script>
+{% endblock %}

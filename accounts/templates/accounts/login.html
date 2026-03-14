@@ -18,31 +18,121 @@
             background-color: #f8f9fa;
             min-height: 100vh;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+            flex-direction: column;
         }
 
-        /* Main Container */
-        .login-container {
+        /* Navbar Styles */
+        .navbar {
+            background-color: #ffffff;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+            position: fixed;
             width: 100%;
-            max-width: 420px;
+            top: 0;
+            z-index: 1000;
+            padding: 15px 0;
         }
 
-        /* Logo */
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
         .logo {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .logo a {
-            font-size: 32px;
+            font-size: 28px;
             font-weight: 700;
             color: #5d5fef;
             text-decoration: none;
-            display: inline-flex;
+            display: flex;
             align-items: center;
-            gap: 10px;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: #6c63ff;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #6c63ff;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-outline {
+            border: 2px solid #6c63ff;
+            color: #6c63ff;
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            background-color: #6c63ff;
+            color: white;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6c63ff, #5d5fef);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(108, 99, 255, 0.2);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 100px 20px 60px;
+            min-height: calc(100vh - 300px);
+        }
+
+        /* Login Container */
+        .login-container {
+            width: 100%;
+            max-width: 420px;
         }
 
         /* Login Card */
@@ -155,6 +245,11 @@
             box-shadow: 0 8px 20px rgba(108, 99, 255, 0.25);
         }
 
+        .login-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
         /* Divider */
         .divider {
             display: flex;
@@ -236,15 +331,26 @@
             text-decoration: underline;
         }
 
-        /* Footer */
-        .footer {
-            text-align: center;
-            margin-top: 30px;
-            color: #777;
-            font-size: 13px;
-        }
+        /* Footer will be styled by footer.html */
 
         /* Responsive */
+        @media (max-width: 992px) {
+            .nav-links {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-buttons .btn {
+                padding: 8px 15px;
+                font-size: 13px;
+            }
+            
+            .main-content {
+                padding: 90px 15px 40px;
+            }
+        }
+
         @media (max-width: 480px) {
             .login-card {
                 padding: 30px 25px;
@@ -254,111 +360,124 @@
                 font-size: 24px;
             }
             
-            .logo a {
-                font-size: 28px;
+            .logo {
+                font-size: 24px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <!-- Logo -->
-        <div class="logo">
-            <a href="{% url 'accounts:index' %}">
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="{% url 'accounts:index' %}" class="logo">
                 <i class="fas fa-heart"></i> EmpathyQ
             </a>
-        </div>
-
-        <!-- Login Card -->
-        <div class="login-card">
-            <!-- Header -->
-            <div class="login-header">
-                <h1>Welcome Back</h1>
-                <p>Sign in to continue your journey</p>
-            </div>
-
-            <!-- Messages -->
-            {% if messages %}
-            <div class="messages">
-                {% for message in messages %}
-                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-error{% endif %}">
-                    <i class="fas {% if message.tags == 'success' %}fa-check-circle{% else %}fa-exclamation-circle{% endif %}"></i>
-                    {{ message }}
-                </div>
-                {% endfor %}
-            </div>
-            {% endif %}
-
-            <!-- Login Form -->
-            <form method="POST" action="{% url 'accounts:login' %}">
-                {% csrf_token %}
-                
-                <div class="form-group">
-                    <div class="input-with-icon">
-                        <i class="fas fa-user"></i>
-                        <input type="text" 
-                               name="username" 
-                               class="form-control" 
-                               placeholder="Username" 
-                               required
-                               autofocus>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-with-icon">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" 
-                               name="password" 
-                               class="form-control" 
-                               placeholder="Password" 
-                               required>
-                    </div>
-                </div>
-
-                <button type="submit" class="login-btn">
-                    <i class="fas fa-sign-in-alt"></i> Login
-                </button>
-            </form>
-
-            <!-- Divider -->
-            <div class="divider">
-                <span>Don't have an account?</span>
-            </div>
-
-            <!-- Registration Options -->
-            <div class="registration-options">
-                <a href="{% url 'accounts:user_register' %}" class="reg-option">
-                    <i class="fas fa-hands-helping"></i>
-                    <h4>Get Support</h4>
-                    <p>Connect with mental health professionals</p>
-                </a>
-                
-                <a href="{% url 'accounts:expert_register' %}" class="reg-option">
-                    <i class="fas fa-user-md"></i>
-                    <h4>Join as Expert</h4>
-                    <p>Help others on their wellness journey</p>
-                </a>
-            </div>
-
-            <!-- Links -->
-            <div class="links">
-                <a href="{% url 'accounts:index' %}">← Back to Home</a>
-                <span style="margin: 0 10px">•</span>
-                <a href="#">Forgot Password?</a>
+            
+            <ul class="nav-links">
+                <li><a href="{% url 'accounts:index' %}#home">Home</a></li>
+                <li><a href="{% url 'accounts:index' %}#about">About Us</a></li>
+                <li><a href="{% url 'accounts:index' %}#features">Features</a></li>
+                <li><a href="{% url 'accounts:index' %}#testimonials">Testimonials</a></li>
+                <li><a href="{% url 'accounts:index' %}#contact">Contact</a></li>
+            </ul>
+            
+            <div class="nav-buttons">
+                <a href="{% url 'accounts:login' %}" class="btn btn-outline">Login</a>
+                <a href="{% url 'accounts:user_register' %}" class="btn btn-primary">Get Started</a>
             </div>
         </div>
+    </nav>
 
-        <!-- Footer -->
-        <div class="footer">
-            <p>&copy; 2025 EmpathyQ. Your partner in mental wellness.</p>
-            <p style="margin-top: 8px; font-size: 12px;">
-                In crisis? Please contact local emergency services immediately.
-            </p>
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="login-container">
+            <!-- Login Card -->
+            <div class="login-card">
+                <!-- Header -->
+                <div class="login-header">
+                    <h1>Welcome Back</h1>
+                    <p>Sign in to continue your journey</p>
+                </div>
+
+                <!-- Messages -->
+                {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-error{% endif %}">
+                        <i class="fas {% if message.tags == 'success' %}fa-check-circle{% else %}fa-exclamation-circle{% endif %}"></i>
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <!-- Login Form -->
+                <form method="POST" action="{% url 'accounts:login' %}">
+                    {% csrf_token %}
+                    
+                    <div class="form-group">
+                        <div class="input-with-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="text" 
+                                   name="username" 
+                                   class="form-control" 
+                                   placeholder="Username" 
+                                   required
+                                   autofocus>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" 
+                                   name="password" 
+                                   class="form-control" 
+                                   placeholder="Password" 
+                                   required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="login-btn">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </button>
+                </form>
+
+                <!-- Divider -->
+                <div class="divider">
+                    <span>Don't have an account?</span>
+                </div>
+
+                <!-- Registration Options -->
+                <div class="registration-options">
+                    <a href="{% url 'accounts:user_register' %}" class="reg-option">
+                        <i class="fas fa-hands-helping"></i>
+                        <h4>Get Support</h4>
+                        <p>Connect with mental health professionals</p>
+                    </a>
+                    
+                    <a href="{% url 'accounts:expert_register' %}" class="reg-option">
+                        <i class="fas fa-user-md"></i>
+                        <h4>Join as Expert</h4>
+                        <p>Help others on their wellness journey</p>
+                    </a>
+                </div>
+
+                <!-- Links -->
+                <div class="links">
+                    <a href="{% url 'accounts:index' %}">← Back to Home</a>
+                    <span style="margin: 0 10px">•</span>
+                    <a href="#">Forgot Password?</a>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Simple Script -->
+    <!-- Footer from include -->
+    {% include 'includes/footer.html' %}
+
+    <!-- Scripts -->
     <script>
         // Add focus effects
         document.querySelectorAll('.form-control').forEach(input => {
@@ -373,10 +492,22 @@
 
         // Form submission feedback
         const form = document.querySelector('form');
-        form.addEventListener('submit', function(e) {
-            const btn = this.querySelector('.login-btn');
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
-            btn.disabled = true;
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                const btn = this.querySelector('.login-btn');
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
+                btn.disabled = true;
+            });
+        }
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+            } else {
+                navbar.style.boxShadow = '0 2px 15px rgba(0, 0, 0, 0.05)';
+            }
         });
     </script>
 </body>

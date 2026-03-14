@@ -353,6 +353,9 @@ def user_dashboard(request):
 
 
 # In accounts/views.py - update expert_dashboard function
+
+
+
 @login_required
 @role_required([User.EXPERT])
 def expert_dashboard(request):
@@ -378,10 +381,11 @@ def expert_dashboard(request):
             status='pending'
         ).count()
         
+        # FIX: Include both 'confirmed' AND 'paid' status for upcoming sessions
         upcoming_count = SessionBooking.objects.filter(
             therapist=therapist,
             booking_date__gte=timezone.now().date(),
-            status='confirmed'
+            status__in=['confirmed', 'paid']  # Include paid status
         ).count()
         
         completed_count = SessionBooking.objects.filter(
@@ -389,11 +393,11 @@ def expert_dashboard(request):
             status='completed'
         ).count()
         
-        # Get today's sessions count
+        # Get today's sessions count - FIX: Include both confirmed and paid
         today_sessions_count = SessionBooking.objects.filter(
             therapist=therapist,
             booking_date=timezone.now().date(),
-            status__in=['confirmed', 'pending']
+            status__in=['confirmed', 'paid', 'pending']  # Include paid status
         ).count()
         
         # Get recent bookings for the activity section
@@ -456,11 +460,7 @@ def expert_dashboard(request):
         'unread_chat_count': unread_chat_count,
         'latest_unread_message': latest_unread_message,
     }
-    # FIXED: Removed the extra closing parenthesis
     return render(request, 'accounts/expert.html', context)
-
-
-
 
 
 
@@ -835,3 +835,474 @@ def get_block_info(request, user_id):
         'blocked_by': user.blocked_by.username if user.blocked_by else None,
     }
     return JsonResponse(data)
+
+
+
+
+
+# ============================================================================
+# EXPERT SUPPORT CHAT VIEWS (Report & Support)
+# ============================================================================
+
+from .models import ExpertSupportChat
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
+from datetime import datetime
+from django.utils import timezone
+
+@login_required
+@user_passes_test(is_admin)
+def admin_expert_support(request):
+    """Admin support chat interface for experts"""
+    
+    # Get all experts (users with role='expert')
+    experts = User.objects.filter(role=User.EXPERT).exclude(is_superuser=True)
+    
+    # Build conversations list
+    conversations = []
+    for expert in experts:
+        # Get last message between admin and this expert
+        last_msg = ExpertSupportChat.objects.filter(
+            Q(sender=request.user, recipient=expert) |
+            Q(sender=expert, recipient=request.user)
+        ).order_by('-timestamp').first()
+        
+        # Count unread messages from this expert
+        unread_count = ExpertSupportChat.objects.filter(
+            sender=expert,
+            recipient=request.user,
+            is_read=False
+        ).count()
+        
+        # Get user initials for avatar
+        if expert.get_full_name():
+            name_parts = expert.get_full_name().split()
+            if len(name_parts) >= 2:
+                initials = name_parts[0][0] + name_parts[-1][0]
+            else:
+                initials = name_parts[0][0] if name_parts else expert.username[0]
+        else:
+            initials = expert.username[0] if expert.username else 'E'
+        
+        conversations.append({
+            'user': expert,
+            'last_message': last_msg.message if last_msg else 'No messages yet',
+            'last_time': last_msg.timestamp if last_msg else None,
+            'unread_count': unread_count,
+            'initials': initials.upper()[:2],
+        })
+    
+    # ===== FIXED: Sort by most recent message (handle timezone-aware datetimes) =====
+    # Create a timezone-aware minimum datetime for sorting
+    min_datetime = timezone.make_aware(
+        datetime(1970, 1, 1),
+        timezone.get_current_timezone()
+    )
+    
+    def sort_key(conv):
+        # Use the last_time if it exists, otherwise use min_datetime
+        last_time = conv['last_time']
+        if last_time is None:
+            return -min_datetime.timestamp()  # Put None at the end
+        return -last_time.timestamp()  # Negative for reverse order
+    
+    conversations.sort(key=sort_key)
+    
+    # Handle specific expert selection
+    active_expert_id = request.GET.get('expert')
+    active_expert = None
+    chat_messages = []
+    
+    if active_expert_id:
+        try:
+            active_expert = User.objects.get(id=active_expert_id, role=User.EXPERT)
+            
+            # Get messages between admin and this expert
+            chat_messages = ExpertSupportChat.objects.filter(
+                Q(sender=request.user, recipient=active_expert) |
+                Q(sender=active_expert, recipient=request.user)
+            ).order_by('timestamp')
+            
+            # Mark messages as read
+            chat_messages.filter(
+                sender=active_expert,
+                recipient=request.user,
+                is_read=False
+            ).update(is_read=True)
+            
+        except User.DoesNotExist:
+            pass
+    
+    # Handle POST request (sending message)
+    if request.method == 'POST':
+        expert_id = request.POST.get('expert_id')
+        message_text = request.POST.get('message')
+        
+        if expert_id and message_text:
+            try:
+                expert = User.objects.get(id=expert_id, role=User.EXPERT)
+                
+                # Create message
+                ExpertSupportChat.objects.create(
+                    sender=request.user,
+                    recipient=expert,
+                    message=message_text,
+                    is_admin_reply=True
+                )
+                
+                messages.success(request, f'Reply sent to {expert.username}')
+                return redirect(f"{request.path}?expert={expert_id}")
+                
+            except User.DoesNotExist:
+                messages.error(request, 'Expert not found')
+    
+    # Get total unread count for badge
+    total_unread = ExpertSupportChat.objects.filter(
+        recipient=request.user,
+        is_read=False
+    ).exclude(sender=request.user).count()
+    
+    context = {
+        'conversations': conversations,
+        'active_user': active_expert,
+        'chat_messages': chat_messages,
+        'is_expert_support': True,
+        'total_unread': total_unread,
+    }
+    # ===== FIXED: Use the correct template =====
+    return render(request, 'accounts/admin_expert_support.html', context)
+
+
+@login_required
+@role_required([User.EXPERT])
+def expert_support(request):
+    """Expert support chat with admin"""
+    
+    # Get admin user (first superuser)
+    admin_user = User.objects.filter(is_superuser=True).first()
+    
+    if not admin_user:
+        messages.error(request, 'No admin available for support. Please try again later.')
+        return redirect('accounts:expert_dashboard')
+    
+    # Get conversation between expert and admin
+    conversation = ExpertSupportChat.objects.filter(
+        Q(sender=request.user, recipient=admin_user) |
+        Q(sender=admin_user, recipient=request.user)
+    ).order_by('timestamp')
+    
+    # Mark unread messages as read
+    unread_messages = conversation.filter(
+        sender=admin_user,
+        recipient=request.user,
+        is_read=False
+    )
+    unread_messages.update(is_read=True)
+    
+    # Handle POST request (sending new message)
+    if request.method == 'POST':
+        message_text = request.POST.get('message')
+        
+        if message_text:
+            ExpertSupportChat.objects.create(
+                sender=request.user,
+                recipient=admin_user,
+                message=message_text,
+                is_admin_reply=False
+            )
+            messages.success(request, 'Message sent to admin successfully!')
+            return redirect('accounts:expert_support')
+        else:
+            messages.error(request, 'Please enter a message.')
+    
+    # Get unread count for badge
+    unread_count = ExpertSupportChat.objects.filter(
+        recipient=request.user,
+        is_read=False
+    ).count()
+    
+    context = {
+        'conversation': conversation,
+        'admin_user': admin_user,
+        'unread_count': unread_count,
+    }
+    return render(request, 'accounts/expert_support.html', context)
+
+
+@login_required
+def get_expert_support_messages(request):
+    """Get messages via AJAX for expert support"""
+    try:
+        if request.user.is_superuser:
+            # Admin viewing expert conversation
+            expert_id = request.GET.get('expert_id')
+            if not expert_id:
+                return JsonResponse({'error': 'Expert ID required'}, status=400)
+            
+            expert = get_object_or_404(User, id=expert_id, role=User.EXPERT)
+            
+            messages_list = ExpertSupportChat.objects.filter(
+                Q(sender=request.user, recipient=expert) |
+                Q(sender=expert, recipient=request.user)
+            ).order_by('timestamp')
+            
+            # Mark as read
+            messages_list.filter(
+                sender=expert,
+                recipient=request.user,
+                is_read=False
+            ).update(is_read=True)
+            
+        else:
+            # Expert viewing their conversation
+            admin = User.objects.filter(is_superuser=True).first()
+            if not admin:
+                return JsonResponse({'error': 'Admin not found'}, status=404)
+            
+            messages_list = ExpertSupportChat.objects.filter(
+                Q(sender=request.user, recipient=admin) |
+                Q(sender=admin, recipient=request.user)
+            ).order_by('timestamp')
+        
+        messages_data = [{
+            'id': msg.id,
+            'message': msg.message,
+            'time': msg.timestamp.strftime('%I:%M %p'),
+            'date': msg.timestamp.strftime('%b %d, %Y'),
+            'is_me': msg.sender == request.user,
+            'is_read': msg.is_read,
+            'sender_name': msg.sender.username,
+        } for msg in messages_list]
+        
+        return JsonResponse({'messages': messages_data})
+        
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
+
+
+@login_required
+@csrf_exempt
+def send_expert_support_message(request):
+    """Send a support message via AJAX"""
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            recipient_id = data.get('recipient_id')
+            message_text = data.get('message')
+            
+            if not recipient_id or not message_text:
+                return JsonResponse({'success': False, 'error': 'Missing data'})
+            
+            recipient = get_object_or_404(User, id=recipient_id)
+            
+            # Create message
+            message = ExpertSupportChat.objects.create(
+                sender=request.user,
+                recipient=recipient,
+                message=message_text,
+                is_admin_reply=request.user.is_superuser
+            )
+            
+            return JsonResponse({
+                'success': True,
+                'message_id': message.id,
+                'time': message.timestamp.strftime('%I:%M %p'),
+            })
+            
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+    
+    return JsonResponse({'success': False, 'error': 'Invalid method'})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+from .models import PlatformReview
+from django.db.models import Avg, Count
+
+# Add this to your existing imports
+
+def index(request):
+    """Homepage with platform reviews"""
+    # Get approved and featured reviews for display
+    featured_reviews = PlatformReview.objects.filter(
+        is_approved=True,
+        is_featured=True
+    ).order_by('-created_at')[:6]  # Show 6 featured reviews
+    
+    # If not enough featured, get latest approved reviews
+    if featured_reviews.count() < 6:
+        latest_reviews = PlatformReview.objects.filter(
+            is_approved=True
+        ).exclude(
+            id__in=[r.id for r in featured_reviews]
+        ).order_by('-created_at')[:6 - featured_reviews.count()]
+        
+        # Combine featured and latest
+        all_reviews = list(featured_reviews) + list(latest_reviews)
+    else:
+        all_reviews = featured_reviews
+    
+    # Calculate overall stats
+    review_stats = PlatformReview.objects.filter(is_approved=True).aggregate(
+        avg_rating=Avg('rating'),
+        total_count=Count('id')
+    )
+    
+    # Count by rating
+    rating_counts = {}
+    for i in range(1, 6):
+        rating_counts[i] = PlatformReview.objects.filter(
+            is_approved=True,
+            rating=i
+        ).count()
+    
+    # Separate user and expert reviews
+    user_reviews = PlatformReview.objects.filter(
+        is_approved=True,
+        review_type='user'
+    ).count()
+    
+    expert_reviews = PlatformReview.objects.filter(
+        is_approved=True,
+        review_type='expert'
+    ).count()
+    
+    context = {
+        'reviews': all_reviews,
+        'avg_rating': round(review_stats['avg_rating'] or 0, 1),
+        'total_reviews': review_stats['total_count'] or 0,
+        'rating_counts': rating_counts,
+        'user_reviews_count': user_reviews,
+        'expert_reviews_count': expert_reviews,
+    }
+    return render(request, 'accounts/index.html', context)
+
+
+@login_required
+@role_required([User.USER, User.EXPERT])
+def submit_platform_review(request):
+    """Submit a review about the platform"""
+    if request.method == 'POST':
+        rating = request.POST.get('rating')
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+        
+        if not all([rating, title, content]):
+            messages.error(request, 'Please fill in all fields.')
+            return redirect('accounts:index')
+        
+        # Check if user already submitted a review
+        existing_review = PlatformReview.objects.filter(
+            user=request.user
+        ).first()
+        
+        if existing_review:
+            messages.info(request, 'You have already submitted a review. Thank you for your feedback!')
+            return redirect('accounts:index')
+        
+        # Create review
+        review = PlatformReview.objects.create(
+            user=request.user,
+            review_type='expert' if request.user.role == User.EXPERT else 'user',
+            rating=int(rating),
+            title=title,
+            content=content,
+            is_approved=False  # Needs admin approval
+        )
+        
+        messages.success(
+            request, 
+            'Thank you for your review! It will be visible after admin approval.'
+        )
+        return redirect('accounts:index')
+    
+    return redirect('accounts:index')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@login_required
+@user_passes_test(is_admin)
+def admin_platform_reviews(request):
+    """Admin view to manage platform reviews"""
+    # Get all reviews
+    pending_reviews = PlatformReview.objects.filter(is_approved=False).order_by('-created_at')
+    approved_reviews = PlatformReview.objects.filter(is_approved=True).order_by('-created_at')
+    
+    context = {
+        'pending_reviews': pending_reviews,
+        'approved_reviews': approved_reviews,
+    }
+    return render(request, 'accounts/admin_platform_reviews.html', context)
+
+
+@login_required
+@user_passes_test(is_admin)
+def approve_platform_review(request, review_id):
+    """Approve a platform review"""
+    review = get_object_or_404(PlatformReview, id=review_id)
+    review.is_approved = True
+    review.save()
+    messages.success(request, f'Review "{review.title}" has been approved.')
+    return redirect('accounts:admin_platform_reviews')
+
+
+@login_required
+@user_passes_test(is_admin)
+def reject_platform_review(request, review_id):
+    """Reject/delete a platform review"""
+    review = get_object_or_404(PlatformReview, id=review_id)
+    title = review.title
+    review.delete()
+    messages.success(request, f'Review "{title}" has been rejected and removed.')
+    return redirect('accounts:admin_platform_reviews')
+
+
+@login_required
+@user_passes_test(is_admin)
+def toggle_featured_review(request, review_id):
+    """Toggle featured status of a review"""
+    review = get_object_or_404(PlatformReview, id=review_id)
+    review.is_featured = not review.is_featured
+    review.save()
+    status = "featured" if review.is_featured else "unfeatured"
+    messages.success(request, f'Review "{review.title}" has been {status}.')
+    return redirect('accounts:admin_platform_reviews')
+
+
+
+
+
+
+
+

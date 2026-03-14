@@ -123,3 +123,114 @@ class BlockedUserNotification(models.Model):
     
     def __str__(self):
         return f"Notification for {self.user.username}: {self.message[:50]}"
+    
+
+
+
+
+
+    # Add this to accounts/models.py (after the existing ChatMessage model)
+
+class ExpertSupportChat(models.Model):
+    """Model for support chat between admin and experts"""
+    sender = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='expert_support_sent'
+    )
+    recipient = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='expert_support_received'
+    )
+    message = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+    is_admin_reply = models.BooleanField(default=False, help_text="True if admin replied")
+    
+    class Meta:
+        ordering = ['timestamp']
+        indexes = [
+            models.Index(fields=['sender', 'recipient', 'timestamp']),
+            models.Index(fields=['recipient', 'is_read']),
+        ]
+    
+    def __str__(self):
+        return f"Expert Support: {self.sender.username} to {self.recipient.username} at {self.timestamp}"
+    
+    def mark_as_read(self):
+        self.is_read = True
+        self.save(update_fields=['is_read'])
+    
+    @classmethod
+    def get_conversation(cls, user1, user2):
+        """Get all messages between two users"""
+        return cls.objects.filter(
+            models.Q(sender=user1, recipient=user2) |
+            models.Q(sender=user2, recipient=user1)
+        ).order_by('timestamp')
+    
+    @classmethod
+    def get_unread_count(cls, user):
+        """Get unread message count for a user"""
+        return cls.objects.filter(recipient=user, is_read=False).count()
+    
+
+
+
+
+
+
+class PlatformReview(models.Model):
+    """Reviews and ratings about EmpathyQ platform from users and experts"""
+    REVIEW_TYPES = [
+        ('user', 'User'),
+        ('expert', 'Expert'),
+    ]
+    
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='platform_reviews'
+    )
+    review_type = models.CharField(max_length=10, choices=REVIEW_TYPES)
+    rating = models.IntegerField(
+        choices=[(i, i) for i in range(1, 6)],
+        help_text="Rating from 1 to 5 stars"
+    )
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+    is_approved = models.BooleanField(default=False, help_text="Admin approval for display")
+    is_featured = models.BooleanField(default=False, help_text="Show on homepage")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name_plural = "Platform Reviews"
+    
+    def __str__(self):
+        return f"{self.get_review_type_display()} Review: {self.title} - {self.rating}★"
+    
+    @property
+    def reviewer_name(self):
+        """Get reviewer name with privacy"""
+        if self.review_type == 'user':
+            return self.user.username
+        else:
+            # For experts, show as "Dr. Name"
+            expert_profile = ExpertProfile.objects.filter(user=self.user).first()
+            if expert_profile and hasattr(expert_profile, 'therapist'):
+                return f"Dr. {expert_profile.therapist.name}"
+            return f"Dr. {self.user.username}"
+    
+    @property
+    def reviewer_initials(self):
+        """Get initials for avatar"""
+        name = self.reviewer_name
+        if name.startswith('Dr. '):
+            name = name[4:]
+        parts = name.split()
+        if len(parts) >= 2:
+            return (parts[0][0] + parts[-1][0]).upper()
+        return name[0].upper() if name else 'U'

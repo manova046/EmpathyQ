@@ -1,237 +1,238 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>How Do You Feel? - EmpathyQ</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #eef2ff, #f8fafc);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-        }
+{% extends 'base_clean.html' %}
 
-        .feedback-container {
-            max-width: 500px;
-            width: 100%;
-        }
+{% block title %}How Do You Feel? - EmpathyQ{% endblock %}
 
+{% block extra_css %}
+<style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient(135deg, #eef2ff, #f8fafc);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        padding: 20px;
+    }
+
+    .feedback-container {
+        max-width: 500px;
+        width: 100%;
+    }
+
+    .feedback-box {
+        background: white;
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        text-align: center;
+    }
+
+    h2 {
+        color: #1e293b;
+        margin-bottom: 30px;
+        font-size: 1.8rem;
+    }
+
+    .mood-info {
+        background: #f1f5f9;
+        padding: 15px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        color: #475569;
+    }
+
+    .mood-badge {
+        display: inline-block;
+        background: #667eea;
+        color: white;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        margin-top: 5px;
+    }
+
+    .feedback-form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .form-group {
+        text-align: left;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #334155;
+    }
+
+    select, textarea {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: border-color 0.3s;
+        box-sizing: border-box;
+    }
+
+    select:focus, textarea:focus {
+        outline: none;
+        border-color: #667eea;
+    }
+
+    .rating-container {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin-top: 10px;
+    }
+
+    .rating-option {
+        flex: 1;
+        text-align: center;
+    }
+
+    .rating-option input[type="radio"] {
+        display: none;
+    }
+
+    .rating-option label {
+        display: block;
+        padding: 15px 10px;
+        background: #f8fafc;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        cursor: pointer;
+        font-weight: 600;
+        color: #475569;
+        transition: all 0.3s;
+        margin: 0;
+    }
+
+    .rating-option input[type="radio"]:checked + label {
+        background: #667eea;
+        color: white;
+        border-color: #667eea;
+        transform: scale(1.05);
+    }
+
+    .feeling-buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin-top: 10px;
+    }
+
+    .feeling-btn {
+        flex: 1;
+        padding: 15px 10px;
+        border: none;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .feeling-btn.better {
+        background: #22c55e;
+        color: white;
+    }
+
+    .feeling-btn.better:hover {
+        background: #16a34a;
+        transform: translateY(-2px);
+    }
+
+    .feeling-btn.same {
+        background: #64748b;
+        color: white;
+    }
+
+    .feeling-btn.same:hover {
+        background: #475569;
+        transform: translateY(-2px);
+    }
+
+    .feeling-btn.worse {
+        background: #ef4444;
+        color: white;
+    }
+
+    .feeling-btn.worse:hover {
+        background: #dc2626;
+        transform: translateY(-2px);
+    }
+
+    .feeling-btn input[type="radio"] {
+        display: none;
+    }
+
+    .feeling-btn input[type="radio"]:checked + .feeling-btn {
+        transform: scale(1.05);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    .submit-btn {
+        background: #667eea;
+        color: white;
+        border: none;
+        padding: 15px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        margin-top: 20px;
+    }
+
+    .submit-btn:hover {
+        background: #5a67d8;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .skip-link {
+        display: block;
+        margin-top: 20px;
+        color: #94a3b8;
+        text-decoration: none;
+        font-size: 0.9rem;
+    }
+
+    .skip-link:hover {
+        color: #667eea;
+    }
+
+    .errorlist {
+        color: #ef4444;
+        font-size: 0.9rem;
+        margin-top: 5px;
+        padding-left: 0;
+        list-style: none;
+    }
+
+    @media (max-width: 600px) {
         .feedback-box {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            text-align: center;
+            padding: 25px;
         }
-
-        h2 {
-            color: #1e293b;
-            margin-bottom: 30px;
-            font-size: 1.8rem;
-        }
-
-        .mood-info {
-            background: #f1f5f9;
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 30px;
-            color: #475569;
-        }
-
-        .mood-badge {
-            display: inline-block;
-            background: #667eea;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            margin-top: 5px;
-        }
-
-        .feedback-form {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .form-group {
-            text-align: left;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #334155;
-        }
-
-        select, textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
-            box-sizing: border-box;
-        }
-
-        select:focus, textarea:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .rating-container {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin-top: 10px;
-        }
-
-        .rating-option {
-            flex: 1;
-            text-align: center;
-        }
-
-        .rating-option input[type="radio"] {
-            display: none;
-        }
-
-        .rating-option label {
-            display: block;
-            padding: 15px 10px;
-            background: #f8fafc;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 600;
-            color: #475569;
-            transition: all 0.3s;
-            margin: 0;
-        }
-
-        .rating-option input[type="radio"]:checked + label {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
-            transform: scale(1.05);
-        }
-
+        
         .feeling-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 10px;
-        }
-
-        .feeling-btn {
-            flex: 1;
-            padding: 15px 10px;
-            border: none;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
             flex-direction: column;
-            align-items: center;
-            gap: 5px;
         }
+    }
+</style>
+{% endblock %}
 
-        .feeling-btn.better {
-            background: #22c55e;
-            color: white;
-        }
-
-        .feeling-btn.better:hover {
-            background: #16a34a;
-            transform: translateY(-2px);
-        }
-
-        .feeling-btn.same {
-            background: #64748b;
-            color: white;
-        }
-
-        .feeling-btn.same:hover {
-            background: #475569;
-            transform: translateY(-2px);
-        }
-
-        .feeling-btn.worse {
-            background: #ef4444;
-            color: white;
-        }
-
-        .feeling-btn.worse:hover {
-            background: #dc2626;
-            transform: translateY(-2px);
-        }
-
-        .feeling-btn input[type="radio"] {
-            display: none;
-        }
-
-        .feeling-btn input[type="radio"]:checked + .feeling-btn {
-            transform: scale(1.05);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-        }
-
-        .submit-btn {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 20px;
-        }
-
-        .submit-btn:hover {
-            background: #5a67d8;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-        }
-
-        .skip-link {
-            display: block;
-            margin-top: 20px;
-            color: #94a3b8;
-            text-decoration: none;
-            font-size: 0.9rem;
-        }
-
-        .skip-link:hover {
-            color: #667eea;
-        }
-
-        .errorlist {
-            color: #ef4444;
-            font-size: 0.9rem;
-            margin-top: 5px;
-            padding-left: 0;
-            list-style: none;
-        }
-
-        @media (max-width: 600px) {
-            .feedback-box {
-                padding: 25px;
-            }
-            
-            .feeling-buttons {
-                flex-direction: column;
-            }
-        }
-    </style>
-</head>
-<body>
-
+{% block content %}
 <div class="feedback-container">
     <div class="feedback-box">
         <h2>How was your chat?</h2>
@@ -314,7 +315,9 @@
         </form>
     </div>
 </div>
+{% endblock %}
 
+{% block extra_js %}
 <script>
     // Auto-select feeling buttons when clicked
     document.querySelectorAll('.feeling-btn').forEach(btn => {
@@ -326,6 +329,4 @@
         });
     });
 </script>
-
-</body>
-</html>
+{% endblock %}

@@ -1,726 +1,630 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Track Progress - EmpathyQ</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        /* Base Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+{% extends 'base.html' %}
 
-        body {
-            background-color: #f8f9fa;
-            color: #333;
-            line-height: 1.6;
-        }
+{% block title %}Track Progress - EmpathyQ{% endblock %}
 
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
+{% block extra_css %}
+<style>
+    /* Base Styles */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-        /* Navigation */
-        .navbar {
-            background-color: #ffffff;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            padding: 15px 0;
-        }
+    body {
+        background-color: #f8f9fa;
+        color: #333;
+        line-height: 1.6;
+    }
 
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    .container {
+        width: 90%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
 
-        .logo {
-            font-size: 28px;
-            font-weight: 700;
-            color: #5d5fef;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-        }
+    /* Page Header */
+    .page-header {
+        background: linear-gradient(135deg, #6c63ff, #5d5fef);
+        color: white;
+        padding: 120px 0 60px;
+        text-align: center;
+    }
 
-        .logo i {
-            margin-right: 10px;
-            color: #6c63ff;
-        }
+    .page-header h1 {
+        font-size: 42px;
+        font-weight: 700;
+        margin-bottom: 15px;
+    }
 
-        .nav-links {
-            display: flex;
-            list-style: none;
-        }
+    .page-header p {
+        font-size: 18px;
+        opacity: 0.9;
+        max-width: 700px;
+        margin: 0 auto;
+    }
 
-        .nav-links li {
-            margin-left: 30px;
-        }
+    /* Progress Section */
+    .progress-section {
+        padding: 60px 0;
+        background: linear-gradient(135deg, #f5f7ff 0%, #f0f2ff 100%);
+        min-height: calc(100vh - 300px);
+    }
 
-        .nav-links a {
-            text-decoration: none;
-            color: #555;
-            font-weight: 500;
-            font-size: 16px;
-            transition: color 0.3s;
-        }
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 25px;
+        margin-bottom: 40px;
+    }
 
-        .nav-links a:hover {
-            color: #6c63ff;
-        }
+    .stat-card {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s;
+        text-align: center;
+    }
 
-        .user-badge {
-            background-color: #6c63ff;
-            color: white;
-            padding: 8px 20px;
-            border-radius: 30px;
-            font-weight: 600;
-            font-size: 14px;
-        }
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(108, 99, 255, 0.1);
+    }
 
-        .user-badge i {
-            margin-right: 8px;
-        }
+    .stat-icon {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #6c63ff, #5d5fef);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 15px;
+        color: white;
+        font-size: 24px;
+    }
 
-        /* Page Header */
-        .page-header {
-            background: linear-gradient(135deg, #6c63ff, #5d5fef);
-            color: white;
-            padding: 120px 0 60px;
-            text-align: center;
-        }
+    .stat-value {
+        font-size: 32px;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 5px;
+    }
 
-        .page-header h1 {
-            font-size: 42px;
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
+    .stat-label {
+        color: #777;
+        font-size: 14px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
 
-        .page-header p {
-            font-size: 18px;
-            opacity: 0.9;
-            max-width: 700px;
-            margin: 0 auto;
-        }
+    .charts-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 25px;
+        margin-bottom: 40px;
+    }
 
-        /* Progress Section */
-        .progress-section {
-            padding: 60px 0;
-            background: linear-gradient(135deg, #f5f7ff 0%, #f0f2ff 100%);
-            min-height: calc(100vh - 300px);
-        }
+    .chart-card {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    }
 
+    .chart-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .chart-header h3 {
+        font-size: 18px;
+        font-weight: 700;
+        color: #333;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .chart-header h3 i {
+        color: #6c63ff;
+    }
+
+    .chart-period {
+        color: #6c63ff;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .chart-container {
+        position: relative;
+        height: 300px;
+        width: 100%;
+    }
+
+    .mood-distribution {
+        margin-top: 20px;
+    }
+
+    .mood-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .mood-item:last-child {
+        border-bottom: none;
+    }
+
+    .mood-label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .mood-color {
+        width: 12px;
+        height: 12px;
+        border-radius: 3px;
+    }
+
+    .mood-name {
+        font-weight: 600;
+        color: #555;
+    }
+
+    .mood-count {
+        font-weight: 700;
+        color: #6c63ff;
+    }
+
+    .progress-card {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        margin-bottom: 25px;
+    }
+
+    .progress-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .progress-icon {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #6c63ff, #5d5fef);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 20px;
+    }
+
+    .progress-title {
+        font-size: 16px;
+        color: #777;
+    }
+
+    .progress-value {
+        font-size: 24px;
+        font-weight: 700;
+        color: #333;
+    }
+
+    .progress-bar-container {
+        height: 10px;
+        background: #f0f0f0;
+        border-radius: 10px;
+        overflow: hidden;
+        margin: 15px 0 10px;
+    }
+
+    .progress-bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #6c63ff, #5d5fef);
+        border-radius: 10px;
+        width: 0%;
+        transition: width 0.5s ease;
+    }
+
+    .progress-stats {
+        display: flex;
+        justify-content: space-between;
+        color: #777;
+        font-size: 14px;
+    }
+
+    .btn {
+        padding: 12px 25px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #6c63ff, #5d5fef);
+        color: white;
+        border: none;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(108, 99, 255, 0.2);
+    }
+
+    .btn-secondary {
+        background: white;
+        color: #6c63ff;
+        border: 2px solid #6c63ff;
+    }
+
+    .btn-secondary:hover {
+        background: #6c63ff;
+        color: white;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        background: white;
+        border-radius: 20px;
+    }
+
+    .empty-state i {
+        font-size: 64px;
+        color: #ddd;
+        margin-bottom: 20px;
+    }
+
+    .empty-state h3 {
+        font-size: 24px;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .empty-state p {
+        color: #777;
+        margin-bottom: 25px;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin-top: 40px;
+        flex-wrap: wrap;
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
         .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 25px;
-            margin-bottom: 40px;
+            grid-template-columns: repeat(2, 1fr);
         }
-
-        .stat-card {
-            background: white;
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s;
-            text-align: center;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(108, 99, 255, 0.1);
-        }
-
-        .stat-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #6c63ff, #5d5fef);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 15px;
-            color: white;
-            font-size: 24px;
-        }
-
-        .stat-value {
-            font-size: 32px;
-            font-weight: 700;
-            color: #333;
-            margin-bottom: 5px;
-        }
-
-        .stat-label {
-            color: #777;
-            font-size: 14px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
+        
         .charts-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 25px;
-            margin-bottom: 40px;
+            grid-template-columns: 1fr;
         }
+    }
 
-        .chart-card {
-            background: white;
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    @media (max-width: 768px) {
+        .page-header h1 {
+            font-size: 32px;
         }
-
-        .chart-header {
-            display: flex;
-            justify-content: space-between;
+        
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .action-buttons {
+            flex-direction: column;
             align-items: center;
-            margin-bottom: 20px;
         }
-
-        .chart-header h3 {
-            font-size: 18px;
-            font-weight: 700;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .chart-header h3 i {
-            color: #6c63ff;
-        }
-
-        .chart-period {
-            color: #6c63ff;
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .chart-container {
-            position: relative;
-            height: 300px;
-            width: 100%;
-        }
-
-        .mood-distribution {
-            margin-top: 20px;
-        }
-
-        .mood-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .mood-item:last-child {
-            border-bottom: none;
-        }
-
-        .mood-label {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .mood-color {
-            width: 12px;
-            height: 12px;
-            border-radius: 3px;
-        }
-
-        .mood-name {
-            font-weight: 600;
-            color: #555;
-        }
-
-        .mood-count {
-            font-weight: 700;
-            color: #6c63ff;
-        }
-
-        .progress-card {
-            background: white;
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            margin-bottom: 25px;
-        }
-
-        .progress-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .progress-icon {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #6c63ff, #5d5fef);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 20px;
-        }
-
-        .progress-title {
-            font-size: 16px;
-            color: #777;
-        }
-
-        .progress-value {
-            font-size: 24px;
-            font-weight: 700;
-            color: #333;
-        }
-
-        .progress-bar-container {
-            height: 10px;
-            background: #f0f0f0;
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 15px 0 10px;
-        }
-
-        .progress-bar-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #6c63ff, #5d5fef);
-            border-radius: 10px;
-            width: 0%;
-            transition: width 0.5s ease;
-        }
-
-        .progress-stats {
-            display: flex;
-            justify-content: space-between;
-            color: #777;
-            font-size: 14px;
-        }
-
+        
         .btn {
-            padding: 12px 25px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
+            width: 100%;
+            justify-content: center;
         }
+    }
+</style>
+{% endblock %}
 
-        .btn-primary {
-            background: linear-gradient(135deg, #6c63ff, #5d5fef);
-            color: white;
-            border: none;
-        }
+{% block content %}
+<!-- Page Header -->
+<section class="page-header">
+    <div class="container">
+        <h1>Track Your Progress</h1>
+        <p>Visualize your emotional wellness journey over time</p>
+    </div>
+</section>
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(108, 99, 255, 0.2);
-        }
-
-        .btn-secondary {
-            background: white;
-            color: #6c63ff;
-            border: 2px solid #6c63ff;
-        }
-
-        .btn-secondary:hover {
-            background: #6c63ff;
-            color: white;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            background: white;
-            border-radius: 20px;
-        }
-
-        .empty-state i {
-            font-size: 64px;
-            color: #ddd;
-            margin-bottom: 20px;
-        }
-
-        .empty-state h3 {
-            font-size: 24px;
-            color: #333;
-            margin-bottom: 10px;
-        }
-
-        .empty-state p {
-            color: #777;
-            margin-bottom: 25px;
-        }
-
-        .footer {
-            background-color: #2a2a3c;
-            color: white;
-            padding: 30px 0;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            color: #bbb;
-            font-size: 14px;
-        }
-
-        /* Responsive */
-        @media (max-width: 992px) {
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .charts-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .page-header h1 {
-                font-size: 32px;
-            }
-            
-            .nav-links {
-                display: none;
-            }
-            
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
-</head>
-<body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="container nav-container">
-            <a href="{% url 'accounts:index' %}" class="logo">
-                <i class="fas fa-heart"></i> EmpathyQ
-            </a>
-            
-            <ul class="nav-links">
-                <li><a href="{% url 'accounts:index' %}#home">Home</a></li>
-                <li><a href="{% url 'accounts:index' %}#about">About Us</a></li>
-                <li><a href="{% url 'accounts:index' %}#features">Features</a></li>
-                <li><a href="{% url 'accounts:index' %}#testimonials">Testimonials</a></li>
-                <li><a href="{% url 'accounts:index' %}#contact">Contact</a></li>
-            </ul>
-            
-            <span class="user-badge">
-                <i class="fas fa-user-circle"></i> {{ request.user.username }}
-            </span>
-        </div>
-    </nav>
-
-    <!-- Page Header -->
-    <section class="page-header">
-        <div class="container">
-            <h1>Track Your Progress</h1>
-            <p>Visualize your emotional wellness journey over time</p>
-        </div>
-    </section>
-
-    <!-- Progress Section -->
-    <section class="progress-section">
-        <div class="container">
-            {% if total_checkins > 0 %}
-                <!-- Statistics Cards -->
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon">
-                            <i class="fas fa-smile"></i>
-                        </div>
-                        <div class="stat-value">{{ total_checkins }}</div>
-                        <div class="stat-label">Total Check-ins</div>
+<!-- Progress Section -->
+<section class="progress-section">
+    <div class="container">
+        {% if total_checkins > 0 %}
+            <!-- Statistics Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-smile"></i>
                     </div>
-                    
-                    <div class="stat-card">
-                        <div class="stat-icon">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
-                        <div class="stat-value">{{ avg_intensity|default:"0" }}</div>
-                        <div class="stat-label">Avg. Intensity</div>
-                    </div>
-                    
-                    <div class="stat-card">
-                        <div class="stat-icon">
-                            <i class="fas fa-check-circle"></i>
-                        </div>
-                        <div class="stat-value">{{ tasks_completed }}</div>
-                        <div class="stat-label">Tasks Completed</div>
-                    </div>
-                    
-                    <div class="stat-card">
-                        <div class="stat-icon">
-                            <i class="fas fa-tasks"></i>
-                        </div>
-                        <div class="stat-value">{{ tasks_pending }}</div>
-                        <div class="stat-label">Pending Tasks</div>
-                    </div>
+                    <div class="stat-value">{{ total_checkins }}</div>
+                    <div class="stat-label">Total Check-ins</div>
                 </div>
-
-                <!-- Charts Grid -->
-                <div class="charts-grid">
-                    <!-- Mood Trend Chart -->
-                    <div class="chart-card">
-                        <div class="chart-header">
-                            <h3>
-                                <i class="fas fa-chart-line"></i>
-                                Mood Intensity Trend
-                            </h3>
-                            <span class="chart-period">Last 7 days</span>
-                        </div>
-                        <div class="chart-container">
-                            <canvas id="moodChart"></canvas>
-                        </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-line"></i>
                     </div>
-
-                    <!-- Mood Distribution Chart -->
-                    <div class="chart-card">
-                        <div class="chart-header">
-                            <h3>
-                                <i class="fas fa-chart-pie"></i>
-                                Mood Distribution
-                            </h3>
-                        </div>
-                        <div class="chart-container">
-                            <canvas id="distributionChart"></canvas>
-                        </div>
+                    <div class="stat-value">{{ avg_intensity|default:"0" }}</div>
+                    <div class="stat-label">Avg. Intensity</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
                     </div>
+                    <div class="stat-value">{{ tasks_completed }}</div>
+                    <div class="stat-label">Tasks Completed</div>
                 </div>
-
-                <!-- Mood Distribution List -->
-                <div class="progress-card">
-                    <div class="progress-header">
-                        <div class="progress-icon">
-                            <i class="fas fa-chart-bar"></i>
-                        </div>
-                        <div>
-                            <div class="progress-title">Your Most Common Moods</div>
-                            <div class="progress-value">Emotional Patterns</div>
-                        </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-tasks"></i>
                     </div>
-                    
-                    <div class="mood-distribution">
-                        {% for mood in mood_distribution %}
-                            <div class="mood-item">
-                                <div class="mood-label">
-                                    <span class="mood-color" style="background: 
-                                        {% if mood.primary_mood == 'low' %}#6c63ff
-                                        {% elif mood.primary_mood == 'anxious' %}#ff6b6b
-                                        {% elif mood.primary_mood == 'stressed' %}#ff9f43
-                                        {% elif mood.primary_mood == 'calm' %}#10ac84
-                                        {% elif mood.primary_mood == 'motivated' %}#ff9ff3
-                                        {% elif mood.primary_mood == 'neutral' %]#8395a7
-                                        {% elif mood.primary_mood == 'irritable' %]#ee5a24
-                                        {% else %}#6c63ff
-                                        {% endif %};">
-                                    </span>
-                                    <span class="mood-name">{{ mood.primary_mood|title }}</span>
-                                </div>
-                                <span class="mood-count">{{ mood.count }} times</span>
-                            </div>
-                        {% empty %}
-                            <p style="color: #777; text-align: center; padding: 20px;">No mood data available yet.</p>
-                        {% endfor %}
-                    </div>
+                    <div class="stat-value">{{ tasks_pending }}</div>
+                    <div class="stat-label">Pending Tasks</div>
                 </div>
-
-                <!-- Task Completion Progress -->
-                <div class="progress-card">
-                    <div class="progress-header">
-                        <div class="progress-icon">
-                            <i class="fas fa-tasks"></i>
-                        </div>
-                        <div>
-                            <div class="progress-title">Task Completion Rate</div>
-                            <div class="progress-value">{{ tasks_completed }} of {{ tasks_completed|add:tasks_pending }} Tasks</div>
-                        </div>
-                    </div>
-                    
-                    {% with total=tasks_completed|add:tasks_pending %}
-                        {% if total > 0 %}
-                            {% with percentage=tasks_completed|floatformat:0 %}
-                                <div class="progress-bar-container">
-                                    <div class="progress-bar-fill" style="width: {% widthratio tasks_completed total 100 %}%;"></div>
-                                </div>
-                                <div class="progress-stats">
-                                    <span>{{ tasks_completed }} Completed</span>
-                                    <span>{{ tasks_pending }} Pending</span>
-                                    <span style="color: #6c63ff; font-weight: 700;">{% widthratio tasks_completed total 100 %}% Complete</span>
-                                </div>
-                            {% endwith %}
-                        {% else %}
-                            <p style="color: #777; text-align: center; padding: 20px;">No tasks assigned yet. Complete a check-in to get personalized recommendations.</p>
-                        {% endif %}
-                    {% endwith %}
-                </div>
-
-                <!-- Action Buttons -->
-                <div style="display: flex; gap: 15px; justify-content: center; margin-top: 40px;">
-                    <a href="{% url 'user:progress_report' %}" class="btn btn-primary">
-                        <i class="fas fa-file-alt"></i> View Full Report
-                    </a>
-                    <a href="{% url 'user:emotional_checkin' %}" class="btn btn-secondary">
-                        <i class="fas fa-plus-circle"></i> New Check-in
-                    </a>
-                    <a href="{% url 'accounts:user_dashboard' %}" class="btn btn-secondary">
-                        <i class="fas fa-arrow-left"></i> Back to Dashboard
-                    </a>
-                </div>
-
-            {% else %}
-                <!-- Empty State -->
-                <div class="empty-state">
-                    <i class="fas fa-chart-line"></i>
-                    <h3>No Progress Data Yet</h3>
-                    <p>Start your emotional wellness journey by completing your first check-in.</p>
-                    <a href="{% url 'user:emotional_checkin' %}" class="btn btn-primary">
-                        <i class="fas fa-smile"></i> Complete First Check-in
-                    </a>
-                </div>
-            {% endif %}
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-bottom">
-                <p>&copy; 2025 EmpathyQ. All rights reserved.</p>
             </div>
-        </div>
-    </footer>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            {% if total_checkins > 0 and dates and mood_scores %}
-                // Mood Trend Chart
-                const ctx1 = document.getElementById('moodChart').getContext('2d');
-                new Chart(ctx1, {
-                    type: 'line',
-                    data: {
-                        labels: {{ dates|safe }},
-                        datasets: [{
-                            label: 'Mood Intensity',
-                            data: {{ mood_scores|safe }},
-                            borderColor: '#6c63ff',
-                            backgroundColor: 'rgba(108, 99, 255, 0.1)',
-                            borderWidth: 3,
-                            pointBackgroundColor: '#6c63ff',
-                            pointBorderColor: 'white',
-                            pointBorderWidth: 2,
-                            pointRadius: 6,
-                            pointHoverRadius: 8,
-                            tension: 0.4,
-                            fill: true
-                        }]
+            <!-- Charts Grid -->
+            <div class="charts-grid">
+                <!-- Mood Trend Chart -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>
+                            <i class="fas fa-chart-line"></i>
+                            Mood Intensity Trend
+                        </h3>
+                        <span class="chart-period">Last 7 days</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="moodChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Mood Distribution Chart -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>
+                            <i class="fas fa-chart-pie"></i>
+                            Mood Distribution
+                        </h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="distributionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mood Distribution List -->
+            <div class="progress-card">
+                <div class="progress-header">
+                    <div class="progress-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <div>
+                        <div class="progress-title">Your Most Common Moods</div>
+                        <div class="progress-value">Emotional Patterns</div>
+                    </div>
+                </div>
+                
+                <div class="mood-distribution">
+                    {% for mood in mood_distribution %}
+                        <div class="mood-item">
+                            <div class="mood-label">
+                                <span class="mood-color" style="background: 
+                                    {% if mood.primary_mood == 'low' %}#6c63ff
+                                    {% elif mood.primary_mood == 'anxious' %}#ff6b6b
+                                    {% elif mood.primary_mood == 'stressed' %}#ff9f43
+                                    {% elif mood.primary_mood == 'calm' %}#10ac84
+                                    {% elif mood.primary_mood == 'motivated' %}#ff9ff3
+                                    {% elif mood.primary_mood == 'neutral' %}#8395a7
+                                    {% elif mood.primary_mood == 'irritable' %}#ee5a24
+                                    {% else %}#6c63ff
+                                    {% endif %};">
+                                </span>
+                                <span class="mood-name">{{ mood.primary_mood|title }}</span>
+                            </div>
+                            <span class="mood-count">{{ mood.count }} times</span>
+                        </div>
+                    {% empty %}
+                        <p style="color: #777; text-align: center; padding: 20px;">No mood data available yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Task Completion Progress -->
+            <div class="progress-card">
+                <div class="progress-header">
+                    <div class="progress-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <div>
+                        <div class="progress-title">Task Completion Rate</div>
+                        <div class="progress-value">{{ tasks_completed }} of {{ tasks_completed|add:tasks_pending }} Tasks</div>
+                    </div>
+                </div>
+                
+                {% with total=tasks_completed|add:tasks_pending %}
+                    {% if total > 0 %}
+                        {% with percentage=tasks_completed|floatformat:0 %}
+                            <div class="progress-bar-container">
+                                <div class="progress-bar-fill" style="width: {% widthratio tasks_completed total 100 %}%;"></div>
+                            </div>
+                            <div class="progress-stats">
+                                <span>{{ tasks_completed }} Completed</span>
+                                <span>{{ tasks_pending }} Pending</span>
+                                <span style="color: #6c63ff; font-weight: 700;">{% widthratio tasks_completed total 100 %}% Complete</span>
+                            </div>
+                        {% endwith %}
+                    {% else %}
+                        <p style="color: #777; text-align: center; padding: 20px;">No tasks assigned yet. Complete a check-in to get personalized recommendations.</p>
+                    {% endif %}
+                {% endwith %}
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <a href="{% url 'user:progress_report' %}" class="btn btn-primary">
+                    <i class="fas fa-file-alt"></i> View Full Report
+                </a>
+                <a href="{% url 'user:emotional_checkin' %}" class="btn btn-secondary">
+                    <i class="fas fa-plus-circle"></i> New Check-in
+                </a>
+            </div>
+
+        {% else %}
+            <!-- Empty State -->
+            <div class="empty-state">
+                <i class="fas fa-chart-line"></i>
+                <h3>No Progress Data Yet</h3>
+                <p>Start your emotional wellness journey by completing your first check-in.</p>
+                <a href="{% url 'user:emotional_checkin' %}" class="btn btn-primary">
+                    <i class="fas fa-smile"></i> Complete First Check-in
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        {% if total_checkins > 0 and dates and mood_scores %}
+            // Mood Trend Chart
+            const ctx1 = document.getElementById('moodChart').getContext('2d');
+            new Chart(ctx1, {
+                type: 'line',
+                data: {
+                    labels: {{ dates|safe }},
+                    datasets: [{
+                        label: 'Mood Intensity',
+                        data: {{ mood_scores|safe }},
+                        borderColor: '#6c63ff',
+                        backgroundColor: 'rgba(108, 99, 255, 0.1)',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#6c63ff',
+                        pointBorderColor: 'white',
+                        pointBorderWidth: 2,
+                        pointRadius: 6,
+                        pointHoverRadius: 8,
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: false
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 10,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
                             }
                         },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                max: 10,
-                                grid: {
-                                    color: 'rgba(0, 0, 0, 0.05)'
-                                }
-                            },
-                            x: {
-                                grid: {
-                                    display: false
-                                }
+                        x: {
+                            grid: {
+                                display: false
                             }
                         }
                     }
-                });
+                }
+            });
 
-                // Mood Distribution Chart
-                const ctx2 = document.getElementById('distributionChart').getContext('2d');
-                const moodLabels = [];
-                const moodCounts = [];
-                const moodColors = [];
+            // Mood Distribution Chart
+            const ctx2 = document.getElementById('distributionChart').getContext('2d');
+            const moodLabels = [];
+            const moodCounts = [];
+            const moodColors = [];
+            
+            {% for mood in mood_distribution %}
+                moodLabels.push('{{ mood.primary_mood|title }}');
+                moodCounts.push({{ mood.count }});
                 
-                {% for mood in mood_distribution %}
-                    moodLabels.push('{{ mood.primary_mood|title }}');
-                    moodCounts.push({{ mood.count }});
-                    
-                    {% if mood.primary_mood == 'low' %}
-                        moodColors.push('#6c63ff');
-                    {% elif mood.primary_mood == 'anxious' %}
-                        moodColors.push('#ff6b6b');
-                    {% elif mood.primary_mood == 'stressed' %}
-                        moodColors.push('#ff9f43');
-                    {% elif mood.primary_mood == 'calm' %}
-                        moodColors.push('#10ac84');
-                    {% elif mood.primary_mood == 'motivated' %}
-                        moodColors.push('#ff9ff3');
-                    {% elif mood.primary_mood == 'neutral' %}
-                        moodColors.push('#8395a7');
-                    {% elif mood.primary_mood == 'irritable' %}
-                        moodColors.push('#ee5a24');
-                    {% else %}
-                        moodColors.push('#6c63ff');
-                    {% endif %}
-                {% endfor %}
+                {% if mood.primary_mood == 'low' %}
+                    moodColors.push('#6c63ff');
+                {% elif mood.primary_mood == 'anxious' %}
+                    moodColors.push('#ff6b6b');
+                {% elif mood.primary_mood == 'stressed' %}
+                    moodColors.push('#ff9f43');
+                {% elif mood.primary_mood == 'calm' %}
+                    moodColors.push('#10ac84');
+                {% elif mood.primary_mood == 'motivated' %}
+                    moodColors.push('#ff9ff3');
+                {% elif mood.primary_mood == 'neutral' %}
+                    moodColors.push('#8395a7');
+                {% elif mood.primary_mood == 'irritable' %}
+                    moodColors.push('#ee5a24');
+                {% else %}
+                    moodColors.push('#6c63ff');
+                {% endif %}
+            {% endfor %}
 
-                new Chart(ctx2, {
-                    type: 'doughnut',
-                    data: {
-                        labels: moodLabels,
-                        datasets: [{
-                            data: moodCounts,
-                            backgroundColor: moodColors,
-                            borderWidth: 0,
-                            hoverOffset: 15
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: {
-                                    boxWidth: 12,
-                                    padding: 15,
-                                    font: {
-                                        size: 12
-                                    }
+            new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: moodLabels,
+                    datasets: [{
+                        data: moodCounts,
+                        backgroundColor: moodColors,
+                        borderWidth: 0,
+                        hoverOffset: 15
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                boxWidth: 12,
+                                padding: 15,
+                                font: {
+                                    size: 12
                                 }
                             }
-                        },
-                        cutout: '70%'
-                    }
-                });
-            {% endif %}
-        });
-    </script>
-</body>
-</html>
+                        }
+                    },
+                    cutout: '70%'
+                }
+            });
+        {% endif %}
+    });
+</script>
+{% endblock %}

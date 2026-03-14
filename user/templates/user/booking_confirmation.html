@@ -1,22 +1,103 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Booking Confirmed | EmpathyQ</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* Add your styles here */
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="success-message">
-            <i class="fas fa-check-circle"></i>
-            <h1>Booking Confirmed!</h1>
-            <p>Your session has been booked successfully. Check your email for details.</p>
-            <a href="{% url 'user:booking_history' %}" class="btn">View My Bookings</a>
-        </div>
+{% extends 'base.html' %}
+
+{% block title %}Booking Confirmed | EmpathyQ{% endblock %}
+
+{% block extra_css %}
+<style>
+    .container {
+        width: 90%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    .success-message {
+        text-align: center;
+        padding: 60px 40px;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        max-width: 600px;
+        margin: 120px auto 60px;
+        border-top: 5px solid #4CAF50;
+    }
+
+    .success-message i {
+        font-size: 80px;
+        color: #4CAF50;
+        margin-bottom: 25px;
+    }
+
+    .success-message h1 {
+        font-size: 32px;
+        color: #333;
+        margin-bottom: 15px;
+        font-weight: 700;
+    }
+
+    .success-message p {
+        color: #666;
+        font-size: 18px;
+        margin-bottom: 30px;
+        line-height: 1.6;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 14px 35px;
+        background: linear-gradient(135deg, #6c63ff, #5d5fef);
+        color: white;
+        text-decoration: none;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 16px;
+        transition: all 0.3s;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(108, 99, 255, 0.2);
+    }
+
+    .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(108, 99, 255, 0.3);
+    }
+
+    .btn i {
+        margin-right: 8px;
+        font-size: 18px;
+    }
+
+    @media (max-width: 768px) {
+        .success-message {
+            padding: 40px 25px;
+            margin: 100px auto 40px;
+        }
+
+        .success-message h1 {
+            font-size: 28px;
+        }
+
+        .success-message p {
+            font-size: 16px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            font-size: 15px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="success-message">
+        <i class="fas fa-check-circle"></i>
+        <h1>Booking Confirmed!</h1>
+        <p>Your session has been booked successfully. Check your email for details.</p>
+        <a href="{% url 'user:booking_history' %}" class="btn">
+            <i class="fas fa-calendar-alt"></i> View My Bookings
+        </a>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}

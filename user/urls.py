@@ -164,6 +164,13 @@ urlpatterns = [
         # ===== NEW: Review URLs =====
     path('submit-review/', views.submit_review, name='submit_review'),
     path('get-session-details/<int:session_id>/', views.get_session_details, name='get_session_details'),
-    path('payment-callback/', views.payment_callback, name='payment_callback'),
-    path('booking-confirmation/<int:booking_id>/', views.booking_confirmation, name='booking_confirmation'),
+
+
+
+    # Payment URLs
+    path('payment/initiate/<int:booking_id>/', views.initiate_payment, name='initiate_payment'),
+    path('payment/callback/', views.payment_callback, name='payment_callback'),
+    path('payment/success/<int:booking_id>/', views.payment_success, name='payment_success'),
+    path('payment/failed/<int:booking_id>/', views.payment_failed, name='payment_failed'),
+    path('payment/retry/<int:booking_id>/', views.retry_payment, name='retry_payment'),
 ]

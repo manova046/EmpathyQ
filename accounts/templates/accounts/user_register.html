@@ -480,122 +480,6 @@
             text-decoration: underline;
         }
 
-        /* Footer - Same as index */
-        .footer {
-            background-color: #2a2a3c;
-            color: white;
-            padding: 60px 0 20px;
-            margin-top: auto;
-        }
-
-        .footer-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 40px;
-            margin-bottom: 40px;
-        }
-
-        .footer-col h3 {
-            font-size: 1.3rem;
-            margin-bottom: 25px;
-            color: white;
-        }
-
-        .footer-col ul {
-            list-style: none;
-        }
-
-        .footer-col ul li {
-            margin-bottom: 15px;
-        }
-
-        .footer-col ul li a {
-            color: #bbb;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .footer-col ul li a:hover {
-            color: white;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            padding-top: 20px;
-            border-top: 1px solid #444;
-            color: #bbb;
-            font-size: 0.9rem;
-        }
-
-        .social-icons {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .social-icons a {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: #444;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            transition: background-color 0.3s;
-            text-decoration: none;
-        }
-
-        .social-icons a:hover {
-            background-color: #6c63ff;
-        }
-
-        /* Responsive */
-        @media (max-width: 992px) {
-            .registration-wrapper {
-                flex-direction: column;
-                gap: 40px;
-            }
-            
-            .registration-info, .registration-form-container {
-                width: 100%;
-                max-width: 600px;
-                margin: 0 auto;
-            }
-            
-            .nav-links {
-                display: none;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .registration-header h1 {
-                font-size: 2.2rem;
-            }
-            
-            .form-header h2 {
-                font-size: 1.8rem;
-            }
-            
-            .registration-form-container {
-                padding: 30px 20px;
-            }
-            
-            .registration-info {
-                padding: 30px 20px;
-            }
-            
-            .btn {
-                width: 100%;
-                text-align: center;
-            }
-            
-            .nav-buttons {
-                flex-direction: column;
-                gap: 10px;
-            }
-        }
-
         /* Trust Badges */
         .trust-badges {
             display: flex;
@@ -679,6 +563,52 @@
         .progress-step.active .step-label {
             color: #6c63ff;
             font-weight: 500;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .registration-wrapper {
+                flex-direction: column;
+                gap: 40px;
+            }
+            
+            .registration-info, .registration-form-container {
+                width: 100%;
+                max-width: 600px;
+                margin: 0 auto;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .registration-header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .form-header h2 {
+                font-size: 1.8rem;
+            }
+            
+            .registration-form-container {
+                padding: 30px 20px;
+            }
+            
+            .registration-info {
+                padding: 30px 20px;
+            }
+            
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .nav-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
         }
     </style>
 </head>
@@ -906,59 +836,8 @@
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-col">
-                    <h3>EmpathyQ</h3>
-                    <p style="color: #bbb; margin-bottom: 20px;">Your partner in mental wellness. A safe, compassionate space for healing and growth.</p>
-                    <div class="social-icons">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                    </div>
-                </div>
-                
-                <div class="footer-col">
-                    <h3>Quick Links</h3>
-                    <ul>
-                        <li><a href="{% url 'accounts:index' %}#home">Home</a></li>
-                        <li><a href="{% url 'accounts:index' %}#about">About Us</a></li>
-                        <li><a href="{% url 'accounts:index' %}#features">Features</a></li>
-                        <li><a href="{% url 'accounts:index' %}#testimonials">Testimonials</a></li>
-                        <li><a href="{% url 'accounts:index' %}#contact">Contact</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-col">
-                    <h3>Support Services</h3>
-                    <ul>
-                        <li><a href="{% url 'accounts:user_register' %}">Individual Therapy</a></li>
-                        <li><a href="#">Anxiety Support</a></li>
-                        <li><a href="#">Depression Help</a></li>
-                        <li><a href="#">Stress Management</a></li>
-                        <li><a href="#">Crisis Resources</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-col">
-                    <h3>Contact Us</h3>
-                    <ul>
-                        <li><i class="fas fa-envelope" style="margin-right: 10px;"></i> support@empathyq.com</li>
-                        <li><i class="fas fa-phone" style="margin-right: 10px;"></i> +1 (800) 123-HELP</li>
-                        <li><i class="fas fa-map-marker-alt" style="margin-right: 10px;"></i> 123 Wellness Street</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="footer-bottom">
-                <p>&copy; 2025 EmpathyQ. All rights reserved. | <a href="#" style="color: #bbb;">Privacy Policy</a> | <a href="#" style="color: #bbb;">Terms of Service</a></p>
-                <p style="margin-top: 10px; font-size: 0.8rem; color: #888;">If you're in crisis, please call your local emergency services immediately.</p>
-            </div>
-        </div>
-    </footer>
+    <!-- Footer from include -->
+    {% include 'includes/footer.html' %}
 
     <!-- Script for Form Interactions -->
     <script>

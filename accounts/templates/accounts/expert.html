@@ -1,910 +1,1230 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Expert Dashboard - EmpathyQ</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* Your existing styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+{% block title %}Expert Dashboard - EmpathyQ{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Your existing styles */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+        background-color: #f8f9fa;
+        color: #333;
+        line-height: 1.6;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    .dashboard-header {
+        margin-top: 100px;
+        padding: 40px 0;
+        background: linear-gradient(135deg, #6c63ff, #5d5fef);
+        color: white;
+        border-radius: 0 0 30px 30px;
+    }
+
+    .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .header-title h1 {
+        font-size: 36px;
+        margin-bottom: 10px;
+    }
+
+    .header-title p {
+        font-size: 16px;
+        opacity: 0.9;
+    }
+
+    .verification-badge {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 12px 25px;
+        border-radius: 50px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 600;
+    }
+
+    .verification-badge i {
+        color: #4CAF50;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 25px;
+        margin: 40px 0;
+    }
+
+    .stat-card {
+        background: white;
+        padding: 25px;
+        border-radius: 20px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: all 0.3s;
+        min-width: 0;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(108, 99, 255, 0.1);
+    }
+
+    .stat-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .stat-info h3 {
+        font-size: 16px;
+        color: #666;
+        margin-bottom: 10px;
+        font-weight: 500;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .stat-number {
+        font-size: 32px;
+        font-weight: 700;
+        color: #333;
+    }
+
+    .stat-icon {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #6c63ff20, #5d5fef20);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #6c63ff;
+        font-size: 28px;
+        flex-shrink: 0;
+        margin-left: 10px;
+    }
+
+    .section {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        margin-bottom: 40px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03);
+    }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .section-header h2 {
+        font-size: 22px;
+        color: #333;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .section-header h2 i {
+        color: #6c63ff;
+    }
+
+    .btn {
+        padding: 12px 25px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s;
+        display: inline-block;
+        border: none;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #6c63ff, #5d5fef);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(108, 99, 255, 0.2);
+    }
+
+    .btn-outline {
+        border: 2px solid #6c63ff;
+        color: #6c63ff;
+        background: transparent;
+    }
+
+    .btn-outline:hover {
+        background: #6c63ff;
+        color: white;
+    }
+
+    .btn-sm {
+        padding: 8px 15px;
+        font-size: 13px;
+    }
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px;
+        margin: 40px 0;
+    }
+
+    .feature-card {
+        background: white;
+        border: 2px solid #edf2f7;
+        border-radius: 20px;
+        padding: 30px;
+        text-align: center;
+        transition: all 0.3s;
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        position: relative;
+    }
+
+    .feature-card:hover {
+        border-color: #6c63ff;
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(108, 99, 255, 0.1);
+    }
+
+    .feature-icon {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #6c63ff20, #5d5fef20);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        color: #6c63ff;
+        font-size: 36px;
+    }
+
+    .feature-card h3 {
+        font-size: 20px;
+        margin-bottom: 10px;
+        color: #333;
+    }
+
+    .feature-card p {
+        color: #666;
+        font-size: 14px;
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+
+    .feature-badge {
+        display: inline-block;
+        background: #f0f2ff;
+        color: #6c63ff;
+        padding: 5px 15px;
+        border-radius: 30px;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .feature-badge.warning {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .feature-badge.success {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .feature-badge.info {
+        background: #d1ecf1;
+        color: #0c5460;
+    }
+
+    /* Table Styles */
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th {
+        text-align: left;
+        padding: 15px;
+        color: #666;
+        font-weight: 600;
+        font-size: 14px;
+        border-bottom: 2px solid #edf2f7;
+    }
+
+    td {
+        padding: 15px;
+        border-bottom: 1px solid #edf2f7;
+    }
+
+    .status-badge {
+        padding: 5px 12px;
+        border-radius: 30px;
+        font-size: 12px;
+        font-weight: 600;
+        display: inline-block;
+    }
+
+    .status-pending {
+        background: #fff3e0;
+        color: #ef6c00;
+    }
+
+    .status-confirmed {
+        background: #e3f2fd;
+        color: #1976d2;
+    }
+
+    .status-completed {
+        background: #e8f5e9;
+        color: #2e7d32;
+    }
+
+    .status-cancelled {
+        background: #ffebee;
+        color: #c62828;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .btn-approve {
+        background: #4CAF50;
+        color: white;
+        padding: 5px 15px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 12px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .btn-approve:hover {
+        background: #45a049;
+    }
+
+    .btn-reject {
+        background: #f44336;
+        color: white;
+        padding: 5px 15px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 12px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .btn-reject:hover {
+        background: #da190b;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 40px;
+        color: #666;
+    }
+
+    .empty-state i {
+        font-size: 50px;
+        color: #ccc;
+        margin-bottom: 15px;
+    }
+
+    .tips-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+
+    .tip-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 12px;
+    }
+
+    .tip-icon {
+        color: #6c63ff;
+        font-size: 24px;
+        flex-shrink: 0;
+    }
+
+    .tip-content {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .tip-content h4 {
+        margin-bottom: 5px;
+        font-size: 16px;
+    }
+
+    .tip-content p {
+        color: #666;
+        font-size: 13px;
+    }
+
+    /* ===== NEW: Rate Your Experience Section Styles ===== */
+    .review-section {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        margin-bottom: 40px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03);
+        border-left: 5px solid #fbbf24;
+    }
+
+    .review-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .review-header h2 {
+        font-size: 22px;
+        color: #333;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .review-header h2 i {
+        color: #fbbf24;
+    }
+
+    .review-badge {
+        background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        color: white;
+        padding: 8px 20px;
+        border-radius: 30px;
+        font-size: 14px;
+        font-weight: 600;
+        box-shadow: 0 4px 10px rgba(251, 191, 36, 0.3);
+    }
+
+    .review-content {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        padding: 20px 0;
+        flex-wrap: wrap;
+    }
+
+    .review-icon {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #fef3c7, #fde68a);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #f59e0b;
+        font-size: 36px;
+        flex-shrink: 0;
+    }
+
+    .review-text {
+        flex: 1;
+    }
+
+    .review-text h3 {
+        font-size: 20px;
+        color: #333;
+        margin-bottom: 10px;
+        font-weight: 600;
+    }
+
+    .review-text p {
+        color: #666;
+        font-size: 15px;
+        line-height: 1.6;
+        margin-bottom: 15px;
+    }
+
+    .review-features {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .review-feature {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #666;
+        font-size: 13px;
+        background: #f8f9fa;
+        padding: 6px 15px;
+        border-radius: 30px;
+    }
+
+    .review-feature i {
+        color: #fbbf24;
+    }
+
+    .btn-review {
+        background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        color: white;
+        padding: 14px 28px;
+        border-radius: 30px;
+        font-size: 16px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        transition: all 0.3s;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
+    }
+
+    .btn-review:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(251, 191, 36, 0.4);
+    }
+
+    .btn-review i {
+        font-size: 18px;
+    }
+
+    .review-thankyou {
+        margin-top: 20px;
+        padding: 15px 20px;
+        background: #e8f5e9;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        border-left: 4px solid #4CAF50;
+    }
+
+    .review-thankyou i {
+        color: #4CAF50;
+        font-size: 24px;
+    }
+
+    .review-thankyou p {
+        color: #2e7d32;
+        font-weight: 600;
+        margin-bottom: 3px;
+    }
+
+    .review-thankyou small {
+        color: #666;
+        font-size: 13px;
+    }
+
+    /* Modal Styles */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
+        z-index: 2000;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal.active {
+        display: flex;
+    }
+
+    .modal-content {
+        background: white;
+        border-radius: 24px;
+        padding: 40px;
+        max-width: 550px;
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+        animation: modalSlideIn 0.4s ease;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    @keyframes modalSlideIn {
+        from {
+            transform: translateY(-30px) scale(0.95);
+            opacity: 0;
         }
 
-        body {
-            background-color: #f8f9fa;
-            color: #333;
-            line-height: 1.6;
+        to {
+            transform: translateY(0) scale(1);
+            opacity: 1;
         }
+    }
 
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #f0f2f5;
+    }
 
-        .navbar {
-            background-color: #ffffff;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            padding: 15px 0;
-        }
+    .modal-header h3 {
+        font-size: 24px;
+        color: #333;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
 
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
+    .modal-header h3 i {
+        color: #fbbf24;
+    }
 
-        .logo {
-            font-size: 28px;
-            font-weight: 700;
-            color: #5d5fef;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-        }
+    .close-modal {
+        background: none;
+        border: none;
+        font-size: 32px;
+        cursor: pointer;
+        color: #999;
+        transition: all 0.3s;
+    }
 
-        .logo i {
-            margin-right: 10px;
-            color: #6c63ff;
+    .close-modal:hover {
+        color: #dc2626;
+        transform: rotate(90deg);
+    }
+
+    .star-rating {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin-bottom: 15px;
+    }
+
+    .star {
+        cursor: pointer;
+        color: #ddd;
+        font-size: 30px;
+        transition: color 0.2s;
+    }
+
+    .star.active {
+        color: #fbbf24;
+    }
+
+    .star i {
+        font-size: 30px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: all 0.3s;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: #6c63ff;
+    }
+
+    textarea.form-control {
+        min-height: 120px;
+        resize: vertical;
+    }
+
+    .info-box {
+        background: #f0f2ff;
+        padding: 15px;
+        border-radius: 8px;
+        font-size: 13px;
+        color: #666;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .info-box i {
+        color: #6c63ff;
+        font-size: 18px;
+    }
+
+    .modal-actions {
+        display: flex;
+        gap: 15px;
+    }
+
+    .modal-actions .btn {
+        flex: 1;
+        padding: 14px;
+        text-align: center;
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
         }
 
         .nav-links {
-            display: flex;
-            list-style: none;
-            flex-wrap: wrap;
-            gap: 15px;
+            display: none;
         }
 
-        .nav-links li {
-            margin-left: 30px;
+        .nav-container {
+            justify-content: space-between;
         }
-
-        .nav-links a {
-            text-decoration: none;
-            color: #555;
-            font-weight: 500;
-            font-size: 16px;
-            transition: color 0.3s;
+        
+        .review-content {
+            flex-direction: column;
+            text-align: center;
         }
-
-        .nav-links a:hover {
-            color: #6c63ff;
+        
+        .review-features {
+            justify-content: center;
         }
+    }
 
-        .user-actions {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .user-badge {
-            background-color: #6c63ff;
-            color: white;
-            padding: 8px 20px;
-            border-radius: 30px;
-            font-weight: 600;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .user-badge i {
-            margin-right: 8px;
-        }
-
-        .logout-btn {
-            background-color: #dc3545;
-            color: white;
-            padding: 8px 20px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s;
-        }
-
-        .logout-btn:hover {
-            background-color: #c82333;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
-        }
-
-        .dashboard-header {
-            margin-top: 100px;
-            padding: 40px 0;
-            background: linear-gradient(135deg, #6c63ff, #5d5fef);
-            color: white;
-            border-radius: 0 0 30px 30px;
+    @media (max-width: 768px) {
+        .stats-grid {
+            grid-template-columns: 1fr;
         }
 
         .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
+            flex-direction: column;
+            text-align: center;
             gap: 20px;
-        }
-
-        .header-title h1 {
-            font-size: 36px;
-            margin-bottom: 10px;
-        }
-
-        .header-title p {
-            font-size: 16px;
-            opacity: 0.9;
-        }
-
-        .verification-badge {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 12px 25px;
-            border-radius: 50px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 600;
-        }
-
-        .verification-badge i {
-            color: #4CAF50;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 25px;
-            margin: 40px 0;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 25px;
-            border-radius: 20px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: all 0.3s;
-            min-width: 0;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(108, 99, 255, 0.1);
-        }
-
-        .stat-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .stat-info h3 {
-            font-size: 16px;
-            color: #666;
-            margin-bottom: 10px;
-            font-weight: 500;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .stat-number {
-            font-size: 32px;
-            font-weight: 700;
-            color: #333;
-        }
-
-        .stat-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #6c63ff20, #5d5fef20);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #6c63ff;
-            font-size: 28px;
-            flex-shrink: 0;
-            margin-left: 10px;
-        }
-
-        .section {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 40px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03);
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .section-header h2 {
-            font-size: 22px;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .section-header h2 i {
-            color: #6c63ff;
-        }
-
-        .btn {
-            padding: 12px 25px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
-            display: inline-block;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #6c63ff, #5d5fef);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(108, 99, 255, 0.2);
-        }
-
-        .btn-outline {
-            border: 2px solid #6c63ff;
-            color: #6c63ff;
-            background: transparent;
-        }
-
-        .btn-outline:hover {
-            background: #6c63ff;
-            color: white;
-        }
-
-        .btn-sm {
-            padding: 8px 15px;
-            font-size: 13px;
         }
 
         .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            margin: 40px 0;
-        }
-
-        .feature-card {
-            background: white;
-            border: 2px solid #edf2f7;
-            border-radius: 20px;
-            padding: 30px;
-            text-align: center;
-            transition: all 0.3s;
-            text-decoration: none;
-            color: inherit;
-            display: block;
-            position: relative;
-        }
-
-        .feature-card:hover {
-            border-color: #6c63ff;
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(108, 99, 255, 0.1);
-        }
-
-        .feature-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #6c63ff20, #5d5fef20);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            color: #6c63ff;
-            font-size: 36px;
-        }
-
-        .feature-card h3 {
-            font-size: 20px;
-            margin-bottom: 10px;
-            color: #333;
-        }
-
-        .feature-card p {
-            color: #666;
-            font-size: 14px;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        .feature-badge {
-            display: inline-block;
-            background: #f0f2ff;
-            color: #6c63ff;
-            padding: 5px 15px;
-            border-radius: 30px;
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .feature-badge.warning {
-            background: #fff3cd;
-            color: #856404;
-        }
-
-        .feature-badge.success {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .feature-badge.info {
-            background: #d1ecf1;
-            color: #0c5460;
-        }
-
-        /* Table Styles */
-        .table-responsive {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th {
-            text-align: left;
-            padding: 15px;
-            color: #666;
-            font-weight: 600;
-            font-size: 14px;
-            border-bottom: 2px solid #edf2f7;
-        }
-
-        td {
-            padding: 15px;
-            border-bottom: 1px solid #edf2f7;
-        }
-
-        .status-badge {
-            padding: 5px 12px;
-            border-radius: 30px;
-            font-size: 12px;
-            font-weight: 600;
-            display: inline-block;
-        }
-
-        .status-pending {
-            background: #fff3e0;
-            color: #ef6c00;
-        }
-
-        .status-confirmed {
-            background: #e3f2fd;
-            color: #1976d2;
-        }
-
-        .status-completed {
-            background: #e8f5e9;
-            color: #2e7d32;
-        }
-
-        .status-cancelled {
-            background: #ffebee;
-            color: #c62828;
+            grid-template-columns: 1fr;
         }
 
         .action-buttons {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
+            flex-direction: column;
         }
 
-        .btn-approve {
-            background: #4CAF50;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 12px;
-            display: inline-flex;
+        .stat-card {
+            padding: 20px;
+        }
+
+        .stat-number {
+            font-size: 28px;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+        }
+        
+        .review-features {
+            flex-direction: column;
             align-items: center;
-            gap: 5px;
+        }
+        
+        .modal-actions {
+            flex-direction: column;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .dashboard-header h1 {
+            font-size: 28px;
         }
 
-        .btn-approve:hover {
-            background: #45a049;
+        .section {
+            padding: 20px;
         }
 
-        .btn-reject {
-            background: #f44336;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 12px;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
+        .feature-card {
+            padding: 20px;
         }
 
-        .btn-reject:hover {
-            background: #da190b;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: #666;
-        }
-
-        .empty-state i {
-            font-size: 50px;
-            color: #ccc;
-            margin-bottom: 15px;
-        }
-
-        .tips-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            font-size: 28px;
         }
 
         .tip-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 12px;
+            flex-direction: column;
+            text-align: center;
         }
 
         .tip-icon {
-            color: #6c63ff;
-            font-size: 24px;
-            flex-shrink: 0;
+            margin-bottom: 10px;
         }
+    }
+    /* ===== END NEW STYLES ===== */
+</style>
+{% endblock %}
 
-        .tip-content {
-            flex: 1;
-            min-width: 0;
-        }
+{% block content %}
+<!-- Dashboard Header -->
+<section class="dashboard-header">
+    <div class="container header-content">
+        <div class="header-title">
+            <h1>Welcome, Dr. {{ request.user.get_full_name|default:request.user.username }}</h1>
+            <p>Manage your sessions, availability, and professional growth</p>
+        </div>
+        <div class="verification-badge">
+            <i class="fas fa-check-circle"></i>
+            <span>Verified Expert</span>
+        </div>
+    </div>
+</section>
 
-        .tip-content h4 {
-            margin-bottom: 5px;
-            font-size: 16px;
-        }
-
-        .tip-content p {
-            color: #666;
-            font-size: 13px;
-        }
-
-        .footer {
-            background-color: #2a2a3c;
-            color: white;
-            padding: 30px 0;
-            margin-top: 60px;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            color: #bbb;
-            font-size: 14px;
-        }
-
-        /* Responsive Breakpoints */
-        @media (max-width: 992px) {
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .nav-links {
-                display: none;
-            }
-
-            .nav-container {
-                justify-content: space-between;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .header-content {
-                flex-direction: column;
-                text-align: center;
-                gap: 20px;
-            }
-
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .action-buttons {
-                flex-direction: column;
-            }
-
-            .user-actions {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .user-badge,
-            .logout-btn {
-                font-size: 12px;
-                padding: 6px 15px;
-            }
-
-            .stat-card {
-                padding: 20px;
-            }
-
-            .stat-number {
-                font-size: 28px;
-            }
-
-            .stat-icon {
-                width: 50px;
-                height: 50px;
-                font-size: 24px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .dashboard-header h1 {
-                font-size: 28px;
-            }
-
-            .section {
-                padding: 20px;
-            }
-
-            .feature-card {
-                padding: 20px;
-            }
-
-            .feature-icon {
-                width: 60px;
-                height: 60px;
-                font-size: 28px;
-            }
-
-            .tip-item {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .tip-icon {
-                margin-bottom: 10px;
-            }
-        }
-    </style>
-</head>
-
-<body>
-    
-    <nav class="navbar">
-        <div class="container nav-container">
-            <a href="{% url 'accounts:index' %}" class="logo">
-                <i class="fas fa-heart"></i> EmpathyQ
-            </a>
-
-            <ul class="nav-links">
-                <li><a href="{% url 'accounts:index' %}#home">Home</a></li>
-                <li><a href="{% url 'accounts:index' %}#about">About Us</a></li>
-                <li><a href="{% url 'accounts:index' %}#features">Features</a></li>
-            </ul>
-
-            <div class="user-actions">
-                <span class="user-badge">
-                    <i class="fas fa-user-md"></i> Dr. {{ request.user.get_full_name|default:request.user.username }}
-                </span>
-                <a href="{% url 'accounts:logout' %}" class="logout-btn">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </a>
+<div class="container">
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-info">
+                <h3>Pending Requests</h3>
+                <div class="stat-number">{{ pending_count|default:'0' }}</div>
+            </div>
+            <div class="stat-icon">
+                <i class="fas fa-clock"></i>
             </div>
         </div>
-    </nav>
-
-   
-    <section class="dashboard-header">
-        <div class="container header-content">
-            <div class="header-title">
-                <h1>Welcome, Dr. {{ request.user.get_full_name|default:request.user.username }}</h1>
-                <p>Manage your sessions, availability, and professional growth</p>
+        <div class="stat-card">
+            <div class="stat-info">
+                <h3>Upcoming Sessions</h3>
+                <div class="stat-number">{{ upcoming_count|default:'0' }}</div>
             </div>
-            <div class="verification-badge">
+            <div class="stat-icon">
+                <i class="fas fa-calendar-check"></i>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-info">
+                <h3>Completed Sessions</h3>
+                <div class="stat-number">{{ completed_count|default:'0' }}</div>
+            </div>
+            <div class="stat-icon">
                 <i class="fas fa-check-circle"></i>
-                <span>Verified Expert</span>
             </div>
         </div>
-    </section>
-
-    <div class="container">
-        
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-info">
-                    <h3>Pending Requests</h3>
-                    <div class="stat-number">{{ pending_count|default:'0' }}</div>
-                </div>
-                <div class="stat-icon">
-                    <i class="fas fa-clock"></i>
-                </div>
+        <div class="stat-card">
+            <div class="stat-info">
+                <h3>Total Earnings</h3>
+                <div class="stat-number">${{ total_earnings|default:'0' }}</div>
             </div>
-            <div class="stat-card">
-                <div class="stat-info">
-                    <h3>Upcoming Sessions</h3>
-                    <div class="stat-number">{{ upcoming_count|default:'0' }}</div>
-                </div>
-                <div class="stat-icon">
-                    <i class="fas fa-calendar-check"></i>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-info">
-                    <h3>Completed Sessions</h3>
-                    <div class="stat-number">{{ completed_count|default:'0' }}</div>
-                </div>
-                <div class="stat-icon">
-                    <i class="fas fa-check-circle"></i>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-info">
-                    <h3>Total Earnings</h3>
-                    <div class="stat-number">${{ total_earnings|default:'0' }}</div>
-                </div>
-                <div class="stat-icon">
-                    <i class="fas fa-dollar-sign"></i>
-                </div>
+            <div class="stat-icon">
+                <i class="fas fa-dollar-sign"></i>
             </div>
         </div>
+    </div>
 
-        
-        <div class="features-grid">
-            <a href="{% url 'expert:session_requests' %}" class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-calendar-alt"></i>
-                </div>
-                <h3>Session Requests</h3>
-                <p>View and manage pending session requests from users</p>
-                {% if pending_count and pending_count > 0 %}
-                <span class="feature-badge">{{ pending_count }} New Request{{ pending_count|pluralize }}</span>
-                {% endif %}
-            </a>
-
-           
-            <a href="{% url 'expert:today_sessions' %}" class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-calendar-day"></i>
-                </div>
-                <h3>Today's Sessions</h3>
-                <p>View and manage your sessions scheduled for today</p>
-                {% if today_sessions_count and today_sessions_count > 0 %}
-                <span class="feature-badge success">{{ today_sessions_count }} Session{{ today_sessions_count|pluralize
-                    }} Today</span>
-                {% else %}
-                <span class="feature-badge info">No sessions today</span>
-                {% endif %}
-            </a>
-
-            <a href="{% url 'expert:manage_availability' %}" class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-clock"></i>
-                </div>
-                <h3>Manage Availability</h3>
-                <p>Set your weekly schedule and time off</p>
-            </a>
-
-
-            <a href="{% url 'expert:analytics' %}" class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-chart-line"></i>
-                </div>
-                <h3>Analytics & Reports</h3>
-                <p>Track your sessions and performance</p>
-            </a>
-
-            <a href="{% url 'expert:profile_settings' %}" class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-user-cog"></i>
-                </div>
-                <h3>Profile Settings</h3>
-                <p>Update your expertise, bio, and professional details</p>
-            </a>
-            
-            <a href="{% url 'expert:chat_list' %}" class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-comments"></i>
-                </div>
-                <h3>User Chat</h3>
-                <p>Chat with users who have booked sessions with you</p>
-                {% if unread_chat_count and unread_chat_count > 0 %}
-                <span class="feature-badge warning">{{ unread_chat_count }} Unread Message{{ unread_chat_count|pluralize
-                    }}</span>
-                {% endif %}
-            </a>
-        </div>
-
-        
-        <div class="section">
-            <div class="section-header">
-                <h2>
-                    <i class="fas fa-history"></i>
-                    Recent Activity
-                </h2>
-                <a href="{% url 'expert:session_requests' %}" class="btn btn-outline btn-sm">View All</a>
+    <!-- Features Grid -->
+    <div class="features-grid">
+        <a href="{% url 'expert:session_requests' %}" class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-calendar-alt"></i>
             </div>
-
-            {% if recent_bookings %}
-            <div class="table-responsive">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>User</th>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for booking in recent_bookings %}
-                        <tr>
-                            <td>
-                                <strong>{{ booking.user.get_full_name|default:booking.user.username }}</strong>
-                            </td>
-                            <td>{{ booking.booking_date|date:"M d, Y" }}</td>
-                            <td>{{ booking.booking_time|time:"g:i A" }}</td>
-                            <td>
-                                <span class="status-badge status-{{ booking.status }}">
-                                    {{ booking.get_status_display }}
-                                </span>
-                            </td>
-                            <td>
-                                <div class="action-buttons">
-                                    {% if booking.status == 'pending' %}
-                                    <a href="{% url 'expert:approve_session' booking.id %}" class="btn-approve"
-                                        onclick="return confirm('Approve this session request from {{ booking.user.username }}?')">
-                                        <i class="fas fa-check"></i> Approve
-                                    </a>
-                                    <a href="{% url 'expert:reject_session' booking.id %}" class="btn-reject"
-                                        onclick="return confirm('Reject this session request from {{ booking.user.username }}?')">
-                                        <i class="fas fa-times"></i> Reject
-                                    </a>
-                                    {% elif booking.status == 'confirmed' %}
-                                    <a href="{% url 'expert:complete_session' booking.id %}" class="btn-approve"
-                                        onclick="return confirm('Mark this session as completed?')">
-                                        <i class="fas fa-check-double"></i> Complete
-                                    </a>
-                                    {% endif %}
-                                </div>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            {% else %}
-            <div class="empty-state">
-                <i class="fas fa-calendar-times"></i>
-                <h3>No Recent Activity</h3>
-                <p>You don't have any recent session activity.</p>
-            </div>
+            <h3>Session Management</h3>
+            <p>View and manage pending session requests from users</p>
+            {% if pending_count and pending_count > 0 %}
+            <span class="feature-badge">{{ pending_count }} New Request{{ pending_count|pluralize }}</span>
             {% endif %}
+        </a>
+
+        <a href="{% url 'expert:today_sessions' %}" class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-calendar-day"></i>
+            </div>
+            <h3>Today's Sessions</h3>
+            <p>View and manage your sessions scheduled for today</p>
+            {% if today_sessions_count and today_sessions_count > 0 %}
+            <span class="feature-badge success">{{ today_sessions_count }} Session{{ today_sessions_count|pluralize }} Today</span>
+            {% else %}
+            <span class="feature-badge info">No sessions today</span>
+            {% endif %}
+        </a>
+
+        <a href="{% url 'expert:manage_availability' %}" class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-clock"></i>
+            </div>
+            <h3>Manage Availability</h3>
+            <p>Set your weekly schedule and time off</p>
+        </a>
+
+        <a href="{% url 'expert:analytics' %}" class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <h3>Analytics & Reports</h3>
+            <p>Track your sessions and performance</p>
+        </a>
+
+        <a href="{% url 'expert:profile_settings' %}" class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-user-cog"></i>
+            </div>
+            <h3>Profile Settings</h3>
+            <p>Update your expertise, bio, and professional details</p>
+        </a>
+
+        <!-- Report & Support -->
+        <a href="{% url 'accounts:expert_support' %}" class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-flag"></i>
+            </div>
+            <h3>Report & Support</h3>
+            <p>Report bugs, complaints, or get technical support from admin</p>
+            {% if unread_support_count and unread_support_count > 0 %}
+            <span class="feature-badge warning">{{ unread_support_count }} Unread Message{{ unread_support_count|pluralize }}</span>
+            {% endif %}
+        </a>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="section">
+        <div class="section-header">
+            <h2>
+                <i class="fas fa-history"></i>
+                Recent Activity
+            </h2>
+            <a href="{% url 'expert:session_requests' %}" class="btn btn-outline btn-sm">View All</a>
         </div>
 
-       
-        <div class="section">
-            <div class="section-header">
-                <h2>
-                    <i class="fas fa-lightbulb"></i>
-                    Quick Tips for Success
-                </h2>
+        {% if recent_bookings %}
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in recent_bookings %}
+                    <tr>
+                        <td>
+                            <strong>{{ booking.user.get_full_name|default:booking.user.username }}</strong>
+                        </td>
+                        <td>{{ booking.booking_date|date:"M d, Y" }}</td>
+                        <td>{{ booking.booking_time|time:"g:i A" }}</td>
+                        <td>
+                            <span class="status-badge status-{{ booking.status }}">
+                                {{ booking.get_status_display }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                {% if booking.status == 'pending' %}
+                                <a href="{% url 'expert:approve_session' booking.id %}" class="btn-approve"
+                                    onclick="return confirm('Approve this session request from {{ booking.user.username }}?')">
+                                    <i class="fas fa-check"></i> Approve
+                                </a>
+                                <a href="{% url 'expert:reject_session' booking.id %}" class="btn-reject"
+                                    onclick="return confirm('Reject this session request from {{ booking.user.username }}?')">
+                                    <i class="fas fa-times"></i> Reject
+                                </a>
+                                {% elif booking.status == 'confirmed' %}
+                                <a href="{% url 'expert:complete_session' booking.id %}" class="btn-approve"
+                                    onclick="return confirm('Mark this session as completed?')">
+                                    <i class="fas fa-check-double"></i> Complete
+                                </a>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-calendar-times"></i>
+            <h3>No Recent Activity</h3>
+            <p>You don't have any recent session activity.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Quick Tips -->
+    <div class="section">
+        <div class="section-header">
+            <h2>
+                <i class="fas fa-lightbulb"></i>
+                Quick Tips for Success
+            </h2>
+        </div>
+        <div class="tips-grid">
+            <div class="tip-item">
+                <i class="fas fa-clock tip-icon"></i>
+                <div class="tip-content">
+                    <h4>Update Availability</h4>
+                    <p>Keep your schedule up to date to receive more bookings</p>
+                </div>
             </div>
-            <div class="tips-grid">
-                <div class="tip-item">
-                    <i class="fas fa-clock tip-icon"></i>
-                    <div class="tip-content">
-                        <h4>Update Availability</h4>
-                        <p>Keep your schedule up to date to receive more bookings</p>
-                    </div>
+            <div class="tip-item">
+                <i class="fas fa-bell tip-icon"></i>
+                <div class="tip-content">
+                    <h4>Respond Quickly</h4>
+                    <p>Users appreciate fast responses to their requests</p>
                 </div>
-                <div class="tip-item">
-                    <i class="fas fa-bell tip-icon"></i>
-                    <div class="tip-content">
-                        <h4>Respond Quickly</h4>
-                        <p>Users appreciate fast responses to their requests</p>
-                    </div>
+            </div>
+            <div class="tip-item">
+                <i class="fas fa-video tip-icon"></i>
+                <div class="tip-content">
+                    <h4>Test Your Setup</h4>
+                    <p>Ensure video works properly before sessions</p>
                 </div>
-                <div class="tip-item">
-                    <i class="fas fa-video tip-icon"></i>
-                    <div class="tip-content">
-                        <h4>Test Your Setup</h4>
-                        <p>Ensure video works properly before sessions</p>
-                    </div>
-                </div>
-                <div class="tip-item">
-                    <i class="fas fa-star tip-icon"></i>
-                    <div class="tip-content">
-                        <h4>Build Your Reputation</h4>
-                        <p>Good reviews lead to more bookings</p>
-                    </div>
+            </div>
+            <div class="tip-item">
+                <i class="fas fa-star tip-icon"></i>
+                <div class="tip-content">
+                    <h4>Build Your Reputation</h4>
+                    <p>Good reviews lead to more bookings</p>
                 </div>
             </div>
         </div>
     </div>
 
-   
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-bottom">
-                <p>&copy; 2025 EmpathyQ. All rights reserved. | Expert Portal</p>
+    <!-- Rate Your Experience Section -->
+    <div class="review-section">
+        <div class="review-header">
+            <h2>
+                <i class="fas fa-star"></i>
+                Rate Your Experience
+            </h2>
+            <span class="review-badge">
+                <i class="fas fa-heart"></i> Share Your Feedback
+            </span>
+        </div>
+
+        <div class="review-content">
+            <div class="review-icon">
+                <i class="fas fa-star"></i>
+            </div>
+            <div class="review-text">
+                <h3>How's your experience as an expert on EmpathyQ?</h3>
+                <p>
+                    Your insights as a mental health professional are invaluable. Share your thoughts on our platform, tools, and support to help us serve you and your clients better.
+                </p>
+                <div class="review-features">
+                    <span class="review-feature">
+                        <i class="fas fa-video"></i> Session Tools
+                    </span>
+                    <span class="review-feature">
+                        <i class="fas fa-calendar"></i> Scheduling
+                    </span>
+                    <span class="review-feature">
+                        <i class="fas fa-credit-card"></i> Payments
+                    </span>
+                    <span class="review-feature">
+                        <i class="fas fa-headset"></i> Support
+                    </span>
+                </div>
+            </div>
+            <button onclick="openReviewModal()" class="btn-review">
+                <i class="fas fa-star"></i> Write a Review
+            </button>
+        </div>
+
+        <!-- Check if expert already submitted a review -->
+        {% if expert_has_reviewed %}
+        <div class="review-thankyou">
+            <i class="fas fa-check-circle"></i>
+            <div>
+                <p>Thank you for your review!</p>
+                <small>Your feedback has been submitted and is awaiting admin approval.</small>
             </div>
         </div>
-    </footer>
+        {% endif %}
+    </div>
+</div>
 
-    <script>
-        // Auto-hide any messages after 5 seconds
-        setTimeout(function () {
-            document.querySelectorAll('.alert').forEach(function (alert) {
-                if (alert) {
-                    alert.style.transition = 'opacity 0.5s';
-                    alert.style.opacity = '0';
-                    setTimeout(() => alert.remove(), 500);
-                }
-            });
-        }, 5000);
+<!-- Review Modal -->
+<div id="reviewModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>
+                <i class="fas fa-star" style="color: #fbbf24;"></i>
+                Share Your Experience
+            </h3>
+            <button class="close-modal" onclick="closeReviewModal()">&times;</button>
+        </div>
 
-        // Confirm before approve/reject actions
-        document.querySelectorAll('.btn-approve, .btn-reject').forEach(btn => {
-            btn.addEventListener('click', function (e) {
-                if (!confirm(this.getAttribute('onclick')?.replace('return confirm(\'', '').replace('\')', '') ||
-                    'Are you sure?')) {
-                    e.preventDefault();
-                }
-            });
+        <form method="post" action="{% url 'accounts:submit_platform_review' %}">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label>Your Rating</label>
+                <div class="star-rating">
+                    <span class="star" onclick="setRating(1)" id="star1"><i class="far fa-star"></i></span>
+                    <span class="star" onclick="setRating(2)" id="star2"><i class="far fa-star"></i></span>
+                    <span class="star" onclick="setRating(3)" id="star3"><i class="far fa-star"></i></span>
+                    <span class="star" onclick="setRating(4)" id="star4"><i class="far fa-star"></i></span>
+                    <span class="star" onclick="setRating(5)" id="star5"><i class="far fa-star"></i></span>
+                </div>
+                <input type="hidden" name="rating" id="ratingInput" required>
+            </div>
+
+            <div class="form-group">
+                <label>Review Title</label>
+                <input type="text" name="title" class="form-control" required placeholder="Summarize your experience">
+            </div>
+
+            <div class="form-group">
+                <label>Your Review</label>
+                <textarea name="content" class="form-control" required placeholder="Tell us about your experience with EmpathyQ..."></textarea>
+            </div>
+
+            <div class="info-box">
+                <i class="fas fa-info-circle"></i>
+                Your review will be reviewed by our team before being published. Thank you for helping us improve!
+            </div>
+
+            <div class="modal-actions">
+                <button type="submit" class="btn btn-primary" style="flex: 1;">
+                    <i class="fas fa-paper-plane"></i> Submit Review
+                </button>
+                <button type="button" onclick="closeReviewModal()" class="btn btn-outline" style="flex: 1;">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Auto-hide any messages after 5 seconds
+    setTimeout(function () {
+        document.querySelectorAll('.alert').forEach(function (alert) {
+            if (alert) {
+                alert.style.transition = 'opacity 0.5s';
+                alert.style.opacity = '0';
+                setTimeout(() => alert.remove(), 500);
+            }
         });
-    </script>
-</body>
+    }, 5000);
 
-</html> 
+    // Confirm before approve/reject actions
+    document.querySelectorAll('.btn-approve, .btn-reject').forEach(btn => {
+        btn.addEventListener('click', function (e) {
+            if (!confirm(this.getAttribute('onclick')?.replace('return confirm(\'', '').replace('\')', '') ||
+                'Are you sure?')) {
+                e.preventDefault();
+            }
+        });
+    });
 
+    // ===== NEW: Review Modal Functions =====
+    let currentRating = 0;
 
+    function setRating(rating) {
+        currentRating = rating;
+        document.getElementById('ratingInput').value = rating;
+        
+        // Update stars
+        for (let i = 1; i <= 5; i++) {
+            const star = document.getElementById(`star${i}`);
+            if (i <= rating) {
+                star.innerHTML = '<i class="fas fa-star"></i>';
+                star.style.color = '#fbbf24';
+            } else {
+                star.innerHTML = '<i class="far fa-star"></i>';
+                star.style.color = '#ddd';
+            }
+        }
+    }
 
+    function openReviewModal() {
+        document.getElementById('reviewModal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
 
+    function closeReviewModal() {
+        document.getElementById('reviewModal').classList.remove('active');
+        document.body.style.overflow = 'auto';
+        // Reset form
+        setRating(0);
+        document.getElementById('ratingInput').value = '';
+        document.querySelector('input[name="title"]').value = '';
+        document.querySelector('textarea[name="content"]').value = '';
+    }
 
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+        const reviewModal = document.getElementById('reviewModal');
+        if (event.target === reviewModal) {
+            closeReviewModal();
+        }
+    }
 
-
- 
+    // Close with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && document.getElementById('reviewModal').classList.contains('active')) {
+            closeReviewModal();
+        }
+    });
+    // ===== END NEW FUNCTIONS =====
+</script>
+{% endblock %}

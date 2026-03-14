@@ -1,1396 +1,1417 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard | EmpathyQ</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard | EmpathyQ{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Header */
+    .header {
+        background: white;
+        padding: 25px 30px;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .header h1 {
+        font-size: 26px;
+        color: #333;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .header h1 i {
+        color: #6c63ff;
+    }
+
+    .admin-info {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    /* Navigation Links */
+    .nav-links {
+        display: flex;
+        gap: 10px;
+        margin-right: 10px;
+    }
+
+    .nav-link {
+        padding: 8px 16px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s;
+    }
+
+    .nav-link i {
+        font-size: 14px;
+    }
+
+    .nav-link.dashboard {
+        background: #f0f2f5;
+        color: #555;
+    }
+
+    .nav-link.dashboard:hover {
+        background: #e4e6e9;
+    }
+
+    .nav-link.chat {
+        background: #10b981;
+        color: white;
+        position: relative;
+    }
+
+    .nav-link.chat:hover {
+        background: #059669;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+    }
+
+    /* ===== NEW: Expert Support Link ===== */
+    .nav-link.expert-support {
+        background: #6c63ff;
+        color: white;
+        position: relative;
+    }
+
+    .nav-link.expert-support:hover {
+        background: #5a52d5;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(108, 99, 255, 0.3);
+    }
+
+    .admin-badge {
+        background: #6c63ff;
+        color: white;
+        padding: 8px 18px;
+        border-radius: 30px;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .logout-btn {
+        background: #ff4757;
+        color: white;
+        padding: 8px 18px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s;
+    }
+
+    .logout-btn:hover {
+        background: #ff3344;
+        transform: translateY(-2px);
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 25px;
+        margin-bottom: 35px;
+    }
+
+    .stat-card {
+        background: white;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: transform 0.3s;
+        cursor: pointer;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-info h3 {
+        font-size: 15px;
+        color: #666;
+        font-weight: 500;
+        margin-bottom: 8px;
+    }
+
+    .stat-number {
+        font-size: 32px;
+        font-weight: 700;
+        color: #333;
+    }
+
+    .stat-icon {
+        font-size: 42px;
+        color: #6c63ff;
+        opacity: 0.3;
+    }
+
+    /* Messages */
+    .messages {
+        margin-bottom: 25px;
+    }
+
+    .alert {
+        padding: 15px 20px;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .alert-success {
+        background: #e8f5e9;
+        color: #2e7d32;
+        border-left: 5px solid #2e7d32;
+    }
+
+    .alert-error {
+        background: #ffebee;
+        color: #c62828;
+        border-left: 5px solid #c62828;
+    }
+
+    .alert-info {
+        background: #e3f2fd;
+        color: #0d47a1;
+        border-left: 5px solid #0d47a1;
+    }
+
+    .alert-warning {
+        background: #fff3e0;
+        color: #e65100;
+        border-left: 5px solid #e65100;
+    }
+
+    /* Section */
+    .section {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+        margin-bottom: 35px;
+        overflow: hidden;
+    }
+
+    .section-header {
+        padding: 20px 25px;
+        border-bottom: 2px solid #f0f2f5;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .section-header h2 {
+        font-size: 20px;
+        color: #333;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .section-header h2 i {
+        color: #6c63ff;
+    }
+
+    .badge {
+        background: #6c63ff;
+        color: white;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 13px;
+    }
+
+    /* Table */
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th {
+        text-align: left;
+        padding: 18px 20px;
+        background: #f8fafd;
+        color: #555;
+        font-weight: 600;
+        font-size: 14px;
+        border-bottom: 2px solid #e9ecef;
+    }
+
+    td {
+        padding: 18px 20px;
+        border-bottom: 1px solid #e9ecef;
+        vertical-align: middle;
+    }
+
+    tr:hover {
+        background: #f8fafd;
+    }
+
+    .expert-name,
+    .user-name {
+        font-weight: 600;
+        color: #333;
+    }
+
+    .expert-email,
+    .user-email {
+        font-size: 13px;
+        color: #666;
+        margin-top: 4px;
+    }
+
+    .user-role {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .role-user {
+        background: #e3f2fd;
+        color: #1976d2;
+    }
+
+    .role-expert {
+        background: #e8f5e9;
+        color: #2e7d32;
+    }
+
+    .role-admin {
+        background: #ffebee;
+        color: #c62828;
+    }
+
+    /* Certificate Links */
+    .certificate-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #f0f2ff;
+        color: #6c63ff;
+        padding: 6px 14px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 500;
+        margin: 2px 0;
+        transition: all 0.3s;
+    }
+
+    .certificate-link:hover {
+        background: #6c63ff;
+        color: white;
+    }
+
+    .no-certificate {
+        color: #999;
+        font-size: 13px;
+        font-style: italic;
+    }
+
+    /* Buttons */
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 18px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 500;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .btn-approve {
+        background: #4CAF50;
+        color: white;
+    }
+
+    .btn-approve:hover {
+        background: #45a049;
+        transform: translateY(-2px);
+    }
+
+    .btn-reject {
+        background: #f44336;
+        color: white;
+    }
+
+    .btn-reject:hover {
+        background: #da190b;
+        transform: translateY(-2px);
+    }
+
+    .btn-sm {
+        padding: 6px 14px;
+        font-size: 12px;
+    }
+
+    .btn-chat {
+        background: #10b981;
+        color: white;
+    }
+
+    .btn-chat:hover {
+        background: #059669;
+    }
+
+    .actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    /* Block/Unlock Button Styles */
+    .btn-block {
+        background: #dc2626;
+        color: white;
+        padding: 6px 14px;
+        border-radius: 6px;
+        border: none;
+        font-weight: 500;
+        font-size: 12px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.3s;
+    }
+
+    .btn-block:hover {
+        background: #b91c1c;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 10px rgba(220, 38, 38, 0.3);
+    }
+
+    .btn-unblock {
+        background: #10b981;
+        color: white;
+        padding: 6px 14px;
+        border-radius: 6px;
+        border: none;
+        font-weight: 500;
+        font-size: 12px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        text-decoration: none;
+        transition: all 0.3s;
+    }
+
+    .btn-unblock:hover {
+        background: #059669;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 10px rgba(16, 185, 129, 0.3);
+    }
+
+    .status-badge-blocked {
+        background: #fee2e2;
+        color: #b91c1c;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        margin-top: 5px;
+    }
+
+    .block-reason-preview {
+        font-size: 11px;
+        color: #6b7280;
+        margin-top: 4px;
+        max-width: 200px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        background: #f3f4f6;
+        padding: 3px 8px;
+        border-radius: 4px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .block-reason-preview i {
+        color: #9ca3af;
+        font-size: 10px;
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 50px 20px;
+        color: #666;
+    }
+
+    .empty-state i {
+        font-size: 50px;
+        color: #ccc;
+        margin-bottom: 15px;
+    }
+
+    .empty-state p {
+        font-size: 16px;
+    }
+
+    /* Report & Support Preview Card */
+    .support-preview {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        border-radius: 12px;
+        padding: 25px;
+        color: white;
+        margin-bottom: 35px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .support-preview-content h3 {
+        font-size: 20px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .support-preview-content p {
+        opacity: 0.9;
+        font-size: 14px;
+    }
+
+    .support-preview-btn {
+        background: white;
+        color: #10b981;
+        padding: 12px 30px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transition: all 0.3s;
+    }
+
+    .support-preview-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Unread Badge */
+    .unread-badge {
+        background: #ff4757;
+        color: white;
+        padding: 2px 8px;
+        border-radius: 20px;
+        font-size: 11px;
+        margin-left: 5px;
+    }
+
+    /* Block Modal Styles */
+    .block-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
+        z-index: 2000;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .block-modal.active {
+        display: flex;
+    }
+
+    .block-modal-content {
+        background: white;
+        border-radius: 16px;
+        padding: 30px;
+        max-width: 500px;
+        width: 90%;
+        max-height: 80vh;
+        overflow-y: auto;
+        animation: modalSlideIn 0.3s ease;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    @keyframes modalSlideIn {
+        from {
+            transform: translateY(-30px);
+            opacity: 0;
         }
 
-        body {
-            background: #f5f7fa;
-            padding: 20px;
+        to {
+            transform: translateY(0);
+            opacity: 1;
         }
+    }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
+    .block-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #f0f2f5;
+    }
 
-        /* Header */
+    .block-modal-header h3 {
+        font-size: 20px;
+        color: #333;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .block-modal-header h3 i {
+        color: #dc2626;
+    }
+
+    .close-modal {
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: #999;
+        transition: color 0.3s;
+    }
+
+    .close-modal:hover {
+        color: #dc2626;
+    }
+
+    .user-info-summary {
+        background: #f8fafd;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .user-info-avatar {
+        width: 50px;
+        height: 50px;
+        background: #6c63ff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 600;
+        font-size: 20px;
+        flex-shrink: 0;
+    }
+
+    .user-info-details h4 {
+        font-size: 16px;
+        color: #333;
+        margin-bottom: 4px;
+    }
+
+    .user-info-details p {
+        font-size: 13px;
+        color: #666;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #333;
+        font-size: 14px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: all 0.3s;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: #6c63ff;
+        box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
+    }
+
+    textarea.form-control {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+    .block-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 25px;
+    }
+
+    .btn-block-submit {
+        background: #dc2626;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 8px;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: all 0.3s;
+    }
+
+    .btn-block-submit:hover {
+        background: #b91c1c;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(220, 38, 38, 0.3);
+    }
+
+    .btn-cancel {
+        background: #f3f4f6;
+        color: #4b5563;
+        padding: 12px 20px;
+        border-radius: 8px;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: all 0.3s;
+    }
+
+    .btn-cancel:hover {
+        background: #e5e7eb;
+    }
+
+    .form-text {
+        font-size: 12px;
+        color: #6b7280;
+        margin-top: 5px;
+        display: block;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
         .header {
-            background: white;
-            padding: 25px 30px;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .header h1 {
-            font-size: 26px;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .header h1 i {
-            color: #6c63ff;
+            flex-direction: column;
+            text-align: center;
         }
 
         .admin-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        /* Navigation Links */
-        .nav-links {
-            display: flex;
-            gap: 10px;
-            margin-right: 10px;
-        }
-
-        .nav-link {
-            padding: 8px 16px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s;
-        }
-
-        .nav-link i {
-            font-size: 14px;
-        }
-
-        .nav-link.dashboard {
-            background: #f0f2f5;
-            color: #555;
-        }
-
-        .nav-link.dashboard:hover {
-            background: #e4e6e9;
-        }
-
-        .nav-link.chat {
-            background: #10b981;
-            color: white;
-            position: relative;
-        }
-
-        .nav-link.chat:hover {
-            background: #059669;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
-        }
-
-        .admin-badge {
-            background: #6c63ff;
-            color: white;
-            padding: 8px 18px;
-            border-radius: 30px;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .logout-btn {
-            background: #ff4757;
-            color: white;
-            padding: 8px 18px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s;
-        }
-
-        .logout-btn:hover {
-            background: #ff3344;
-            transform: translateY(-2px);
-        }
-
-        /* Stats Grid */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 25px;
-            margin-bottom: 35px;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: transform 0.3s;
-            cursor: pointer;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-        }
-
-        .stat-info h3 {
-            font-size: 15px;
-            color: #666;
-            font-weight: 500;
-            margin-bottom: 8px;
-        }
-
-        .stat-number {
-            font-size: 32px;
-            font-weight: 700;
-            color: #333;
-        }
-
-        .stat-icon {
-            font-size: 42px;
-            color: #6c63ff;
-            opacity: 0.3;
-        }
-
-        /* Messages */
-        .messages {
-            margin-bottom: 25px;
-        }
-
-        .alert {
-            padding: 15px 20px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .alert-success {
-            background: #e8f5e9;
-            color: #2e7d32;
-            border-left: 5px solid #2e7d32;
-        }
-
-        .alert-error {
-            background: #ffebee;
-            color: #c62828;
-            border-left: 5px solid #c62828;
-        }
-
-        .alert-info {
-            background: #e3f2fd;
-            color: #0d47a1;
-            border-left: 5px solid #0d47a1;
-        }
-
-        .alert-warning {
-            background: #fff3e0;
-            color: #e65100;
-            border-left: 5px solid #e65100;
-        }
-
-        /* Section */
-        .section {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
-            margin-bottom: 35px;
-            overflow: hidden;
-        }
-
-        .section-header {
-            padding: 20px 25px;
-            border-bottom: 2px solid #f0f2f5;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .section-header h2 {
-            font-size: 20px;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .section-header h2 i {
-            color: #6c63ff;
-        }
-
-        .badge {
-            background: #6c63ff;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 13px;
-        }
-
-        /* Table */
-        .table-responsive {
-            overflow-x: auto;
-        }
-
-        table {
+            flex-direction: column;
             width: 100%;
-            border-collapse: collapse;
         }
 
-        th {
-            text-align: left;
-            padding: 18px 20px;
-            background: #f8fafd;
-            color: #555;
-            font-weight: 600;
-            font-size: 14px;
-            border-bottom: 2px solid #e9ecef;
+        .nav-links {
+            width: 100%;
+            justify-content: center;
+            flex-wrap: wrap;
         }
 
+        .admin-badge,
+        .logout-btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        th,
         td {
-            padding: 18px 20px;
-            border-bottom: 1px solid #e9ecef;
-            vertical-align: middle;
-        }
-
-        tr:hover {
-            background: #f8fafd;
-        }
-
-        .expert-name, .user-name {
-            font-weight: 600;
-            color: #333;
-        }
-
-        .expert-email, .user-email {
-            font-size: 13px;
-            color: #666;
-            margin-top: 4px;
-        }
-
-        .user-role {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .role-user {
-            background: #e3f2fd;
-            color: #1976d2;
-        }
-
-        .role-expert {
-            background: #e8f5e9;
-            color: #2e7d32;
-        }
-
-        .role-admin {
-            background: #ffebee;
-            color: #c62828;
-        }
-
-        /* Certificate Links */
-        .certificate-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: #f0f2ff;
-            color: #6c63ff;
-            padding: 6px 14px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 500;
-            margin: 2px 0;
-            transition: all 0.3s;
-        }
-
-        .certificate-link:hover {
-            background: #6c63ff;
-            color: white;
-        }
-
-        .no-certificate {
-            color: #999;
-            font-size: 13px;
-            font-style: italic;
-        }
-
-        /* Buttons */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 18px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 500;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-approve {
-            background: #4CAF50;
-            color: white;
-        }
-
-        .btn-approve:hover {
-            background: #45a049;
-            transform: translateY(-2px);
-        }
-
-        .btn-reject {
-            background: #f44336;
-            color: white;
-        }
-
-        .btn-reject:hover {
-            background: #da190b;
-            transform: translateY(-2px);
-        }
-
-        .btn-sm {
-            padding: 6px 14px;
-            font-size: 12px;
-        }
-
-        .btn-chat {
-            background: #10b981;
-            color: white;
-        }
-
-        .btn-chat:hover {
-            background: #059669;
+            padding: 12px;
         }
 
         .actions {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
+            flex-direction: column;
         }
 
-        /* ===== NEW: Block/Unlock Button Styles ===== */
-        .btn-block {
-            background: #dc2626;
-            color: white;
-            padding: 6px 14px;
-            border-radius: 6px;
-            border: none;
-            font-weight: 500;
-            font-size: 12px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.3s;
+        .btn {
+            width: 100%;
+            justify-content: center;
         }
 
-        .btn-block:hover {
-            background: #b91c1c;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 10px rgba(220, 38, 38, 0.3);
-        }
-
-        .btn-unblock {
-            background: #10b981;
-            color: white;
-            padding: 6px 14px;
-            border-radius: 6px;
-            border: none;
-            font-weight: 500;
-            font-size: 12px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-
-        .btn-unblock:hover {
-            background: #059669;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 10px rgba(16, 185, 129, 0.3);
-        }
-
-        .status-badge-blocked {
-            background: #fee2e2;
-            color: #b91c1c;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            margin-top: 5px;
-        }
-
-        .block-reason-preview {
-            font-size: 11px;
-            color: #6b7280;
-            margin-top: 4px;
-            max-width: 200px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            background: #f3f4f6;
-            padding: 3px 8px;
-            border-radius: 4px;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .block-reason-preview i {
-            color: #9ca3af;
-            font-size: 10px;
-        }
-        /* ===== END NEW STYLES ===== */
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 50px 20px;
-            color: #666;
-        }
-
-        .empty-state i {
-            font-size: 50px;
-            color: #ccc;
-            margin-bottom: 15px;
-        }
-
-        .empty-state p {
-            font-size: 16px;
-        }
-
-        /* Report & Support Preview Card - MOVED TO BOTTOM */
         .support-preview {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            border-radius: 12px;
-            padding: 25px;
-            color: white;
-            margin-bottom: 35px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .support-preview-content h3 {
-            font-size: 20px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .support-preview-content p {
-            opacity: 0.9;
-            font-size: 14px;
+            flex-direction: column;
+            text-align: center;
         }
 
         .support-preview-btn {
-            background: white;
-            color: #10b981;
-            padding: 12px 30px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: all 0.3s;
-        }
-
-        .support-preview-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-        }
-
-        /* Unread Badge */
-        .unread-badge {
-            background: #ff4757;
-            color: white;
-            padding: 2px 8px;
-            border-radius: 20px;
-            font-size: 11px;
-            margin-left: 5px;
-        }
-
-        /* ===== NEW: Block Modal Styles ===== */
-        .block-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
             width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
-            z-index: 2000;
             justify-content: center;
-            align-items: center;
-        }
-
-        .block-modal.active {
-            display: flex;
         }
 
         .block-modal-content {
-            background: white;
-            border-radius: 16px;
-            padding: 30px;
-            max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            animation: modalSlideIn 0.3s ease;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        }
-
-        @keyframes modalSlideIn {
-            from {
-                transform: translateY(-30px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        .block-modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #f0f2f5;
-        }
-
-        .block-modal-header h3 {
-            font-size: 20px;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .block-modal-header h3 i {
-            color: #dc2626;
-        }
-
-        .close-modal {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: #999;
-            transition: color 0.3s;
-        }
-
-        .close-modal:hover {
-            color: #dc2626;
-        }
-
-        .user-info-summary {
-            background: #f8fafd;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .user-info-avatar {
-            width: 50px;
-            height: 50px;
-            background: #6c63ff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-            font-size: 20px;
-            flex-shrink: 0;
-        }
-
-        .user-info-details h4 {
-            font-size: 16px;
-            color: #333;
-            margin-bottom: 4px;
-        }
-
-        .user-info-details p {
-            font-size: 13px;
-            color: #666;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #333;
-            font-size: 14px;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: all 0.3s;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: #6c63ff;
-            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
-        }
-
-        textarea.form-control {
-            min-height: 100px;
-            resize: vertical;
+            padding: 20px;
         }
 
         .block-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 25px;
+            flex-direction: column;
         }
+    }
+</style>
+{% endblock %}
 
-        .btn-block-submit {
-            background: #dc2626;
-            color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: all 0.3s;
-        }
-
-        .btn-block-submit:hover {
-            background: #b91c1c;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(220, 38, 38, 0.3);
-        }
-
-        .btn-cancel {
-            background: #f3f4f6;
-            color: #4b5563;
-            padding: 12px 20px;
-            border-radius: 8px;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: all 0.3s;
-        }
-
-        .btn-cancel:hover {
-            background: #e5e7eb;
-        }
-
-        .form-text {
-            font-size: 12px;
-            color: #6b7280;
-            margin-top: 5px;
-            display: block;
-        }
-        /* ===== END BLOCK MODAL STYLES ===== */
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .admin-info {
-                flex-direction: column;
-                width: 100%;
-            }
-            
-            .nav-links {
-                width: 100%;
-                justify-content: center;
-            }
-            
-            .admin-badge, .logout-btn {
-                width: 100%;
-                justify-content: center;
-            }
-            
-            th, td {
-                padding: 12px;
-            }
-            
-            .actions {
-                flex-direction: column;
-            }
-            
-            .btn {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .support-preview {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .support-preview-btn {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .block-modal-content {
-                padding: 20px;
-            }
-            
-            .block-actions {
-                flex-direction: column;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <!-- Header with Report & Support Link -->
-        <div class="header">
-            <h1>
-                <i class="fas fa-shield-alt"></i>
-                EmpathyQ Admin Panel
-            </h1>
-            <div class="admin-info">
-                <div class="nav-links">
-                    <a href="{% url 'accounts:admin_dashboard' %}" class="nav-link dashboard">
-                        <i class="fas fa-tachometer-alt"></i> Dashboard
-                    </a>
-                    <a href="{% url 'accounts:admin_chat' %}" class="nav-link chat">
-                        <i class="fas fa-flag"></i> Report & Support
-                        {% if unread_chat_count %}
-                        <span class="unread-badge">{{ unread_chat_count }}</span>
-                        {% endif %}
-                    </a>
-                </div>
-                <span class="admin-badge">
-                    <i class="fas fa-user"></i>
-                    {{ request.user.username }}
-                </span>
-                <a href="{% url 'accounts:logout' %}" class="logout-btn">
-                    <i class="fas fa-sign-out-alt"></i>
-                    Logout
+{% block content %}
+<div class="container" style="padding-top: 30px;">
+    <!-- Header with Support Links -->
+    <div class="header">
+        <h1>
+            <i class="fas fa-shield-alt"></i>
+            EmpathyQ Admin Panel
+        </h1>
+        <div class="admin-info">
+            <div class="nav-links">
+                <a href="{% url 'accounts:admin_dashboard' %}" class="nav-link dashboard">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <!-- ===== ADDED: Expert Support Link ===== -->
+                <a href="{% url 'accounts:admin_expert_support' %}" class="nav-link support">
+                    <i class="fas fa-user-md"></i> Expert Support
+                    {% if unread_expert_support_count %}
+                    <span class="unread-badge">{{ unread_expert_support_count }}</span>
+                    {% endif %}
+                </a>
+                <a href="{% url 'accounts:admin_chat' %}" class="nav-link chat">
+                    <i class="fas fa-flag"></i> User Support
+                    {% if unread_chat_count %}
+                    <span class="unread-badge">{{ unread_chat_count }}</span>
+                    {% endif %}
+                </a>
+                <a href="{% url 'accounts:admin_platform_reviews' %}" class="nav-link dashboard">
+                    <i class="fas fa-star"></i> Platform Reviews
                 </a>
             </div>
-        </div>
-
-        <!-- Statistics -->
-        <div class="stats-grid">
-            <div class="stat-card" onclick="location.href='#pending'">
-                <div class="stat-info">
-                    <h3>Pending Approvals</h3>
-                    <div class="stat-number">{{ pending_count|default:'0' }}</div>
-                </div>
-                <div class="stat-icon">
-                    <i class="fas fa-clock"></i>
-                </div>
-            </div>
-            <div class="stat-card" onclick="location.href='#approved'">
-                <div class="stat-info">
-                    <h3>Approved Experts</h3>
-                    <div class="stat-number">{{ approved_count|default:'0' }}</div>
-                </div>
-                <div class="stat-icon">
-                    <i class="fas fa-check-circle"></i>
-                </div>
-            </div>
-            <div class="stat-card" onclick="location.href='#experts'">
-                <div class="stat-info">
-                    <h3>Total Experts</h3>
-                    <div class="stat-number">{{ total_experts|default:'0' }}</div>
-                </div>
-                <div class="stat-icon">
-                    <i class="fas fa-user-md"></i>
-                </div>
-            </div>
-            <div class="stat-card" onclick="location.href='#users'">
-                <div class="stat-info">
-                    <h3>Total Users</h3>
-                    <div class="stat-number">{{ total_users|default:'0' }}</div>
-                </div>
-                <div class="stat-icon">
-                    <i class="fas fa-users"></i>
-                </div>
-            </div>
-        </div>
-
-        <!-- Messages -->
-        {% if messages %}
-        <div class="messages">
-            {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">
-                <i class="fas {% if message.tags == 'success' %}fa-check-circle{% elif message.tags == 'error' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %}"></i>
-                {{ message }}
-            </div>
-            {% endfor %}
-        </div>
-        {% endif %}
-
-        <!-- Pending Expert Approvals -->
-        <div class="section" id="pending">
-            <div class="section-header">
-                <h2>
-                    <i class="fas fa-hourglass-half"></i>
-                    Pending Expert Approvals
-                </h2>
-                <span class="badge">{{ pending_experts|length }} Pending</span>
-            </div>
-            
-            {% if pending_experts %}
-            <div class="table-responsive">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Expert</th>
-                            <th>Qualification</th>
-                            <th>License #</th>
-                            <th>Experience</th>
-                            <th>Specialization</th>
-                            <th>Certificate</th>
-                            <th>Applied</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for expert in pending_experts %}
-                        <tr>
-                            <td>
-                                <div class="expert-name">{{ expert.user.username }}</div>
-                                <div class="expert-email">{{ expert.user.email }}</div>
-                                {% if expert.user.is_blocked %}
-                                <span class="status-badge-blocked">
-                                    <i class="fas fa-ban"></i> Blocked
-                                </span>
-                                {% endif %}
-                            </td>
-                            <td>{{ expert.qualification|truncatechars:25 }}</td>
-                            <td>{{ expert.license_number }}</td>
-                            <td>{{ expert.experience_years }} years</td>
-                            <td>{{ expert.specialization|truncatechars:20 }}</td>
-                            <td>
-                                {% if expert.certificate %}
-                                    <a href="{{ expert.certificate.url }}" target="_blank" class="certificate-link">
-                                        <i class="fas fa-file-pdf"></i> View Certificate
-                                    </a>
-                                    {% if expert.additional_documents %}
-                                        <br>
-                                        <a href="{{ expert.additional_documents.url }}" target="_blank" class="certificate-link" style="margin-top: 5px;">
-                                            <i class="fas fa-paperclip"></i> Additional
-                                        </a>
-                                    {% endif %}
-                                {% else %}
-                                    <span class="no-certificate">No certificate</span>
-                                {% endif %}
-                            </td>
-                            <td>
-                                {{ expert.uploaded_at|date:"M d, Y" }}
-                                <br>
-                                <small style="color: #888;">{{ expert.uploaded_at|timesince }} ago</small>
-                            </td>
-                            <td>
-                                <div class="actions">
-                                    <a href="{% url 'accounts:approve_expert' expert.id %}" 
-                                       class="btn btn-approve btn-sm"
-                                       onclick="return confirm('Approve {{ expert.user.username }} as an expert?')">
-                                        <i class="fas fa-check"></i> Approve
-                                    </a>
-                                    <a href="{% url 'accounts:reject_expert' expert.id %}" 
-                                       class="btn btn-reject btn-sm"
-                                       onclick="return confirm('Reject {{ expert.user.username }}? This will delete their application.')">
-                                        <i class="fas fa-times"></i> Reject
-                                    </a>
-                                    {% if not expert.user.is_blocked %}
-                                    <button class="btn-block btn-sm" 
-                                            onclick="openBlockModal('{{ expert.user.id }}', '{{ expert.user.username }}', '{{ expert.user.email }}', 'expert', '{{ expert.id }}')">
-                                        <i class="fas fa-ban"></i> Block
-                                    </button>
-                                    {% else %}
-                                    <a href="{% url 'accounts:unblock_expert' expert.id %}" 
-                                       class="btn-unblock btn-sm"
-                                       onclick="return confirm('Unblock expert {{ expert.user.username }}? They will be able to log in again.')">
-                                        <i class="fas fa-check-circle"></i> Unblock
-                                    </a>
-                                    {% endif %}
-                                </div>
-                                {% if expert.user.is_blocked and expert.user.blocked_reason %}
-                                <div class="block-reason-preview" title="{{ expert.user.blocked_reason }}">
-                                    <i class="fas fa-info-circle"></i> {{ expert.user.blocked_reason|truncatechars:30 }}
-                                </div>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            {% else %}
-            <div class="empty-state">
-                <i class="fas fa-check-circle"></i>
-                <p>No pending expert approvals at this time.</p>
-            </div>
-            {% endif %}
-        </div>
-
-        <!-- All Experts List -->
-        <div class="section" id="experts">
-            <div class="section-header">
-                <h2>
-                    <i class="fas fa-user-md"></i>
-                    All Experts
-                </h2>
-                <span class="badge">{{ total_experts|default:'0' }} Total</span>
-            </div>
-            
-            {% if all_experts %}
-            <div class="table-responsive">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Expert</th>
-                            <th>Specialization</th>
-                            <th>Experience</th>
-                            <th>Status</th>
-                            <th>Joined</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for expert in all_experts %}
-                        <tr>
-                            <td>
-                                <div class="expert-name">{{ expert.user.username }}</div>
-                                <div class="expert-email">{{ expert.user.email }}</div>
-                                {% if expert.user.is_blocked %}
-                                <span class="status-badge-blocked">
-                                    <i class="fas fa-ban"></i> Blocked
-                                </span>
-                                {% endif %}
-                            </td>
-                            <td>{{ expert.specialization|truncatechars:25 }}</td>
-                            <td>{{ expert.experience_years }} years</td>
-                            <td>
-                                {% if expert.is_approved %}
-                                <span class="user-role role-expert">Approved</span>
-                                {% else %}
-                                <span class="user-role role-user">Pending</span>
-                                {% endif %}
-                            </td>
-                            <td>{{ expert.user.date_joined|date:"M d, Y" }}</td>
-                            <td>
-                                <div class="actions">
-                                    {% if expert.user.is_blocked %}
-                                        <a href="{% url 'accounts:unblock_expert' expert.id %}" 
-                                           class="btn-unblock btn-sm"
-                                           onclick="return confirm('Unblock expert {{ expert.user.username }}? They will be able to log in again.')">
-                                            <i class="fas fa-check-circle"></i> Unblock
-                                        </a>
-                                    {% else %}
-                                        <button class="btn-block btn-sm" 
-                                                onclick="openBlockModal('{{ expert.user.id }}', '{{ expert.user.username }}', '{{ expert.user.email }}', 'expert', '{{ expert.id }}')">
-                                            <i class="fas fa-ban"></i> Block
-                                        </button>
-                                    {% endif %}
-                                </div>
-                                {% if expert.user.is_blocked and expert.user.blocked_reason %}
-                                <div class="block-reason-preview" title="{{ expert.user.blocked_reason }}">
-                                    <i class="fas fa-info-circle"></i> {{ expert.user.blocked_reason|truncatechars:30 }}
-                                </div>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            {% else %}
-            <div class="empty-state">
-                <i class="fas fa-user-md"></i>
-                <p>No experts found.</p>
-            </div>
-            {% endif %}
-        </div>
-
-        <!-- Regular Users List (Only Users, No Experts) -->
-        <div class="section" id="users">
-            <div class="section-header">
-                <h2>
-                    <i class="fas fa-users"></i>
-                    Regular Users
-                </h2>
-                <span class="badge">{{ regular_users_count|default:total_users }} Total</span>
-            </div>
-            
-            {% if regular_users %}
-            <div class="table-responsive">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Username</th>
-                            <th>Email</th>
-                            <th>Joined</th>
-                            <th>Last Active</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for user in regular_users %}
-                        <tr>
-                            <td>
-                                <div class="user-name">{{ user.username }}</div>
-                                {% if user.is_blocked %}
-                                <span class="status-badge-blocked">
-                                    <i class="fas fa-ban"></i> Blocked
-                                </span>
-                                {% endif %}
-                            </td>
-                            <td>{{ user.email|default:'No email' }}</td>
-                            <td>{{ user.date_joined|date:"M d, Y" }}</td>
-                            <td>
-                                {% if user.last_login %}
-                                {{ user.last_login|timesince }} ago
-                                {% else %}
-                                Never
-                                {% endif %}
-                            </td>
-                            <td>
-                                <span class="user-role role-user">User</span>
-                            </td>
-                            <td>
-                                <div class="actions">
-                                    {% if user.is_blocked %}
-                                        <a href="{% url 'accounts:unblock_user' user.id %}" 
-                                           class="btn-unblock btn-sm"
-                                           onclick="return confirm('Unblock user {{ user.username }}? They will be able to log in again.')">
-                                            <i class="fas fa-check-circle"></i> Unblock
-                                        </a>
-                                    {% else %}
-                                        <button class="btn-block btn-sm" 
-                                                onclick="openBlockModal('{{ user.id }}', '{{ user.username }}', '{{ user.email }}', 'user')">
-                                            <i class="fas fa-ban"></i> Block
-                                        </button>
-                                    {% endif %}
-                                </div>
-                                {% if user.is_blocked and user.blocked_reason %}
-                                <div class="block-reason-preview" title="{{ user.blocked_reason }}">
-                                    <i class="fas fa-info-circle"></i> {{ user.blocked_reason|truncatechars:30 }}
-                                </div>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            {% else %}
-            <div class="empty-state">
-                <i class="fas fa-users"></i>
-                <p>No regular users found.</p>
-            </div>
-            {% endif %}
-        </div>
-
-        <!-- Recently Approved Experts -->
-        <div class="section" id="approved">
-            <div class="section-header">
-                <h2>
-                    <i class="fas fa-check-circle"></i>
-                    Recently Approved Experts
-                </h2>
-                <span class="badge" style="background: #4CAF50;">{{ approved_count }} Total</span>
-            </div>
-            
-            {% if approved_experts %}
-            <div class="table-responsive">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Expert</th>
-                            <th>Qualification</th>
-                            <th>Specialization</th>
-                            <th>Experience</th>
-                            <th>Approved On</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for expert in approved_experts %}
-                        <tr>
-                            <td>
-                                <div class="expert-name">{{ expert.user.username }}</div>
-                                <div class="expert-email">{{ expert.user.email }}</div>
-                                {% if expert.user.is_blocked %}
-                                <span class="status-badge-blocked">
-                                    <i class="fas fa-ban"></i> Blocked
-                                </span>
-                                {% endif %}
-                            </td>
-                            <td>{{ expert.qualification|truncatechars:25 }}</td>
-                            <td>{{ expert.specialization|truncatechars:20 }}</td>
-                            <td>{{ expert.experience_years }} years</td>
-                            <td>{{ expert.uploaded_at|date:"M d, Y" }}</td>
-                            <td>
-                                {% if expert.user.is_blocked %}
-                                <div class="block-reason-preview" title="{{ expert.user.blocked_reason }}">
-                                    <i class="fas fa-info-circle"></i> Blocked
-                                </div>
-                                {% else %}
-                                <span class="user-role role-expert">Active</span>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            {% else %}
-            <div class="empty-state">
-                <i class="fas fa-user-md"></i>
-                <p>No approved experts yet.</p>
-            </div>
-            {% endif %}
-        </div>
-
-        <!-- Report & Support Preview Card - MOVED TO BOTTOM -->
-        <div class="support-preview">
-            <div class="support-preview-content">
-                <h3>
-                    <i class="fas fa-flag"></i>
-                    Report & Support
-                </h3>
-                <p>Handle user reports, complaints, and provide technical support through the support system.</p>
-            </div>
-            <a href="{% url 'accounts:admin_chat' %}" class="support-preview-btn">
-                <i class="fas fa-comments"></i>
-                Open Support Center
-                {% if unread_chat_count %}
-                <span class="unread-badge">{{ unread_chat_count }} unread</span>
-                {% endif %}
+            <span class="admin-badge">
+                <i class="fas fa-user"></i>
+                {{ request.user.username }}
+            </span>
+            <a href="{% url 'accounts:logout' %}" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
             </a>
         </div>
     </div>
 
-    <!-- ===== NEW: Block User Modal ===== -->
-    <div id="blockModal" class="block-modal">
-        <div class="block-modal-content">
-            <div class="block-modal-header">
-                <h3>
-                    <i class="fas fa-ban"></i>
-                    Block User
-                </h3>
-                <button class="close-modal" onclick="closeBlockModal()">&times;</button>
+    <!-- Statistics -->
+    <div class="stats-grid">
+        <div class="stat-card" onclick="location.href='#pending'">
+            <div class="stat-info">
+                <h3>Pending Approvals</h3>
+                <div class="stat-number">{{ pending_count|default:'0' }}</div>
             </div>
-            
-            <div id="blockUserInfo" class="user-info-summary">
-                <!-- Will be filled by JavaScript -->
+            <div class="stat-icon">
+                <i class="fas fa-clock"></i>
             </div>
-            
-            <form id="blockForm" method="post" action="">
-                {% csrf_token %}
-                <input type="hidden" id="block_user_id" name="user_id" value="">
-                
-                <div class="form-group">
-                    <label for="blockReason">Reason for blocking</label>
-                    <textarea name="reason" id="blockReason" class="form-control" 
-                              placeholder="Please provide a reason for blocking this user..." 
-                              required></textarea>
-                    <small class="form-text">
-                        This reason will be shown to the user when they try to log in.
-                    </small>
-                </div>
-                
-                <div class="block-actions">
-                    <button type="button" class="btn-cancel" onclick="closeBlockModal()">
-                        <i class="fas fa-times"></i> Cancel
-                    </button>
-                    <button type="submit" class="btn-block-submit">
-                        <i class="fas fa-ban"></i> Block User
-                    </button>
-                </div>
-            </form>
+        </div>
+        <div class="stat-card" onclick="location.href='#approved'">
+            <div class="stat-info">
+                <h3>Approved Experts</h3>
+                <div class="stat-number">{{ approved_count|default:'0' }}</div>
+            </div>
+            <div class="stat-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+        </div>
+        <div class="stat-card" onclick="location.href='#experts'">
+            <div class="stat-info">
+                <h3>Total Experts</h3>
+                <div class="stat-number">{{ total_experts|default:'0' }}</div>
+            </div>
+            <div class="stat-icon">
+                <i class="fas fa-user-md"></i>
+            </div>
+        </div>
+        <div class="stat-card" onclick="location.href='#users'">
+            <div class="stat-info">
+                <h3>Total Users</h3>
+                <div class="stat-number">{{ total_users|default:'0' }}</div>
+            </div>
+            <div class="stat-icon">
+                <i class="fas fa-users"></i>
+            </div>
         </div>
     </div>
 
-    <script>
-        // Auto-hide messages after 4 seconds
-        setTimeout(function() {
-            document.querySelectorAll('.alert').forEach(function(alert) {
-                alert.style.transition = 'opacity 0.5s';
-                alert.style.opacity = '0';
-                setTimeout(() => alert.remove(), 500);
-            });
-        }, 4000);
+    <!-- Messages -->
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            <i
+                class="fas {% if message.tags == 'success' %}fa-check-circle{% elif message.tags == 'error' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %}"></i>
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
 
-        // Add active class to current nav link
-        document.addEventListener('DOMContentLoaded', function() {
-            const currentLocation = window.location.pathname;
-            const navLinks = document.querySelectorAll('.nav-link');
-            
-            navLinks.forEach(link => {
-                if (link.getAttribute('href') === currentLocation) {
-                    link.classList.add('active');
-                }
-            });
+    <!-- Pending Expert Approvals -->
+    <div class="section" id="pending">
+        <div class="section-header">
+            <h2>
+                <i class="fas fa-hourglass-half"></i>
+                Pending Expert Approvals
+            </h2>
+            <span class="badge">{{ pending_experts|length }} Pending</span>
+        </div>
 
-            // Highlight section based on URL hash
-            if (window.location.hash) {
-                const section = document.querySelector(window.location.hash);
-                if (section) {
-                    section.style.transition = 'all 0.3s';
-                    section.style.boxShadow = '0 0 0 3px #6c63ff';
-                    setTimeout(() => {
-                        section.style.boxShadow = '0 2px 10px rgba(0,0,0,0.03)';
-                    }, 2000);
-                    
-                    // Scroll to section
-                    setTimeout(() => {
-                        section.scrollIntoView({ behavior: 'smooth' });
-                    }, 100);
-                }
+        {% if pending_experts %}
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Expert</th>
+                        <th>Qualification</th>
+                        <th>License #</th>
+                        <th>Experience</th>
+                        <th>Specialization</th>
+                        <th>Certificate</th>
+                        <th>Applied</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for expert in pending_experts %}
+                    <tr>
+                        <td>
+                            <div class="expert-name">{{ expert.user.username }}</div>
+                            <div class="expert-email">{{ expert.user.email }}</div>
+                            {% if expert.user.is_blocked %}
+                            <span class="status-badge-blocked">
+                                <i class="fas fa-ban"></i> Blocked
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td>{{ expert.qualification|truncatechars:25 }}</td>
+                        <td>{{ expert.license_number }}</td>
+                        <td>{{ expert.experience_years }} years</td>
+                        <td>{{ expert.specialization|truncatechars:20 }}</td>
+                        <td>
+                            {% if expert.certificate %}
+                            <a href="{{ expert.certificate.url }}" target="_blank" class="certificate-link">
+                                <i class="fas fa-file-pdf"></i> View Certificate
+                            </a>
+                            {% if expert.additional_documents %}
+                            <br>
+                            <a href="{{ expert.additional_documents.url }}" target="_blank" class="certificate-link"
+                                style="margin-top: 5px;">
+                                <i class="fas fa-paperclip"></i> Additional
+                            </a>
+                            {% endif %}
+                            {% else %}
+                            <span class="no-certificate">No certificate</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{ expert.uploaded_at|date:"M d, Y" }}
+                            <br>
+                            <small style="color: #888;">{{ expert.uploaded_at|timesince }} ago</small>
+                        </td>
+                        <td>
+                            <div class="actions">
+                                <a href="{% url 'accounts:approve_expert' expert.id %}"
+                                    class="btn btn-approve btn-sm"
+                                    onclick="return confirm('Approve {{ expert.user.username }} as an expert?')">
+                                    <i class="fas fa-check"></i> Approve
+                                </a>
+                                <a href="{% url 'accounts:reject_expert' expert.id %}" class="btn btn-reject btn-sm"
+                                    onclick="return confirm('Reject {{ expert.user.username }}? This will delete their application.')">
+                                    <i class="fas fa-times"></i> Reject
+                                </a>
+                                {% if not expert.user.is_blocked %}
+                                <button class="btn-block btn-sm"
+                                    onclick="openBlockModal('{{ expert.user.id }}', '{{ expert.user.username }}', '{{ expert.user.email }}', 'expert', '{{ expert.id }}')">
+                                    <i class="fas fa-ban"></i> Block
+                                </button>
+                                {% else %}
+                                <a href="{% url 'accounts:unblock_expert' expert.id %}" class="btn-unblock btn-sm"
+                                    onclick="return confirm('Unblock expert {{ expert.user.username }}? They will be able to log in again.')">
+                                    <i class="fas fa-check-circle"></i> Unblock
+                                </a>
+                                {% endif %}
+                            </div>
+                            {% if expert.user.is_blocked and expert.user.blocked_reason %}
+                            <div class="block-reason-preview" title="{{ expert.user.blocked_reason }}">
+                                <i class="fas fa-info-circle"></i> {{ expert.user.blocked_reason|truncatechars:30 }}
+                            </div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-check-circle"></i>
+            <p>No pending expert approvals at this time.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- All Experts List -->
+    <div class="section" id="experts">
+        <div class="section-header">
+            <h2>
+                <i class="fas fa-user-md"></i>
+                All Experts
+            </h2>
+            <span class="badge">{{ total_experts|default:'0' }} Total</span>
+        </div>
+
+        {% if all_experts %}
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Expert</th>
+                        <th>Specialization</th>
+                        <th>Experience</th>
+                        <th>Status</th>
+                        <th>Joined</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for expert in all_experts %}
+                    <tr>
+                        <td>
+                            <div class="expert-name">{{ expert.user.username }}</div>
+                            <div class="expert-email">{{ expert.user.email }}</div>
+                            {% if expert.user.is_blocked %}
+                            <span class="status-badge-blocked">
+                                <i class="fas fa-ban"></i> Blocked
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td>{{ expert.specialization|truncatechars:25 }}</td>
+                        <td>{{ expert.experience_years }} years</td>
+                        <td>
+                            {% if expert.is_approved %}
+                            <span class="user-role role-expert">Approved</span>
+                            {% else %}
+                            <span class="user-role role-user">Pending</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ expert.user.date_joined|date:"M d, Y" }}</td>
+                        <td>
+                            <div class="actions">
+                                {% if expert.user.is_blocked %}
+                                <a href="{% url 'accounts:unblock_expert' expert.id %}" class="btn-unblock btn-sm"
+                                    onclick="return confirm('Unblock expert {{ expert.user.username }}? They will be able to log in again.')">
+                                    <i class="fas fa-check-circle"></i> Unblock
+                                </a>
+                                {% else %}
+                                <button class="btn-block btn-sm"
+                                    onclick="openBlockModal('{{ expert.user.id }}', '{{ expert.user.username }}', '{{ expert.user.email }}', 'expert', '{{ expert.id }}')">
+                                    <i class="fas fa-ban"></i> Block
+                                </button>
+                                {% endif %}
+                            </div>
+                            {% if expert.user.is_blocked and expert.user.blocked_reason %}
+                            <div class="block-reason-preview" title="{{ expert.user.blocked_reason }}">
+                                <i class="fas fa-info-circle"></i> {{ expert.user.blocked_reason|truncatechars:30 }}
+                            </div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-user-md"></i>
+            <p>No experts found.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Regular Users List (Only Users, No Experts) -->
+    <div class="section" id="users">
+        <div class="section-header">
+            <h2>
+                <i class="fas fa-users"></i>
+                Regular Users
+            </h2>
+            <span class="badge">{{ regular_users_count|default:total_users }} Total</span>
+        </div>
+
+        {% if regular_users %}
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Joined</th>
+                        <th>Last Active</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in regular_users %}
+                    <tr>
+                        <td>
+                            <div class="user-name">{{ user.username }}</div>
+                            {% if user.is_blocked %}
+                            <span class="status-badge-blocked">
+                                <i class="fas fa-ban"></i> Blocked
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td>{{ user.email|default:'No email' }}</td>
+                        <td>{{ user.date_joined|date:"M d, Y" }}</td>
+                        <td>
+                            {% if user.last_login %}
+                            {{ user.last_login|timesince }} ago
+                            {% else %}
+                            Never
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="user-role role-user">User</span>
+                        </td>
+                        <td>
+                            <div class="actions">
+                                {% if user.is_blocked %}
+                                <a href="{% url 'accounts:unblock_user' user.id %}" class="btn-unblock btn-sm"
+                                    onclick="return confirm('Unblock user {{ user.username }}? They will be able to log in again.')">
+                                    <i class="fas fa-check-circle"></i> Unblock
+                                </a>
+                                {% else %}
+                                <button class="btn-block btn-sm"
+                                    onclick="openBlockModal('{{ user.id }}', '{{ user.username }}', '{{ user.email }}', 'user')">
+                                    <i class="fas fa-ban"></i> Block
+                                </button>
+                                {% endif %}
+                            </div>
+                            {% if user.is_blocked and user.blocked_reason %}
+                            <div class="block-reason-preview" title="{{ user.blocked_reason }}">
+                                <i class="fas fa-info-circle"></i> {{ user.blocked_reason|truncatechars:30 }}
+                            </div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-users"></i>
+            <p>No regular users found.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Recently Approved Experts -->
+    <div class="section" id="approved">
+        <div class="section-header">
+            <h2>
+                <i class="fas fa-check-circle"></i>
+                Recently Approved Experts
+            </h2>
+            <span class="badge" style="background: #4CAF50;">{{ approved_count }} Total</span>
+        </div>
+
+        {% if approved_experts %}
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Expert</th>
+                        <th>Qualification</th>
+                        <th>Specialization</th>
+                        <th>Experience</th>
+                        <th>Approved On</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for expert in approved_experts %}
+                    <tr>
+                        <td>
+                            <div class="expert-name">{{ expert.user.username }}</div>
+                            <div class="expert-email">{{ expert.user.email }}</div>
+                            {% if expert.user.is_blocked %}
+                            <span class="status-badge-blocked">
+                                <i class="fas fa-ban"></i> Blocked
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td>{{ expert.qualification|truncatechars:25 }}</td>
+                        <td>{{ expert.specialization|truncatechars:20 }}</td>
+                        <td>{{ expert.experience_years }} years</td>
+                        <td>{{ expert.uploaded_at|date:"M d, Y" }}</td>
+                        <td>
+                            {% if expert.user.is_blocked %}
+                            <div class="block-reason-preview" title="{{ expert.user.blocked_reason }}">
+                                <i class="fas fa-info-circle"></i> Blocked
+                            </div>
+                            {% else %}
+                            <span class="user-role role-expert">Active</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-user-md"></i>
+            <p>No approved experts yet.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Support Preview Cards -->
+    <div class="support-preview">
+        <div class="support-preview-content">
+            <h3>
+                <i class="fas fa-user-md"></i>
+                Expert Support
+            </h3>
+            <p>Handle expert reports, complaints, and provide technical support.</p>
+        </div>
+        <a href="{% url 'accounts:admin_expert_support' %}" class="support-preview-btn">
+            <i class="fas fa-comments"></i>
+            Expert Support Center
+            {% if unread_expert_support_count %}
+            <span class="unread-badge">{{ unread_expert_support_count }} unread</span>
+            {% endif %}
+        </a>
+    </div>
+
+    <div class="support-preview">
+        <div class="support-preview-content">
+            <h3>
+                <i class="fas fa-flag"></i>
+                User Support
+            </h3>
+            <p>Handle user reports, complaints, and provide technical support.</p>
+        </div>
+        <a href="{% url 'accounts:admin_chat' %}" class="support-preview-btn">
+            <i class="fas fa-comments"></i>
+            User Support Center
+            {% if unread_chat_count %}
+            <span class="unread-badge">{{ unread_chat_count }} unread</span>
+            {% endif %}
+        </a>
+    </div>
+</div>
+
+<!-- Block User Modal -->
+<div id="blockModal" class="block-modal">
+    <div class="block-modal-content">
+        <div class="block-modal-header">
+            <h3>
+                <i class="fas fa-ban"></i>
+                Block User
+            </h3>
+            <button class="close-modal" onclick="closeBlockModal()">&times;</button>
+        </div>
+
+        <div id="blockUserInfo" class="user-info-summary">
+            <!-- Will be filled by JavaScript -->
+        </div>
+
+        <form id="blockForm" method="post" action="">
+            {% csrf_token %}
+            <input type="hidden" id="block_user_id" name="user_id" value="">
+
+            <div class="form-group">
+                <label for="blockReason">Reason for blocking</label>
+                <textarea name="reason" id="blockReason" class="form-control"
+                    placeholder="Please provide a reason for blocking this user..." required></textarea>
+                <small class="form-text">
+                    This reason will be shown to the user when they try to log in.
+                </small>
+            </div>
+
+            <div class="block-actions">
+                <button type="button" class="btn-cancel" onclick="closeBlockModal()">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+                <button type="submit" class="btn-block-submit">
+                    <i class="fas fa-ban"></i> Block User
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Auto-hide messages after 4 seconds
+    setTimeout(function () {
+        document.querySelectorAll('.alert').forEach(function (alert) {
+            alert.style.transition = 'opacity 0.5s';
+            alert.style.opacity = '0';
+            setTimeout(() => alert.remove(), 500);
+        });
+    }, 4000);
+
+    // Add active class to current nav link
+    document.addEventListener('DOMContentLoaded', function () {
+        const currentLocation = window.location.pathname;
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        navLinks.forEach(link => {
+            if (link.getAttribute('href') === currentLocation) {
+                link.classList.add('active');
             }
         });
 
-        // Smooth scroll for anchor links
-        document.querySelectorAll('.stat-card').forEach(card => {
-            card.addEventListener('click', function(e) {
-                const onclickAttr = this.getAttribute('onclick');
-                if (onclickAttr) {
-                    const match = onclickAttr.match(/'([^']+)'/);
-                    if (match) {
-                        const href = match[1];
-                        e.preventDefault();
-                        document.querySelector(href).scrollIntoView({
-                            behavior: 'smooth'
-                        });
-                    }
+        // Highlight section based on URL hash
+        if (window.location.hash) {
+            const section = document.querySelector(window.location.hash);
+            if (section) {
+                section.style.transition = 'all 0.3s';
+                section.style.boxShadow = '0 0 0 3px #6c63ff';
+                setTimeout(() => {
+                    section.style.boxShadow = '0 2px 10px rgba(0,0,0,0.03)';
+                }, 2000);
+
+                // Scroll to section
+                setTimeout(() => {
+                    section.scrollIntoView({ behavior: 'smooth' });
+                }, 100);
+            }
+        }
+    });
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('.stat-card').forEach(card => {
+        card.addEventListener('click', function (e) {
+            const onclickAttr = this.getAttribute('onclick');
+            if (onclickAttr) {
+                const match = onclickAttr.match(/'([^']+)'/);
+                if (match) {
+                    const href = match[1];
+                    e.preventDefault();
+                    document.querySelector(href).scrollIntoView({
+                        behavior: 'smooth'
+                    });
                 }
-            });
-        });
-
-        // Auto-refresh messages every 30 seconds (optional)
-        setInterval(function() {
-            location.reload();
-        }, 30000); // Refresh every 30 seconds to check for new messages
-
-        // ===== NEW: Block Modal Functions =====
-        let currentUserId = null;
-        let currentUserType = null;
-        let currentExpertId = null;
-
-        function openBlockModal(userId, username, email, userType, expertId = null) {
-            currentUserId = userId;
-            currentUserType = userType;
-            currentExpertId = expertId;
-            
-            // Set form action
-            let actionUrl = '';
-            if (userType === 'expert') {
-                actionUrl = "{% url 'accounts:block_expert' 0 %}".replace('0', expertId);
-            } else {
-                actionUrl = "{% url 'accounts:block_user' 0 %}".replace('0', userId);
-            }
-            document.getElementById('blockForm').action = actionUrl;
-            document.getElementById('block_user_id').value = userId;
-            
-            // Set user info
-            document.getElementById('blockUserInfo').innerHTML = `
-                <div class="user-info-avatar">${username.charAt(0).toUpperCase()}</div>
-                <div class="user-info-details">
-                    <h4>${username}</h4>
-                    <p>${email} • ${userType === 'expert' ? 'Expert' : 'User'}</p>
-                </div>
-            `;
-            
-            // Clear previous reason
-            document.getElementById('blockReason').value = '';
-            
-            // Show modal
-            document.getElementById('blockModal').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeBlockModal() {
-            document.getElementById('blockModal').classList.remove('active');
-            document.body.style.overflow = 'auto';
-            currentUserId = null;
-            currentUserType = null;
-            currentExpertId = null;
-        }
-
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const modal = document.getElementById('blockModal');
-            if (event.target === modal) {
-                closeBlockModal();
-            }
-        }
-
-        // Close with Escape key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && document.getElementById('blockModal').classList.contains('active')) {
-                closeBlockModal();
             }
         });
-        // ===== END NEW FUNCTIONS =====
-    </script>
-</body>
-</html>
+    });
+
+    // Auto-refresh messages every 30 seconds (optional)
+    setInterval(function () {
+        location.reload();
+    }, 30000); // Refresh every 30 seconds to check for new messages
+
+    // Block Modal Functions
+    let currentUserId = null;
+    let currentUserType = null;
+    let currentExpertId = null;
+
+    function openBlockModal(userId, username, email, userType, expertId = null) {
+        currentUserId = userId;
+        currentUserType = userType;
+        currentExpertId = expertId;
+
+        // Set form action
+        let actionUrl = '';
+        if (userType === 'expert') {
+            actionUrl = "{% url 'accounts:block_expert' 0 %}".replace('0', expertId);
+        } else {
+            actionUrl = "{% url 'accounts:block_user' 0 %}".replace('0', userId);
+        }
+        document.getElementById('blockForm').action = actionUrl;
+        document.getElementById('block_user_id').value = userId;
+
+        // Set user info
+        document.getElementById('blockUserInfo').innerHTML = `
+            <div class="user-info-avatar">${username.charAt(0).toUpperCase()}</div>
+            <div class="user-info-details">
+                <h4>${username}</h4>
+                <p>${email} • ${userType === 'expert' ? 'Expert' : 'User'}</p>
+            </div>
+        `;
+
+        // Clear previous reason
+        document.getElementById('blockReason').value = '';
+
+        // Show modal
+        document.getElementById('blockModal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeBlockModal() {
+        document.getElementById('blockModal').classList.remove('active');
+        document.body.style.overflow = 'auto';
+        currentUserId = null;
+        currentUserType = null;
+        currentExpertId = null;
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function (event) {
+        const modal = document.getElementById('blockModal');
+        if (event.target === modal) {
+            closeBlockModal();
+        }
+    }
+
+    // Close with Escape key
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && document.getElementById('blockModal').classList.contains('active')) {
+            closeBlockModal();
+        }
+    });
+</script>
+{% endblock %}

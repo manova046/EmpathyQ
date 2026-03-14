@@ -41,26 +41,38 @@ def session_requests(request):
         
         print(f"Total bookings found: {all_bookings.count()}")
         
-        # Separate into categories for better organization
+        # FIX: Include both 'confirmed' AND 'paid' status for upcoming sessions
         pending_requests = all_bookings.filter(status='pending')
+        
+        # Upcoming sessions: confirmed OR paid, with future dates
         upcoming_sessions = all_bookings.filter(
-            status='confirmed',
+            status__in=['confirmed', 'paid'],  # Include paid status
             booking_date__gte=timezone.now().date()
-        )
+        ).order_by('booking_date', 'booking_time')
+        
         past_sessions = all_bookings.filter(
             status__in=['completed', 'cancelled', 'no_show']
         )[:20]  # Limit to last 20
         
-        print(f"Pending: {pending_requests.count()}, Upcoming: {upcoming_sessions.count()}, Past: {past_sessions.count()}")
+        # Also include today's sessions in upcoming
+        today = timezone.now().date()
+        today_sessions = all_bookings.filter(
+            status__in=['confirmed', 'paid'],
+            booking_date=today
+        ).order_by('booking_time')
         
-        # Debug: Print all pending bookings
-        for booking in pending_requests:
-            print(f"  Pending: {booking.id} - {booking.user.username} - {booking.booking_date} {booking.booking_time}")
+        print(f"Pending: {pending_requests.count()}, Upcoming: {upcoming_sessions.count()}, Past: {past_sessions.count()}")
+        print(f"Today's sessions: {today_sessions.count()}")
+        
+        # Debug: Print all upcoming sessions
+        for booking in upcoming_sessions:
+            print(f"  Upcoming: {booking.id} - {booking.user.username} - {booking.booking_date} {booking.booking_time} - Status: {booking.status}")
         
     except Therapist.DoesNotExist:
         pending_requests = []
         upcoming_sessions = []
         past_sessions = []
+        today_sessions = []
         messages.warning(request, 'Therapist profile not found.')
         print("Therapist not found!")
     
@@ -68,9 +80,11 @@ def session_requests(request):
         'pending_requests': pending_requests,
         'upcoming_sessions': upcoming_sessions,
         'past_sessions': past_sessions,
+        'today_sessions': today_sessions,
+        'today': timezone.now().date(),
+        'now': timezone.now(),
     }
     return render(request, 'expert/session_requests.html', context)
-
 
 # expert/views.py - Update approve_session function
 
@@ -178,14 +192,19 @@ def reject_session(request, booking_id):
 
 # expert/views.py - Update the complete_session view
 
-# expert/views.py - Update the complete_session view
-
 @login_required
 def complete_session(request, booking_id):
     """Mark a session as completed with option to add notes/prescriptions"""
     try:
         therapist = Therapist.objects.get(name=request.user.get_full_name() or request.user.username)
-        booking = get_object_or_404(SessionBooking, id=booking_id, therapist=therapist, status='confirmed')
+        
+        # FIX: Allow both 'confirmed' AND 'paid' status for completion
+        booking = get_object_or_404(
+            SessionBooking, 
+            id=booking_id, 
+            therapist=therapist, 
+            status__in=['confirmed', 'paid']  # ← FIXED: Include paid status
+        )
         
         # Check if session is already completed
         if booking.status == 'completed':
@@ -275,7 +294,7 @@ def complete_session(request, booking_id):
         messages.error(request, 'Therapist profile not found.')
         return redirect('expert:session_requests')
     except SessionBooking.DoesNotExist:
-        messages.error(request, 'Booking not found or not in confirmed status.')
+        messages.error(request, 'Booking not found or not in confirmed/paid status.')
         return redirect('expert:session_requests')
     except Exception as e:
         messages.error(request, f'An error occurred: {str(e)}')
@@ -379,7 +398,14 @@ def start_session(request, booking_id):
     """Start a video session"""
     try:
         therapist = Therapist.objects.get(name=request.user.get_full_name() or request.user.username)
-        booking = get_object_or_404(SessionBooking, id=booking_id, therapist=therapist, status='confirmed')
+        
+        # FIX: Allow both 'confirmed' AND 'paid' status for starting
+        booking = get_object_or_404(
+            SessionBooking, 
+            id=booking_id, 
+            therapist=therapist, 
+            status__in=['confirmed', 'paid']  # ← FIXED: Include paid status
+        )
         
         # Check if session is for today or future
         if booking.booking_date < timezone.now().date():
@@ -408,12 +434,12 @@ def start_session(request, booking_id):
         messages.error(request, 'Therapist profile not found.')
         return redirect('expert:session_requests')
     except SessionBooking.DoesNotExist:
-        messages.error(request, 'Booking not found.')
+        messages.error(request, 'Booking not found or not in confirmed/paid status.')
         return redirect('expert:session_requests')
     except Exception as e:
         messages.error(request, f'Error starting session: {str(e)}')
         return redirect('expert:session_requests')
-
+    
 # ==================== TODAY SESSIONS FUNCTION ====================
 
 # expert/views.py - Update today_sessions function
@@ -425,11 +451,11 @@ def today_sessions(request):
         therapist = Therapist.objects.get(name=request.user.get_full_name() or request.user.username)
         today = timezone.now().date()
         
-        # Get today's confirmed sessions
+        # FIX: Include both 'confirmed' AND 'paid' status for today's sessions
         confirmed_sessions = SessionBooking.objects.filter(
             therapist=therapist,
             booking_date=today,
-            status='confirmed'
+            status__in=['confirmed', 'paid']  # Include paid status
         ).select_related('user', 'category').order_by('booking_time')
         
         # Get today's pending sessions
@@ -439,34 +465,22 @@ def today_sessions(request):
             status='pending'
         ).select_related('user', 'category').order_by('booking_time')
         
-        # Get today's completed sessions (optional)
+        # Get today's completed sessions
         completed_sessions = SessionBooking.objects.filter(
             therapist=therapist,
             booking_date=today,
             status='completed'
         ).select_related('user', 'category').order_by('booking_time')
         
-        # Ensure meeting links exist for confirmed sessions
+        # Ensure meeting links exist for confirmed/paid sessions
         for session in confirmed_sessions:
             if not session.meeting_link:
                 session.generate_meeting_link()
-        
-        # Get today's TimeSlot bookings (if using TimeSlot model)
-        try:
-            from .models import TimeSlot
-            today_slots = TimeSlot.objects.filter(
-                therapist=therapist,
-                date=today,
-                is_booked=True
-            ).select_related('booking_detail__seeker')
-        except:
-            today_slots = []
         
         context = {
             'today_sessions': confirmed_sessions,
             'pending_today': pending_sessions,
             'completed_today': completed_sessions,
-            'today_slots': today_slots,
             'today_date': today,
             'total_today': confirmed_sessions.count() + pending_sessions.count(),
         }
@@ -479,6 +493,7 @@ def today_sessions(request):
     except Exception as e:
         messages.error(request, f'An error occurred: {str(e)}')
         return redirect('accounts:expert_dashboard')
+    
 # ==================== UPDATED MANAGE AVAILABILITY FUNCTION ====================
 
 @login_required
@@ -494,6 +509,17 @@ def manage_availability(request):
     
     # Get or create settings
     settings, created = TherapistSettings.objects.get_or_create(therapist=therapist)
+    
+    # ===== FIXED: Also get profile settings to show correct fee =====
+    profile_settings = ExpertProfileSettings.objects.filter(therapist=therapist).first()
+    
+    # If profile settings exist, use its fee for display
+    if profile_settings and profile_settings.consultation_fee:
+        # Update settings consultation_fee to match profile for display
+        if settings.consultation_fee != profile_settings.consultation_fee:
+            settings.consultation_fee = profile_settings.consultation_fee
+            settings.save()
+            print(f"Synced consultation fee from profile: ${profile_settings.consultation_fee}")
     
     # Get existing availability (working hours)
     availabilities = Availability.objects.filter(
@@ -648,8 +674,18 @@ def manage_availability(request):
         # Update settings
         elif action == 'update_settings':
             try:
-                if request.POST.get('consultation_fee'):
-                    settings.consultation_fee = request.POST.get('consultation_fee')
+                # Get fee from form
+                new_fee = request.POST.get('consultation_fee')
+                if new_fee:
+                    # Update both settings
+                    settings.consultation_fee = new_fee
+                    
+                    # Also update profile settings if they exist
+                    if profile_settings:
+                        profile_settings.consultation_fee = new_fee
+                        profile_settings.save()
+                        print(f"Updated profile fee to: ${new_fee}")
+                
                 if request.POST.get('advance_booking_days'):
                     settings.advance_booking_days = request.POST.get('advance_booking_days')
                 if request.POST.get('session_duration'):
@@ -718,6 +754,7 @@ def manage_availability(request):
         'booked_slots': booked_slots,
         'days_of_week': days_of_week,
         'settings': settings,
+        'profile': profile_settings,  # Add profile to context for template
         'today': today,
     }
     
@@ -1176,27 +1213,55 @@ def public_profile(request, therapist_id=None):
 
 # ==================== SESSION MANAGEMENT FUNCTIONS ====================
 
+# ==================== SESSION MANAGEMENT FUNCTIONS ====================
+
 @login_required
 def start_session(request, booking_id):
     """Start a video session"""
     try:
         therapist = Therapist.objects.get(name=request.user.get_full_name() or request.user.username)
-        booking = get_object_or_404(SessionBooking, id=booking_id, therapist=therapist)
         
-        if booking.status != 'confirmed':
-            messages.error(request, 'This session is not confirmed yet.')
-            return redirect('expert:today_sessions')
+        # FIX: Allow both 'confirmed' AND 'paid' status for starting
+        booking = get_object_or_404(
+            SessionBooking, 
+            id=booking_id, 
+            therapist=therapist, 
+            status__in=['confirmed', 'paid']  # ← FIXED: Include paid status
+        )
         
+        # Check if session is for today or future
+        if booking.booking_date < timezone.now().date():
+            messages.warning(request, 'This session is from a past date. You can still join if the meeting link is active.')
+        elif booking.booking_date == timezone.now().date():
+            # Check if it's too early to join (more than 15 minutes before)
+            session_datetime = timezone.datetime.combine(booking.booking_date, booking.booking_time)
+            session_datetime = timezone.make_aware(session_datetime)
+            time_diff = session_datetime - timezone.now()
+            
+            if time_diff.total_seconds() > 900:  # 15 minutes in seconds
+                minutes_until = int(time_diff.total_seconds() / 60)
+                messages.info(request, f'Session starts in {minutes_until} minutes. You can join closer to the start time.')
+        
+        # Generate meeting link if not exists
         if not booking.meeting_link:
+            import uuid
             room_name = f"empathyq-{booking.id}-{uuid.uuid4().hex[:8]}"
             booking.meeting_link = f"https://meet.jit.si/{room_name}"
             booking.save()
         
+        # Redirect to meeting link
         return redirect(booking.meeting_link)
+        
     except Therapist.DoesNotExist:
         messages.error(request, 'Therapist profile not found.')
         return redirect('accounts:expert_dashboard')
-
+    except SessionBooking.DoesNotExist:
+        messages.error(request, 'Booking not found or not in confirmed/paid status.')
+        return redirect('expert:today_sessions')
+    except Exception as e:
+        messages.error(request, f'Error starting session: {str(e)}')
+        return redirect('expert:today_sessions')
+    
 @login_required
 def feedback(request, booking_id):
     """Submit feedback for a completed session"""
@@ -1575,6 +1640,61 @@ def get_messages(request, user_id):
 
 
 
-
-
-
+@login_required
+def analytics(request):
+    """Expert analytics dashboard"""
+    try:
+        therapist = Therapist.objects.get(name=request.user.get_full_name() or request.user.username)
+        
+        total_sessions = SessionBooking.objects.filter(therapist=therapist).count()
+        completed_sessions = SessionBooking.objects.filter(therapist=therapist, status='completed').count()
+        cancelled_sessions = SessionBooking.objects.filter(therapist=therapist, status='cancelled').count()
+        
+        # ===== FIX: Import the correct Review model =====
+        # Use the Review model from user.models that has is_approved field
+        from user.models import Review
+        
+        # Get only approved reviews
+        reviews = Review.objects.filter(
+            therapist=therapist, 
+            is_approved=True
+        )
+        
+        avg_rating = reviews.aggregate(avg=Avg('rating'))['avg'] or 0
+        total_reviews = reviews.count()
+        
+        # Get rating distribution for charts
+        rating_counts = {}
+        for rating in range(1, 6):
+            rating_counts[rating] = reviews.filter(rating=rating).count()
+        
+        monthly_sessions = SessionBooking.objects.filter(
+            therapist=therapist,
+            status='completed'
+        ).extra({'month': "strftime('%%Y-%%m', booking_date)"}).values('month').annotate(
+            count=Count('id'),
+            earnings=Count('id') * 50
+        ).order_by('-month')
+        
+        context = {
+            'total_sessions': total_sessions,
+            'completed_sessions': completed_sessions,
+            'cancelled_sessions': cancelled_sessions,
+            'avg_rating': round(avg_rating, 1),
+            'total_reviews': total_reviews,
+            'rating_counts': rating_counts,
+            'monthly_sessions': monthly_sessions,
+        }
+    except Therapist.DoesNotExist:
+        context = {
+            'total_sessions': 0,
+            'completed_sessions': 0,
+            'cancelled_sessions': 0,
+            'avg_rating': 0,
+            'total_reviews': 0,
+            'rating_counts': {},
+            'monthly_sessions': [],
+        }
+        messages.warning(request, 'Therapist profile not found.')
+    
+    return render(request, 'expert/analytics.html', context)

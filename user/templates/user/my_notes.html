@@ -1,856 +1,738 @@
 <!-- user/templates/user/my_notes.html -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Notes & Prescriptions - EmpathyQ</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+{% extends 'base.html' %}
 
-        body {
-            background-color: #f8f9fa;
-        }
+{% block title %}My Notes & Prescriptions - EmpathyQ{% endblock %}
 
-        .navbar {
-            background-color: #ffffff;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            padding: 15px 0;
-        }
+{% block extra_css %}
+<style>
+    .page-header {
+        background: linear-gradient(135deg, #6c63ff, #5d5fef);
+        color: white;
+        padding: 100px 0 40px;
+        margin-top: 70px;
+        text-align: center;
+        position: relative;
+    }
 
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+    .page-header h1 {
+        font-size: 36px;
+        margin-bottom: 10px;
+    }
 
-        .logo {
-            font-size: 28px;
-            font-weight: 700;
-            color: #5d5fef;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-        }
+    .page-header p {
+        font-size: 16px;
+        opacity: 0.9;
+        max-width: 600px;
+        margin: 0 auto;
+    }
 
-        .logo i {
-            margin-right: 10px;
-            color: #6c63ff;
-        }
+    .container {
+        width: 90%;
+        max-width: 1200px;
+        margin: -30px auto 40px;
+        position: relative;
+        z-index: 10;
+    }
 
-        .user-badge {
-            background-color: #6c63ff;
-            color: white;
-            padding: 8px 20px;
-            border-radius: 30px;
-            font-weight: 600;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+    /* Stats Cards */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
 
-        .page-header {
-            background: linear-gradient(135deg, #6c63ff, #5d5fef);
-            color: white;
-            padding: 100px 0 40px;
-            margin-top: 70px;
-            text-align: center;
-            position: relative;
-        }
+    .stat-card {
+        background: white;
+        padding: 25px;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        text-align: center;
+        border: 1px solid #edf2f7;
+        transition: transform 0.3s;
+    }
 
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(108, 99, 255, 0.1);
+        border-color: #6c63ff;
+    }
+
+    .stat-icon {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 15px;
+        color: white;
+        font-size: 20px;
+    }
+
+    .stat-value {
+        font-size: 28px;
+        font-weight: 700;
+        color: #333;
+    }
+
+    .stat-label {
+        color: #666;
+        font-size: 13px;
+        margin-top: 5px;
+    }
+
+    /* Filters */
+    .filters {
+        background: white;
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 30px;
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+        align-items: center;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.03);
+    }
+
+    .filter-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .filter-label {
+        font-weight: 600;
+        color: #555;
+        font-size: 14px;
+    }
+
+    .filter-select {
+        padding: 10px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 30px;
+        font-size: 14px;
+        outline: none;
+        min-width: 150px;
+    }
+
+    .filter-select:focus {
+        border-color: #6c63ff;
+    }
+
+    .clear-filter {
+        color: #6c63ff;
+        text-decoration: none;
+        font-size: 14px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .clear-filter:hover {
+        text-decoration: underline;
+    }
+
+    /* Notes Grid */
+    .notes-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 25px;
+    }
+
+    .note-card {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        border: 1px solid #edf2f7;
+        transition: all 0.3s;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .note-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(108, 99, 255, 0.1);
+        border-color: #6c63ff;
+    }
+
+    .note-card.unread {
+        background: #fffaf0;
+        border-left: 4px solid #ff9800;
+    }
+
+    .note-card.important {
+        border: 2px solid #ff9800;
+        box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.1);
+    }
+
+    .note-type {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        padding: 5px 15px;
+        border-radius: 30px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+    }
+
+    .type-prescription { background: #ffebee; color: #c62828; }
+    .type-recommendation { background: #e8f5e9; color: #2e7d32; }
+    .type-exercise { background: #e3f2fd; color: #1565c0; }
+    .type-referral { background: #fff3e0; color: #ef6c00; }
+    .type-follow_up { background: #f3e5f5; color: #7b1fa2; }
+    .type-general { background: #e0f2fe; color: #0369a1; }
+
+    .note-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 15px;
+        padding-right: 80px;
+    }
+
+    .therapist-avatar {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #6c63ff, #5d5fef);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 600;
+        font-size: 20px;
+        flex-shrink: 0;
+    }
+
+    .therapist-info {
+        flex: 1;
+    }
+
+    .therapist-info h4 {
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 3px;
+    }
+
+    .therapist-info p {
+        font-size: 12px;
+        color: #666;
+    }
+
+    .note-date {
+        font-size: 12px;
+        color: #999;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        margin-bottom: 10px;
+    }
+
+    .note-date i {
+        color: #6c63ff;
+    }
+
+    .unread-badge {
+        background: #ff9800;
+        color: white;
+        padding: 2px 10px;
+        border-radius: 30px;
+        font-size: 10px;
+        font-weight: 600;
+        margin-left: 10px;
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.7; }
+    }
+
+    .note-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 10px;
+        line-height: 1.4;
+    }
+
+    .note-preview {
+        color: #666;
+        font-size: 14px;
+        line-height: 1.6;
+        margin-bottom: 15px;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .note-meta {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 15px;
+        font-size: 12px;
+        color: #666;
+        flex-wrap: wrap;
+    }
+
+    .note-meta span {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        background: #f8f9fa;
+        padding: 5px 12px;
+        border-radius: 30px;
+    }
+
+    .note-meta i {
+        color: #6c63ff;
+    }
+
+    .note-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid #edf2f7;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-size: 13px;
+        border: none;
+        cursor: pointer;
+        flex: 1;
+    }
+
+    .btn-primary {
+        background: #6c63ff;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background: #5a52d5;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(108, 99, 255, 0.3);
+    }
+
+    .btn-outline {
+        border: 2px solid #6c63ff;
+        color: #6c63ff;
+        background: transparent;
+    }
+
+    .btn-outline:hover {
+        background: #6c63ff;
+        color: white;
+    }
+
+    .btn-success {
+        background: #4CAF50;
+        color: white;
+    }
+
+    .btn-success:hover {
+        background: #45a049;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        background: white;
+        border-radius: 20px;
+        grid-column: 1 / -1;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+
+    .empty-state i {
+        font-size: 70px;
+        color: #cbd5e1;
+        margin-bottom: 20px;
+    }
+
+    .empty-state h3 {
+        color: #333;
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+
+    .empty-state p {
+        color: #666;
+        margin-bottom: 25px;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .btn-lg {
+        padding: 14px 30px;
+        font-size: 16px;
+        display: inline-flex;
+        width: auto;
+    }
+
+    /* Session grouping */
+    .session-group {
+        margin-bottom: 40px;
+    }
+
+    .session-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #edf2f7;
+    }
+
+    .session-header h2 {
+        font-size: 20px;
+        color: #333;
+    }
+
+    .session-date {
+        background: #f0f2ff;
+        color: #6c63ff;
+        padding: 5px 15px;
+        border-radius: 30px;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .session-badge {
+        background: #6c63ff;
+        color: white;
+        padding: 3px 12px;
+        border-radius: 30px;
+        font-size: 12px;
+    }
+
+    /* Messages */
+    .alert {
+        padding: 16px 20px;
+        border-radius: 12px;
+        margin-bottom: 25px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+        from { transform: translateY(-20px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    .alert-success { background: #d4edda; color: #155724; border-left: 4px solid #28a745; }
+    .alert-info { background: #d1ecf1; color: #0c5460; border-left: 4px solid #17a2b8; }
+    .alert-warning { background: #fff3cd; color: #856404; border-left: 4px solid #ffc107; }
+    .alert-error { background: #f8d7da; color: #721c24; border-left: 4px solid #dc3545; }
+
+    @media (max-width: 768px) {
         .page-header h1 {
-            font-size: 36px;
-            margin-bottom: 10px;
-        }
-
-        .page-header p {
-            font-size: 16px;
-            opacity: 0.9;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .back-link {
-            position: absolute;
-            top: 120px;
-            left: 30px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(5px);
-        }
-
-        .back-link:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateX(-5px);
-        }
-
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: -30px auto 40px;
-            position: relative;
-            z-index: 10;
-        }
-
-        /* Stats Cards */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 25px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            text-align: center;
-            border: 1px solid #edf2f7;
-            transition: transform 0.3s;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(108, 99, 255, 0.1);
-            border-color: #6c63ff;
-        }
-
-        .stat-icon {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 15px;
-            color: white;
-            font-size: 20px;
-        }
-
-        .stat-value {
             font-size: 28px;
-            font-weight: 700;
-            color: #333;
         }
 
-        .stat-label {
-            color: #666;
-            font-size: 13px;
-            margin-top: 5px;
+        .stats-grid {
+            grid-template-columns: 1fr;
         }
 
-        /* Filters */
-        .filters {
-            background: white;
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 30px;
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            align-items: center;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.03);
-        }
-
-        .filter-group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .filter-label {
-            font-weight: 600;
-            color: #555;
-            font-size: 14px;
-        }
-
-        .filter-select {
-            padding: 10px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 30px;
-            font-size: 14px;
-            outline: none;
-            min-width: 150px;
-        }
-
-        .filter-select:focus {
-            border-color: #6c63ff;
-        }
-
-        .clear-filter {
-            color: #6c63ff;
-            text-decoration: none;
-            font-size: 14px;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .clear-filter:hover {
-            text-decoration: underline;
-        }
-
-        /* Notes Grid */
         .notes-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 25px;
+            grid-template-columns: 1fr;
         }
 
-        .note-card {
-            background: white;
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            border: 1px solid #edf2f7;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .note-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(108, 99, 255, 0.1);
-            border-color: #6c63ff;
-        }
-
-        .note-card.unread {
-            background: #fffaf0;
-            border-left: 4px solid #ff9800;
-        }
-
-        .note-card.important {
-            border: 2px solid #ff9800;
-            box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.1);
+        .note-header {
+            padding-right: 0;
         }
 
         .note-type {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            padding: 5px 15px;
-            border-radius: 30px;
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-
-        .type-prescription { background: #ffebee; color: #c62828; }
-        .type-recommendation { background: #e8f5e9; color: #2e7d32; }
-        .type-exercise { background: #e3f2fd; color: #1565c0; }
-        .type-referral { background: #fff3e0; color: #ef6c00; }
-        .type-follow_up { background: #f3e5f5; color: #7b1fa2; }
-        .type-general { background: #e0f2fe; color: #0369a1; }
-
-        .note-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
-            padding-right: 80px;
-        }
-
-        .therapist-avatar {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #6c63ff, #5d5fef);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-            font-size: 20px;
-            flex-shrink: 0;
-        }
-
-        .therapist-info {
-            flex: 1;
-        }
-
-        .therapist-info h4 {
-            font-size: 16px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 3px;
-        }
-
-        .therapist-info p {
-            font-size: 12px;
-            color: #666;
-        }
-
-        .note-date {
-            font-size: 12px;
-            color: #999;
-            display: flex;
-            align-items: center;
-            gap: 5px;
+            position: relative;
+            top: 0;
+            right: 0;
+            display: inline-block;
             margin-bottom: 10px;
         }
 
-        .note-date i {
-            color: #6c63ff;
+        .filters {
+            flex-direction: column;
+            align-items: stretch;
         }
 
-        .unread-badge {
-            background: #ff9800;
-            color: white;
-            padding: 2px 10px;
-            border-radius: 30px;
-            font-size: 10px;
-            font-weight: 600;
-            margin-left: 10px;
-            animation: pulse 2s infinite;
+        .filter-group {
+            flex-direction: column;
+            align-items: stretch;
         }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-
-        .note-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 10px;
-            line-height: 1.4;
-        }
-
-        .note-preview {
-            color: #666;
-            font-size: 14px;
-            line-height: 1.6;
-            margin-bottom: 15px;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .note-meta {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 15px;
-            font-size: 12px;
-            color: #666;
-            flex-wrap: wrap;
-        }
-
-        .note-meta span {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            background: #f8f9fa;
-            padding: 5px 12px;
-            border-radius: 30px;
-        }
-
-        .note-meta i {
-            color: #6c63ff;
-        }
-
-        .note-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid #edf2f7;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-size: 13px;
-            border: none;
-            cursor: pointer;
-            flex: 1;
-        }
-
-        .btn-primary {
-            background: #6c63ff;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #5a52d5;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(108, 99, 255, 0.3);
-        }
-
-        .btn-outline {
-            border: 2px solid #6c63ff;
-            color: #6c63ff;
-            background: transparent;
-        }
-
-        .btn-outline:hover {
-            background: #6c63ff;
-            color: white;
-        }
-
-        .btn-success {
-            background: #4CAF50;
-            color: white;
-        }
-
-        .btn-success:hover {
-            background: #45a049;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            background: white;
-            border-radius: 20px;
-            grid-column: 1 / -1;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-        }
-
-        .empty-state i {
-            font-size: 70px;
-            color: #cbd5e1;
-            margin-bottom: 20px;
-        }
-
-        .empty-state h3 {
-            color: #333;
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-
-        .empty-state p {
-            color: #666;
-            margin-bottom: 25px;
-            max-width: 400px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .btn-lg {
-            padding: 14px 30px;
-            font-size: 16px;
-            display: inline-flex;
-            width: auto;
-        }
-
-        /* Session grouping */
-        .session-group {
-            margin-bottom: 40px;
+        .filter-select {
+            width: 100%;
         }
 
         .session-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #edf2f7;
+            flex-direction: column;
+            align-items: flex-start;
         }
+    }
+</style>
+{% endblock %}
 
-        .session-header h2 {
-            font-size: 20px;
-            color: #333;
-        }
+{% block content %}
+<div class="page-header">
+    <h1>My Notes & Prescriptions</h1>
+    <p>View all notes, prescriptions, and recommendations from your therapists</p>
+</div>
 
-        .session-date {
-            background: #f0f2ff;
-            color: #6c63ff;
-            padding: 5px 15px;
-            border-radius: 30px;
-            font-size: 14px;
-            font-weight: 600;
-        }
+<div class="container">
+    <!-- Messages -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-circle{% elif message.tags == 'warning' %}exclamation-triangle{% else %}info-circle{% endif %}"></i>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
 
-        .session-badge {
-            background: #6c63ff;
-            color: white;
-            padding: 3px 12px;
-            border-radius: 30px;
-            font-size: 12px;
-        }
-
-        /* Footer */
-        .footer {
-            background-color: #2a2a3c;
-            color: white;
-            padding: 30px 0;
-            margin-top: 60px;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            color: #bbb;
-            font-size: 14px;
-        }
-
-        /* Messages */
-        .alert {
-            padding: 16px 20px;
-            border-radius: 12px;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            animation: slideIn 0.3s ease;
-        }
-
-        @keyframes slideIn {
-            from { transform: translateY(-20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .alert-success { background: #d4edda; color: #155724; border-left: 4px solid #28a745; }
-        .alert-info { background: #d1ecf1; color: #0c5460; border-left: 4px solid #17a2b8; }
-        .alert-warning { background: #fff3cd; color: #856404; border-left: 4px solid #ffc107; }
-        .alert-error { background: #f8d7da; color: #721c24; border-left: 4px solid #dc3545; }
-
-        @media (max-width: 768px) {
-            .page-header h1 {
-                font-size: 28px;
-            }
-
-            .back-link {
-                position: relative;
-                top: 0;
-                left: 0;
-                margin: 20px auto 0;
-                display: inline-block;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .notes-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .note-header {
-                padding-right: 0;
-            }
-
-            .note-type {
-                position: relative;
-                top: 0;
-                right: 0;
-                display: inline-block;
-                margin-bottom: 10px;
-            }
-
-            .filters {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .filter-group {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .filter-select {
-                width: 100%;
-            }
-        }
-    </style>
-</head>
-<body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="{% url 'accounts:index' %}" class="logo">
-                <i class="fas fa-heart"></i> EmpathyQ
-            </a>
-            <span class="user-badge">
-                <i class="fas fa-user-circle"></i> {{ request.user.get_full_name|default:request.user.username }}
-            </span>
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-sticky-note"></i></div>
+            <div class="stat-value">{{ total_count|default:"0" }}</div>
+            <div class="stat-label">Total Notes</div>
         </div>
-    </nav>
-
-    <div class="page-header">
-        <a href="{% url 'accounts:user_dashboard' %}" class="back-link">
-            <i class="fas fa-arrow-left"></i> Back to Dashboard
-        </a>
-        <h1>My Notes & Prescriptions</h1>
-        <p>View all notes, prescriptions, and recommendations from your therapists</p>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-clock"></i></div>
+            <div class="stat-value">{{ unread_count|default:"0" }}</div>
+            <div class="stat-label">Unread</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-prescription"></i></div>
+            <div class="stat-value">{{ prescription_count|default:"0" }}</div>
+            <div class="stat-label">Prescriptions</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-dumbbell"></i></div>
+            <div class="stat-value">{{ exercise_count|default:"0" }}</div>
+            <div class="stat-label">Exercises</div>
+        </div>
     </div>
 
-    <div class="container">
-        <!-- Messages -->
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}">
-                    <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-circle{% elif message.tags == 'warning' %}exclamation-triangle{% else %}info-circle{% endif %}"></i>
-                    {{ message }}
+    <!-- Filters -->
+    <div class="filters">
+        <div class="filter-group">
+            <span class="filter-label"><i class="fas fa-filter"></i> Filter by:</span>
+            <select class="filter-select" id="typeFilter" onchange="filterNotes()">
+                <option value="all">All Types</option>
+                <option value="prescription">Prescriptions</option>
+                <option value="recommendation">Recommendations</option>
+                <option value="exercise">Exercises</option>
+                <option value="referral">Referrals</option>
+                <option value="general">General Notes</option>
+            </select>
+            
+            <select class="filter-select" id="statusFilter" onchange="filterNotes()">
+                <option value="all">All Status</option>
+                <option value="unread">Unread Only</option>
+                <option value="read">Read Only</option>
+                <option value="important">Important Only</option>
+            </select>
+        </div>
+        <a href="#" class="clear-filter" onclick="clearFilters(event)"><i class="fas fa-times"></i> Clear Filters</a>
+    </div>
+
+    <!-- Notes by Session Groups -->
+    {% if notes_by_session %}
+        {% for session_id, session_data in notes_by_session.items %}
+            <div class="session-group" data-session-id="{{ session_id }}">
+                <div class="session-header">
+                    <h2>
+                        <i class="fas fa-calendar-alt" style="color: #6c63ff;"></i>
+                        Session with Dr. {{ session_data.session.therapist.name }}
+                    </h2>
+                    <span class="session-date">{{ session_data.session.booking_date|date:"F j, Y" }}</span>
+                    <span class="session-badge">{{ session_data.notes|length }} note{{ session_data.notes|pluralize }}</span>
                 </div>
-            {% endfor %}
-        {% endif %}
 
-        <!-- Stats Cards -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-sticky-note"></i></div>
-                <div class="stat-value">{{ total_count|default:"0" }}</div>
-                <div class="stat-label">Total Notes</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-clock"></i></div>
-                <div class="stat-value">{{ unread_count|default:"0" }}</div>
-                <div class="stat-label">Unread</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-prescription"></i></div>
-                <div class="stat-value">{{ prescription_count|default:"0" }}</div>
-                <div class="stat-label">Prescriptions</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-dumbbell"></i></div>
-                <div class="stat-value">{{ exercise_count|default:"0" }}</div>
-                <div class="stat-label">Exercises</div>
-            </div>
-        </div>
+                <div class="notes-grid">
+                    {% for note in session_data.notes %}
+                        <div class="note-card {% if not note.is_read %}unread{% endif %} {% if note.is_important %}important{% endif %}" 
+                             data-note-type="{{ note.note_type }}"
+                             data-is-read="{{ note.is_read|lower }}"
+                             data-is-important="{{ note.is_important|lower }}">
+                            <span class="note-type type-{{ note.note_type }}">
+                                <i class="fas 
+                                    {% if note.note_type == 'prescription' %}fa-prescription
+                                    {% elif note.note_type == 'recommendation' %}fa-check-circle
+                                    {% elif note.note_type == 'exercise' %}fa-dumbbell
+                                    {% elif note.note_type == 'referral' %}fa-hand-holding-heart
+                                    {% elif note.note_type == 'follow_up' %}fa-clock
+                                    {% else %}fa-sticky-note
+                                    {% endif %}">
+                                </i>
+                                {{ note.get_note_type_display }}
+                            </span>
 
-        <!-- Filters -->
-        <div class="filters">
-            <div class="filter-group">
-                <span class="filter-label"><i class="fas fa-filter"></i> Filter by:</span>
-                <select class="filter-select" id="typeFilter" onchange="filterNotes()">
-                    <option value="all">All Types</option>
-                    <option value="prescription">Prescriptions</option>
-                    <option value="recommendation">Recommendations</option>
-                    <option value="exercise">Exercises</option>
-                    <option value="referral">Referrals</option>
-                    <option value="general">General Notes</option>
-                </select>
-                
-                <select class="filter-select" id="statusFilter" onchange="filterNotes()">
-                    <option value="all">All Status</option>
-                    <option value="unread">Unread Only</option>
-                    <option value="read">Read Only</option>
-                    <option value="important">Important Only</option>
-                </select>
-            </div>
-            <a href="#" class="clear-filter" onclick="clearFilters(event)"><i class="fas fa-times"></i> Clear Filters</a>
-        </div>
-
-        <!-- Notes by Session Groups -->
-        {% if notes_by_session %}
-            {% for session_id, session_data in notes_by_session.items %}
-                <div class="session-group" data-session-id="{{ session_id }}">
-                    <div class="session-header">
-                        <h2>
-                            <i class="fas fa-calendar-alt" style="color: #6c63ff;"></i>
-                            Session with Dr. {{ session_data.session.therapist.name }}
-                        </h2>
-                        <span class="session-date">{{ session_data.session.booking_date|date:"F j, Y" }}</span>
-                        <span class="session-badge">{{ session_data.notes|length }} note{{ session_data.notes|pluralize }}</span>
-                    </div>
-
-                    <div class="notes-grid">
-                        {% for note in session_data.notes %}
-                            <div class="note-card {% if not note.is_read %}unread{% endif %} {% if note.is_important %}important{% endif %}" 
-                                 data-note-type="{{ note.note_type }}"
-                                 data-is-read="{{ note.is_read|lower }}"
-                                 data-is-important="{{ note.is_important|lower }}">
-                                <span class="note-type type-{{ note.note_type }}">
-                                    <i class="fas 
-                                        {% if note.note_type == 'prescription' %}fa-prescription
-                                        {% elif note.note_type == 'recommendation' %}fa-check-circle
-                                        {% elif note.note_type == 'exercise' %}fa-dumbbell
-                                        {% elif note.note_type == 'referral' %}fa-hand-holding-heart
-                                        {% elif note.note_type == 'follow_up' %}fa-clock
-                                        {% else %}fa-sticky-note
-                                        {% endif %}">
-                                    </i>
-                                    {{ note.get_note_type_display }}
-                                </span>
-
-                                <div class="note-header">
-                                    <div class="therapist-avatar">
-                                        {{ note.therapist.name|first|upper }}
-                                    </div>
-                                    <div class="therapist-info">
-                                        <h4>Dr. {{ note.therapist.name }}</h4>
-                                        <p>{{ note.therapist.specialization|default:"Mental Health Professional" }}</p>
-                                    </div>
+                            <div class="note-header">
+                                <div class="therapist-avatar">
+                                    {{ note.therapist.name|first|upper }}
                                 </div>
-
-                                <div class="note-date">
-                                    <i class="fas fa-calendar"></i> {{ note.created_at|date:"F j, Y" }} at {{ note.created_at|time:"g:i A" }}
-                                    {% if not note.is_read %}
-                                        <span class="unread-badge">NEW</span>
-                                    {% endif %}
-                                </div>
-
-                                <h3 class="note-title">{{ note.title }}</h3>
-                                <div class="note-preview">{{ note.content|truncatechars:150 }}</div>
-
-                                {% if note.note_type == 'prescription' and note.medication_name %}
-                                    <div class="note-meta">
-                                        <span><i class="fas fa-pills"></i> {{ note.medication_name }} {{ note.dosage|default:"" }}</span>
-                                        {% if note.frequency %}
-                                            <span><i class="fas fa-clock"></i> {{ note.frequency }}</span>
-                                        {% endif %}
-                                    </div>
-                                {% endif %}
-
-                                {% if note.note_type == 'exercise' and note.exercise_name %}
-                                    <div class="note-meta">
-                                        <span><i class="fas fa-dumbbell"></i> {{ note.exercise_name }}</span>
-                                        {% if note.exercise_duration %}
-                                            <span><i class="fas fa-hourglass"></i> {{ note.exercise_duration }}</span>
-                                        {% endif %}
-                                    </div>
-                                {% endif %}
-
-                                {% if note.note_type == 'referral' %}
-                                    <div class="note-meta">
-                                        <span><i class="fas fa-user-md"></i> Referral</span>
-                                    </div>
-                                {% endif %}
-
-                                <div class="note-actions">
-                                    <a href="{% url 'user:view_note' note.id %}" class="btn btn-primary">
-                                        <i class="fas fa-eye"></i> View Full Note
-                                    </a>
-                                    {% if note.attachment %}
-                                        <a href="{% url 'user:download_note_attachment' note.id %}" class="btn btn-outline">
-                                            <i class="fas fa-download"></i> Download
-                                        </a>
-                                    {% endif %}
+                                <div class="therapist-info">
+                                    <h4>Dr. {{ note.therapist.name }}</h4>
+                                    <p>{{ note.therapist.specialization|default:"Mental Health Professional" }}</p>
                                 </div>
                             </div>
-                        {% endfor %}
-                    </div>
+
+                            <div class="note-date">
+                                <i class="fas fa-calendar"></i> {{ note.created_at|date:"F j, Y" }} at {{ note.created_at|time:"g:i A" }}
+                                {% if not note.is_read %}
+                                    <span class="unread-badge">NEW</span>
+                                {% endif %}
+                            </div>
+
+                            <h3 class="note-title">{{ note.title }}</h3>
+                            <div class="note-preview">{{ note.content|truncatechars:150 }}</div>
+
+                            {% if note.note_type == 'prescription' and note.medication_name %}
+                                <div class="note-meta">
+                                    <span><i class="fas fa-pills"></i> {{ note.medication_name }} {{ note.dosage|default:"" }}</span>
+                                    {% if note.frequency %}
+                                        <span><i class="fas fa-clock"></i> {{ note.frequency }}</span>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+
+                            {% if note.note_type == 'exercise' and note.exercise_name %}
+                                <div class="note-meta">
+                                    <span><i class="fas fa-dumbbell"></i> {{ note.exercise_name }}</span>
+                                    {% if note.exercise_duration %}
+                                        <span><i class="fas fa-hourglass"></i> {{ note.exercise_duration }}</span>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+
+                            {% if note.note_type == 'referral' %}
+                                <div class="note-meta">
+                                    <span><i class="fas fa-user-md"></i> Referral</span>
+                                </div>
+                            {% endif %}
+
+                            <div class="note-actions">
+                                <a href="{% url 'user:view_note' note.id %}" class="btn btn-primary">
+                                    <i class="fas fa-eye"></i> View Full Note
+                                </a>
+                                {% if note.attachment %}
+                                    <a href="{% url 'user:download_note_attachment' note.id %}" class="btn btn-outline">
+                                        <i class="fas fa-download"></i> Download
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
                 </div>
-            {% endfor %}
-        {% else %}
-            <!-- Empty State -->
-            <div class="empty-state">
-                <i class="fas fa-sticky-note"></i>
-                <h3>No Notes Yet</h3>
-                <p>Your therapists haven't shared any notes, prescriptions, or recommendations with you yet. After your sessions, they may add notes here.</p>
-                <a href="{% url 'user:my_sessions' %}" class="btn btn-primary btn-lg">
-                    <i class="fas fa-calendar-alt"></i> View My Sessions
-                </a>
             </div>
-        {% endif %}
-    </div>
-
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-bottom">
-                <p>&copy; 2025 EmpathyQ. All rights reserved. | Your notes are private and confidential</p>
-            </div>
+        {% endfor %}
+    {% else %}
+        <!-- Empty State -->
+        <div class="empty-state">
+            <i class="fas fa-sticky-note"></i>
+            <h3>No Notes Yet</h3>
+            <p>Your therapists haven't shared any notes, prescriptions, or recommendations with you yet. After your sessions, they may add notes here.</p>
+            <a href="{% url 'user:my_sessions' %}" class="btn btn-primary btn-lg">
+                <i class="fas fa-calendar-alt"></i> View My Sessions
+            </a>
         </div>
-    </footer>
+    {% endif %}
+</div>
+{% endblock %}
 
-    <script>
-        // Filter notes by type and status
-        function filterNotes() {
-            const typeFilter = document.getElementById('typeFilter').value;
-            const statusFilter = document.getElementById('statusFilter').value;
+{% block extra_js %}
+<script>
+    // Filter notes by type and status
+    function filterNotes() {
+        const typeFilter = document.getElementById('typeFilter').value;
+        const statusFilter = document.getElementById('statusFilter').value;
+        
+        const noteCards = document.querySelectorAll('.note-card');
+        
+        noteCards.forEach(card => {
+            let showCard = true;
             
-            const noteCards = document.querySelectorAll('.note-card');
-            
-            noteCards.forEach(card => {
-                let showCard = true;
-                
-                // Filter by type
-                if (typeFilter !== 'all') {
-                    const noteType = card.dataset.noteType;
-                    if (noteType !== typeFilter) {
-                        showCard = false;
-                    }
+            // Filter by type
+            if (typeFilter !== 'all') {
+                const noteType = card.dataset.noteType;
+                if (noteType !== typeFilter) {
+                    showCard = false;
                 }
-                
-                // Filter by status
-                if (statusFilter !== 'all' && showCard) {
-                    if (statusFilter === 'unread' && card.dataset.isRead !== 'false') {
-                        showCard = false;
-                    } else if (statusFilter === 'read' && card.dataset.isRead !== 'true') {
-                        showCard = false;
-                    } else if (statusFilter === 'important' && card.dataset.isImportant !== 'true') {
-                        showCard = false;
-                    }
+            }
+            
+            // Filter by status
+            if (statusFilter !== 'all' && showCard) {
+                if (statusFilter === 'unread' && card.dataset.isRead !== 'false') {
+                    showCard = false;
+                } else if (statusFilter === 'read' && card.dataset.isRead !== 'true') {
+                    showCard = false;
+                } else if (statusFilter === 'important' && card.dataset.isImportant !== 'true') {
+                    showCard = false;
                 }
-                
-                card.style.display = showCard ? 'block' : 'none';
-            });
+            }
             
-            // Show/hide session groups
-            const sessionGroups = document.querySelectorAll('.session-group');
-            sessionGroups.forEach(group => {
-                const visibleCards = group.querySelectorAll('.note-card[style="display: block"]').length;
-                const totalCards = group.querySelectorAll('.note-card').length;
-                
-                if (visibleCards === 0) {
-                    group.style.display = 'none';
-                } else {
-                    group.style.display = 'block';
-                }
-            });
-        }
-
-        // Clear all filters
-        function clearFilters(event) {
-            event.preventDefault();
-            document.getElementById('typeFilter').value = 'all';
-            document.getElementById('statusFilter').value = 'all';
+            card.style.display = showCard ? 'block' : 'none';
+        });
+        
+        // Show/hide session groups
+        const sessionGroups = document.querySelectorAll('.session-group');
+        sessionGroups.forEach(group => {
+            const visibleCards = group.querySelectorAll('.note-card[style="display: block"]').length;
             
-            document.querySelectorAll('.note-card').forEach(card => {
-                card.style.display = 'block';
-            });
-            
-            document.querySelectorAll('.session-group').forEach(group => {
+            if (visibleCards === 0) {
+                group.style.display = 'none';
+            } else {
                 group.style.display = 'block';
-            });
-        }
+            }
+        });
+    }
 
-        // Auto-hide messages
-        setTimeout(function() {
-            document.querySelectorAll('.alert').forEach(function(alert) {
+    // Clear all filters
+    function clearFilters(event) {
+        event.preventDefault();
+        document.getElementById('typeFilter').value = 'all';
+        document.getElementById('statusFilter').value = 'all';
+        
+        document.querySelectorAll('.note-card').forEach(card => {
+            card.style.display = 'block';
+        });
+        
+        document.querySelectorAll('.session-group').forEach(group => {
+            group.style.display = 'block';
+        });
+    }
+
+    // Auto-hide messages
+    setTimeout(function() {
+        document.querySelectorAll('.alert').forEach(function(alert) {
+            if (alert) {
                 alert.style.transition = 'opacity 0.5s';
                 alert.style.opacity = '0';
                 setTimeout(() => alert.remove(), 500);
-            });
-        }, 5000);
-    </script>
-</body>
-</html>
+            }
+        });
+    }, 5000);
+</script>
+{% endblock %}

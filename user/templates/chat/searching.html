@@ -1,393 +1,266 @@
-<!-- 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Finding a Match - EmpathyQ</title>
-    <style>
-        body {
-            font-family: system-ui, -apple-system, sans-serif;
-            background: #f0f2f5;
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .searching-container {
-            max-width: 500px;
-            width: 100%;
-            background: white;
-            border-radius: 24px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            padding: 40px;
-            text-align: center;
-        }
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .mood-badge {
-            background: #667eea;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 50px;
-            display: inline-block;
-            margin: 10px 0;
-        }
-        .cancel-btn {
-            background: #f56565;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 24px;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            margin-top: 20px;
-        }
-        .cancel-btn:hover {
-            opacity: 0.9;
-        }
-        .wait-time {
-            color: #666;
-            font-size: 14px;
-            margin-top: 10px;
-        }
-    </style>
-</head>
-<body>
-    <div class="searching-container">
+{% extends 'base_clean.html' %}
+
+{% block title %}Finding a Match - EmpathyQ{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        font-family: system-ui, -apple-system, sans-serif;
+        background: #f0f2f5;
+        margin: 0;
+        padding: 20px;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .searching-container {
+        max-width: 500px;
+        width: 100%;
+        background: white;
+        border-radius: 24px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        padding: 40px;
+        text-align: center;
+    }
+    .spinner {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #667eea;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+        margin: 20px auto;
+    }
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    .mood-badge {
+        background: #667eea;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 50px;
+        display: inline-block;
+        margin: 10px 0;
+    }
+    .cancel-btn {
+        background: #f56565;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 24px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        margin-top: 20px;
+    }
+    .cancel-btn:hover {
+        opacity: 0.9;
+    }
+    .wait-time {
+        color: #666;
+        font-size: 14px;
+        margin-top: 10px;
+    }
+    .energy-indicator {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        margin-left: 8px;
+    }
+    .energy-low { background: #4834d4; color: white; }
+    .energy-medium { background: #f39c12; color: white; }
+    .energy-high { background: #eb4d4b; color: white; }
+    .match-found {
+        text-align: center;
+    }
+    .match-found .check-circle {
+        background: #4CAF50;
+        color: white;
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        font-size: 40px;
+    }
+    .compatibility-score {
+        font-size: 24px;
+        font-weight: bold;
+        color: #4CAF50;
+        margin: 15px 0;
+    }
+    .encouragement-message {
+        background: #f0f9ff;
+        border: 1px solid #bae6fd;
+        border-radius: 12px;
+        padding: 15px;
+        margin: 20px 0;
+        color: #0369a1;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="searching-container">
+    <div id="mainContent">
         <h2>Finding Your Match</h2>
         <div class="spinner"></div>
         
         {% if queue_entry %}
-        <p>Your mood: <span class="mood-badge">{{ queue_entry.mood }}</span></p>
+        <div>
+            <p>Your mood: <span class="mood-badge">{{ queue_entry.mood }}</span></p>
+            {% if queue_entry.secondary_mood %}
+            <p>Secondary mood: <span class="mood-badge">{{ queue_entry.secondary_mood }}</span></p>
+            {% endif %}
+            <p>
+                Energy level: 
+                <span class="energy-indicator energy-{{ queue_entry.energy_level }}">
+                    {{ queue_entry.energy_level }}
+                </span>
+            </p>
+            <p>Intensity: {{ queue_entry.intensity }}/10</p>
+        </div>
         
-        <p>We're looking for someone to connect with you.</p>
+        <p>We're looking for someone compatible with your emotional state.</p>
         <p>This usually takes less than a minute.</p>
+        
+        <div class="encouragement-message" id="encouragementMessage">
+            <i class="fas fa-heart"></i> Finding the best match for you...
+        </div>
         
         <p class="wait-time">Joined at: {{ queue_entry.joined_at|time:"H:i:s" }}</p>
         <p class="wait-time" id="waitTimeDisplay">Waiting: 0 seconds</p>
         {% else %}
         <p>You are not in the queue.</p>
         {% endif %}
-        
-        <a href="{% url 'user:emotional_checkin' %}" class="cancel-btn">Cancel</a>
     </div>
+    
+    <a href="{% url 'user:emotional_checkin' %}" class="cancel-btn">Cancel</a>
+</div>
+{% endblock %}
 
-    <script>
-        let checkInterval = setInterval(checkMatch, 2000);
-        let startTime = Date.now();
+{% block extra_js %}
+<script>
+    // Use var for Edge compatibility
+    var checkInterval = setInterval(checkMatch, 2000);
+    var startTime = Date.now();
+    var checkCount = 0;
+    var encouragementMessages = [
+        "Finding someone who understands...",
+        "Matching based on your emotional state...",
+        "Good matches take time...",
+        "Almost there...",
+        "Still searching for your ideal match...",
+        "Checking compatibility with potential matches...",
+        "You're not alone, we're finding someone for you..."
+    ];
+    
+    function checkMatch() {
+        checkCount++;
         
-        function checkMatch() {
-            fetch(window.location.href, {
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.matched) {
-                    clearInterval(checkInterval);
-                    window.location.href = data.redirect_url;
-                } else if (data.expired) {
-                    clearInterval(checkInterval);
-                    alert(data.message);
-                    window.location.href = "{% url 'user:emotional_checkin' %}";
-                } else {
-                    // Update wait time
-                    const waitSeconds = Math.floor((Date.now() - startTime) / 1000);
-                    document.getElementById('waitTimeDisplay').textContent = 
-                        `Waiting: ${waitSeconds} seconds`;
-                }
-            })
-            .catch(error => {
-                console.error('Error checking match:', error);
-            });
-        }
-        
-        // Update wait time every second
-        setInterval(() => {
-            const waitSeconds = Math.floor((Date.now() - startTime) / 1000);
-            document.getElementById('waitTimeDisplay').textContent = 
-                `Waiting: ${waitSeconds} seconds`;
-        }, 1000);
-    </script>
-</body>
-</html> -->
-
-<!-- templates/chat/searching.html -->
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Finding a Match - EmpathyQ</title>
-    <style>
-        body {
-            font-family: system-ui, -apple-system, sans-serif;
-            background: #f0f2f5;
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .searching-container {
-            max-width: 500px;
-            width: 100%;
-            background: white;
-            border-radius: 24px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            padding: 40px;
-            text-align: center;
-        }
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .mood-badge {
-            background: #667eea;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 50px;
-            display: inline-block;
-            margin: 10px 0;
-        }
-        .cancel-btn {
-            background: #f56565;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 24px;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            margin-top: 20px;
-        }
-        .cancel-btn:hover {
-            opacity: 0.9;
-        }
-        .wait-time {
-            color: #666;
-            font-size: 14px;
-            margin-top: 10px;
-        }
-        .energy-indicator {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-left: 8px;
-        }
-        .energy-low { background: #4834d4; color: white; }
-        .energy-medium { background: #f39c12; color: white; }
-        .energy-high { background: #eb4d4b; color: white; }
-        .match-found {
-            text-align: center;
-        }
-        .match-found .check-circle {
-            background: #4CAF50;
-            color: white;
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            font-size: 40px;
-        }
-        .compatibility-score {
-            font-size: 24px;
-            font-weight: bold;
-            color: #4CAF50;
-            margin: 15px 0;
-        }
-        .encouragement-message {
-            background: #f0f9ff;
-            border: 1px solid #bae6fd;
-            border-radius: 12px;
-            padding: 15px;
-            margin: 20px 0;
-            color: #0369a1;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-    </style>
-</head>
-<body>
-    <div class="searching-container">
-        <div id="mainContent">
-            <h2>Finding Your Match</h2>
-            <div class="spinner"></div>
-            
-            {% if queue_entry %}
-            <div>
-                <p>Your mood: <span class="mood-badge">{{ queue_entry.mood }}</span></p>
-                {% if queue_entry.secondary_mood %}
-                <p>Secondary mood: <span class="mood-badge">{{ queue_entry.secondary_mood }}</span></p>
-                {% endif %}
-                <p>
-                    Energy level: 
-                    <span class="energy-indicator energy-{{ queue_entry.energy_level }}">
-                        {{ queue_entry.energy_level }}
-                    </span>
-                </p>
-                <p>Intensity: {{ queue_entry.intensity }}/10</p>
-            </div>
-            
-            <p>We're looking for someone compatible with your emotional state.</p>
-            <p>This usually takes less than a minute.</p>
-            
-            <div class="encouragement-message" id="encouragementMessage">
-                <i class="fas fa-heart"></i> Finding the best match for you...
-            </div>
-            
-            <p class="wait-time">Joined at: {{ queue_entry.joined_at|time:"H:i:s" }}</p>
-            <p class="wait-time" id="waitTimeDisplay">Waiting: 0 seconds</p>
-            {% else %}
-            <p>You are not in the queue.</p>
-            {% endif %}
-        </div>
-        
-        <a href="{% url 'user:emotional_checkin' %}" class="cancel-btn">Cancel</a>
-    </div>
-
-    <script>
-        // Use var for Edge compatibility
-        var checkInterval = setInterval(checkMatch, 2000);
-        var startTime = Date.now();
-        var checkCount = 0;
-        var encouragementMessages = [
-            "Finding someone who understands...",
-            "Matching based on your emotional state...",
-            "Good matches take time...",
-            "Almost there...",
-            "Still searching for your ideal match...",
-            "Checking compatibility with potential matches...",
-            "You're not alone, we're finding someone for you..."
-        ];
-        
-        function checkMatch() {
-            checkCount++;
-            
-            // Use XMLHttpRequest for better Edge compatibility
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4) {
-                    if (xhr.status === 200) {
-                        try {
-                            var data = JSON.parse(xhr.responseText);
-                            
-                            if (data.matched) {
-                                clearInterval(checkInterval);
-                                showMatchFound(data);
-                            } else if (data.expired) {
-                                clearInterval(checkInterval);
-                                alert(data.message);
-                                window.location.href = "{% url 'user:emotional_checkin' %}";
-                            } else {
-                                // Update wait time
-                                var waitSeconds = Math.floor((Date.now() - startTime) / 1000);
-                                var waitDisplay = document.getElementById('waitTimeDisplay');
-                                if (waitDisplay) {
-                                    waitDisplay.textContent = 'Waiting: ' + waitSeconds + ' seconds';
-                                }
-                                
-                                // Show encouraging message periodically
-                                if (waitSeconds > 10 && waitSeconds % 10 === 0) {
-                                    showEncouragement();
-                                }
+        // Use XMLHttpRequest for better Edge compatibility
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    try {
+                        var data = JSON.parse(xhr.responseText);
+                        
+                        if (data.matched) {
+                            clearInterval(checkInterval);
+                            showMatchFound(data);
+                        } else if (data.expired) {
+                            clearInterval(checkInterval);
+                            alert(data.message);
+                            window.location.href = "{% url 'user:emotional_checkin' %}";
+                        } else {
+                            // Update wait time
+                            var waitSeconds = Math.floor((Date.now() - startTime) / 1000);
+                            var waitDisplay = document.getElementById('waitTimeDisplay');
+                            if (waitDisplay) {
+                                waitDisplay.textContent = 'Waiting: ' + waitSeconds + ' seconds';
                             }
-                        } catch (e) {
-                            console.error('Error parsing response:', e);
+                            
+                            // Show encouraging message periodically
+                            if (waitSeconds > 10 && waitSeconds % 10 === 0) {
+                                showEncouragement();
+                            }
                         }
-                    } else {
-                        console.error('Network error:', xhr.status);
+                    } catch (e) {
+                        console.error('Error parsing response:', e);
                     }
+                } else {
+                    console.error('Network error:', xhr.status);
                 }
-            };
-            
-            xhr.open('GET', window.location.href + '?t=' + new Date().getTime(), true);
-            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-            xhr.send();
-        }
+            }
+        };
         
-        function showMatchFound(data) {
-            var container = document.querySelector('.searching-container');
-            var mainContent = document.getElementById('mainContent');
-            
-            if (mainContent) {
-                mainContent.innerHTML = `
-                    <div class="match-found">
-                        <div class="check-circle">
-                            <i class="fas fa-check"></i>
-                        </div>
-                        <h2>Match Found!</h2>
-                        <p style="margin: 15px 0; color: #666;">${data.reason || 'Great match found!'}</p>
-                        <div class="compatibility-score">${Math.min(100, data.score || 50)}% Compatible</div>
-                        <p>Redirecting to chat room...</p>
-                        <div class="spinner" style="width: 30px; height: 30px;"></div>
+        xhr.open('GET', window.location.href + '?t=' + new Date().getTime(), true);
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.send();
+    }
+    
+    function showMatchFound(data) {
+        var container = document.querySelector('.searching-container');
+        var mainContent = document.getElementById('mainContent');
+        
+        if (mainContent) {
+            mainContent.innerHTML = `
+                <div class="match-found">
+                    <div class="check-circle">
+                        <i class="fas fa-check"></i>
                     </div>
-                `;
-            }
+                    <h2>Match Found!</h2>
+                    <p style="margin: 15px 0; color: #666;">${data.reason || 'Great match found!'}</p>
+                    <div class="compatibility-score">${Math.min(100, data.score || 50)}% Compatible</div>
+                    <p>Redirecting to chat room...</p>
+                    <div class="spinner" style="width: 30px; height: 30px;"></div>
+                </div>
+            `;
+        }
+        
+        // Redirect after showing success message
+        setTimeout(function() {
+            window.location.href = data.redirect_url;
+        }, 2000);
+    }
+    
+    function showEncouragement() {
+        var randomMsg = encouragementMessages[Math.floor(Math.random() * encouragementMessages.length)];
+        var encouragementDiv = document.getElementById('encouragementMessage');
+        if (encouragementDiv) {
+            encouragementDiv.innerHTML = '<i class="fas fa-heart"></i> ' + randomMsg;
             
-            // Redirect after showing success message
+            // Add a subtle animation
+            encouragementDiv.style.transform = 'scale(1.02)';
             setTimeout(function() {
-                window.location.href = data.redirect_url;
-            }, 2000);
+                encouragementDiv.style.transform = 'scale(1)';
+            }, 200);
         }
-        
-        function showEncouragement() {
-            var randomMsg = encouragementMessages[Math.floor(Math.random() * encouragementMessages.length)];
-            var encouragementDiv = document.getElementById('encouragementMessage');
-            if (encouragementDiv) {
-                encouragementDiv.innerHTML = '<i class="fas fa-heart"></i> ' + randomMsg;
-                
-                // Add a subtle animation
-                encouragementDiv.style.transform = 'scale(1.02)';
-                setTimeout(function() {
-                    encouragementDiv.style.transform = 'scale(1)';
-                }, 200);
-            }
+    }
+    
+    // Update wait time every second
+    setInterval(function() {
+        var waitSeconds = Math.floor((Date.now() - startTime) / 1000);
+        var waitDisplay = document.getElementById('waitTimeDisplay');
+        if (waitDisplay) {
+            waitDisplay.textContent = 'Waiting: ' + waitSeconds + ' seconds';
         }
-        
-        // Update wait time every second
-        setInterval(function() {
-            var waitSeconds = Math.floor((Date.now() - startTime) / 1000);
-            var waitDisplay = document.getElementById('waitTimeDisplay');
-            if (waitDisplay) {
-                waitDisplay.textContent = 'Waiting: ' + waitSeconds + ' seconds';
-            }
-        }, 1000);
-        
-        // Add Font Awesome for icons
-        var fontAwesome = document.createElement('link');
-        fontAwesome.rel = 'stylesheet';
-        fontAwesome.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
-        document.head.appendChild(fontAwesome);
-    </script>
-</body>
-</html>
+    }, 1000);
+    
+    // Add Font Awesome for icons (if not already in base)
+    var fontAwesome = document.createElement('link');
+    fontAwesome.rel = 'stylesheet';
+    fontAwesome.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
+    document.head.appendChild(fontAwesome);
+</script>
+{% endblock %}

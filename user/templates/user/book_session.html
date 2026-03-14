@@ -1,1840 +1,1638 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book Session - EmpathyQ</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* All your existing CSS styles remain exactly the same */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+{% block title %}Book Session - EmpathyQ{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* All your existing CSS styles remain exactly the same */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+        background-color: #f8f9fa;
+        color: #333;
+        line-height: 1.6;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    /* Page Header */
+    .page-header {
+        background: linear-gradient(135deg, #6c63ff, #5d5fef);
+        color: white;
+        padding: 120px 0 60px;
+        text-align: center;
+        position: relative;
+    }
+
+    .page-header h1 {
+        font-size: 42px;
+        font-weight: 700;
+        margin-bottom: 15px;
+    }
+
+    .page-header p {
+        font-size: 18px;
+        opacity: 0.9;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    /* Booking Section */
+    .booking-section {
+        padding: 60px 0;
+        background: linear-gradient(135deg, #f5f7ff 0%, #f0f2ff 100%);
+        min-height: calc(100vh - 300px);
+    }
+
+    /* Specialization Filter */
+    .filter-section {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        margin-bottom: 40px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03);
+        animation: fadeIn 0.5s ease-out;
+    }
+
+    .filter-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .filter-header h2 {
+        font-size: 24px;
+        color: #333;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .filter-header h2 i {
+        color: #6c63ff;
+    }
+
+    .selected-filter {
+        background: #6c63ff;
+        color: white;
+        padding: 8px 20px;
+        border-radius: 30px;
+        font-size: 14px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        animation: slideIn 0.3s ease;
+    }
+
+    .specialization-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        justify-content: center;
+    }
+
+    .specialization-card {
+        background: white;
+        border: 2px solid #e0e0e0;
+        border-radius: 15px;
+        padding: 20px 25px;
+        cursor: pointer;
+        transition: all 0.3s;
+        flex: 0 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        min-width: 160px;
+    }
+
+    .specialization-card:hover {
+        border-color: #6c63ff;
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(108, 99, 255, 0.1);
+    }
+
+    .specialization-card.active {
+        border-color: #6c63ff;
+        background: linear-gradient(135deg, #6c63ff, #5d5fef);
+        color: white;
+    }
+
+    .specialization-card.active i,
+    .specialization-card.active h3,
+    .specialization-card.active p {
+        color: white;
+    }
+
+    .specialization-icon {
+        font-size: 32px;
+        color: #6c63ff;
+        margin-bottom: 12px;
+    }
+
+    .specialization-card h3 {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 5px;
+        color: #333;
+    }
+
+    .specialization-card p {
+        font-size: 13px;
+        color: #777;
+    }
+
+    .clear-filter {
+        background: #f0f2ff;
+        color: #6c63ff;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 30px;
+        font-weight: 600;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s;
+        text-decoration: none;
+    }
+
+    .clear-filter:hover {
+        background: #6c63ff;
+        color: white;
+    }
+
+    /* Experts Grid */
+    .experts-section {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        margin-bottom: 40px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03);
+        animation: fadeIn 0.5s ease-out 0.2s both;
+    }
+
+    .experts-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .experts-header h2 {
+        font-size: 24px;
+        color: #333;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .experts-header h2 i {
+        color: #6c63ff;
+    }
+
+    .expert-count {
+        background: #f0f2ff;
+        color: #6c63ff;
+        padding: 8px 20px;
+        border-radius: 30px;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .experts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 25px;
+    }
+
+    .expert-card {
+        background: white;
+        border: 2px solid #edf2f7;
+        border-radius: 20px;
+        padding: 25px;
+        transition: all 0.3s;
+        position: relative;
+        animation: cardFadeIn 0.5s ease-out;
+    }
+
+    .expert-card:hover {
+        border-color: #6c63ff;
+        box-shadow: 0 10px 30px rgba(108, 99, 255, 0.1);
+        transform: translateY(-5px);
+    }
+
+    .expert-card.verified::after {
+        content: '✓ Verified';
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: #4CAF50;
+        color: white;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .expert-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-right: 80px;
+    }
+
+    .expert-avatar {
+        width: 70px;
+        height: 70px;
+        background: linear-gradient(135deg, #6c63ff, #5d5fef);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 28px;
+        font-weight: 600;
+        margin-right: 20px;
+        flex-shrink: 0;
+        box-shadow: 0 5px 15px rgba(108, 99, 255, 0.2);
+    }
+
+    .expert-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .expert-info h3 {
+        font-size: 18px;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 5px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .expert-title {
+        color: #6c63ff;
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 5px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .expert-rating {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+        color: #FFD700;
+        font-size: 14px;
+        flex-wrap: wrap;
+    }
+
+    .expert-rating span {
+        color: #666;
+        margin-left: 5px;
+        white-space: nowrap;
+    }
+
+    .expert-details {
+        margin: 20px 0;
+        padding: 15px 0;
+        border-top: 1px solid #edf2f7;
+        border-bottom: 1px solid #edf2f7;
+    }
+
+    .expert-specialization {
+        display: inline-block;
+        background: #f0f2ff;
+        color: #6c63ff;
+        padding: 6px 15px;
+        border-radius: 30px;
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    .expert-bio {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 10px;
+        line-height: 1.6;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .expert-meta {
+        display: flex;
+        gap: 20px;
+        margin-top: 10px;
+        flex-wrap: wrap;
+    }
+
+    .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: #777;
+        font-size: 13px;
+    }
+
+    .meta-item i {
+        color: #6c63ff;
+    }
+
+    /* Time Slots Styles */
+    .time-slots-section {
+        margin-top: 20px;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 12px;
+        border: 1px solid #e0e0e0;
+    }
+
+    .time-slots-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        cursor: pointer;
+        padding: 10px;
+        background: white;
+        border-radius: 8px;
+        transition: all 0.3s;
+    }
+
+    .time-slots-header:hover {
+        background: #f0f2ff;
+    }
+
+    .time-slots-header h4 {
+        color: #333;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .time-slots-header h4 i {
+        color: #6c63ff;
+    }
+
+    .toggle-icon {
+        color: #6c63ff;
+        transition: transform 0.3s;
+    }
+
+    .time-slots-container {
+        display: none;
+        animation: slideDown 0.3s ease;
+    }
+
+    .time-slots-container.expanded {
+        display: block;
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .date-group {
+        margin-bottom: 20px;
+        border-bottom: 1px solid #e0e0e0;
+        padding-bottom: 15px;
+    }
+
+    .date-group:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+
+    .date-title {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 12px;
+        font-size: 15px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .date-title i {
+        color: #6c63ff;
+    }
+
+    .slots-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 10px;
+    }
+
+    .time-slot {
+        background: white;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        padding: 10px 8px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 13px;
+        font-weight: 500;
+        color: #333;
+        position: relative;
+    }
+
+    .time-slot:hover:not(.disabled) {
+        border-color: #6c63ff;
+        background: #f0f2ff;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(108, 99, 255, 0.1);
+    }
+
+    .time-slot.selected {
+        border-color: #6c63ff;
+        background: linear-gradient(135deg, #6c63ff, #5d5fef);
+        color: white;
+    }
+
+    .time-slot.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        background: #f5f5f5;
+    }
+
+    .slot-time {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 3px;
+    }
+
+    .slot-duration {
+        font-size: 11px;
+        opacity: 0.8;
+    }
+
+    .no-slots-message {
+        text-align: center;
+        padding: 20px;
+        color: #777;
+        background: #f5f5f5;
+        border-radius: 10px;
+        font-size: 14px;
+    }
+
+    .selected-slot-info {
+        background: #e8f5e9;
+        border: 1px solid #4CAF50;
+        border-radius: 10px;
+        padding: 12px 15px;
+        margin: 15px 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .selected-slot-info span {
+        color: #2e7d32;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .selected-slot-info i {
+        color: #4CAF50;
+    }
+
+    .clear-slot-btn {
+        background: none;
+        border: none;
+        color: #f44336;
+        cursor: pointer;
+        font-size: 14px;
+        padding: 5px 10px;
+        border-radius: 5px;
+        transition: all 0.3s;
+    }
+
+    .clear-slot-btn:hover {
+        background: #ffebee;
+    }
+
+    .slot-badge {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: #4CAF50;
+        color: white;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        font-size: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+    }
+
+    /* Booking Modal */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 2000;
+        justify-content: center;
+        align-items: center;
+        backdrop-filter: blur(5px);
+    }
+
+    .modal.active {
+        display: flex;
+    }
+
+    .modal-content {
+        background: white;
+        border-radius: 25px;
+        padding: 40px;
+        max-width: 550px;
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+        position: relative;
+        animation: modalSlideIn 0.3s ease;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    @keyframes modalSlideIn {
+        from {
+            transform: translateY(-50px);
+            opacity: 0;
         }
 
-        body {
-            background-color: #f8f9fa;
-            color: #333;
-            line-height: 1.6;
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
         }
 
-        .container {
-            width: 90%;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px;
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes cardFadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
         }
 
-        /* Navigation */
-        .navbar {
-            background-color: #ffffff;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            padding: 15px 0;
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateX(20px);
+            opacity: 0;
         }
 
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+
+    .modal-header h3 {
+        font-size: 24px;
+        color: #333;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .modal-header h3 i {
+        color: #6c63ff;
+    }
+
+    .close-modal {
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: #999;
+        transition: color 0.3s;
+    }
+
+    .close-modal:hover {
+        color: #f44336;
+    }
+
+    .therapist-summary {
+        background: linear-gradient(135deg, #f8f9fa, #f0f2ff);
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 25px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        border: 1px solid #e0e0e0;
+    }
+
+    .summary-avatar {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #6c63ff, #5d5fef);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 24px;
+        font-weight: 600;
+        box-shadow: 0 5px 15px rgba(108, 99, 255, 0.2);
+    }
+
+    .summary-info h4 {
+        font-size: 18px;
+        color: #333;
+        margin-bottom: 5px;
+    }
+
+    .summary-info p {
+        color: #6c63ff;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .btn {
+        padding: 14px 30px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s;
+        display: inline-block;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #6c63ff, #5d5fef);
+        color: white;
+        width: 100%;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(108, 99, 255, 0.2);
+    }
+
+    .btn-primary:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .btn-secondary {
+        background: white;
+        color: #6c63ff;
+        border: 2px solid #6c63ff;
+    }
+
+    .btn-secondary:hover {
+        background: #6c63ff;
+        color: white;
+    }
+
+    .btn-book {
+        background: #6c63ff;
+        color: white;
+        width: 100%;
+        padding: 12px;
+        border-radius: 10px;
+        font-size: 15px;
+        margin-top: 15px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .btn-book:hover {
+        background: #5d5fef;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(108, 99, 255, 0.3);
+    }
+
+    .btn-book:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .alert {
+        padding: 16px 20px;
+        border-radius: 12px;
+        margin-bottom: 25px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        animation: slideIn 0.3s ease;
+    }
+
+    .alert-success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    .alert-info {
+        background: #d1ecf1;
+        color: #0c5460;
+        border: 1px solid #bee5eb;
+    }
+
+    .alert-warning {
+        background: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffeeba;
+    }
+
+    .alert-error {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+
+    .alert i {
+        font-size: 20px;
+    }
+
+    .booking-status {
+        background: #fff3cd;
+        color: #856404;
+        padding: 12px 15px;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 600;
+        margin: 20px 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border-left: 4px solid #ffc107;
+    }
+
+    .booking-status i {
+        font-size: 16px;
+        color: #ffc107;
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        background: #f8f9fa;
+        border-radius: 20px;
+        grid-column: 1 / -1;
+        border: 2px dashed #e0e0e0;
+    }
+
+    .empty-state i {
+        font-size: 60px;
+        color: #6c63ff;
+        margin-bottom: 20px;
+        opacity: 0.5;
+    }
+
+    .empty-state h3 {
+        font-size: 20px;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .empty-state p {
+        color: #777;
+        margin-bottom: 25px;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* Form Styles */
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 15px;
+        transition: all 0.3s;
+    }
+
+    .form-control:focus {
+        border-color: #6c63ff;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
+    }
+
+    textarea.form-control {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+    /* Loading Spinner */
+    .fa-spinner {
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
         }
 
-        .logo {
-            font-size: 28px;
-            font-weight: 700;
-            color: #5d5fef;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
+        100% {
+            transform: rotate(360deg);
         }
+    }
 
-        .logo i {
-            margin-right: 10px;
-            color: #6c63ff;
-        }
+    /* Tooltip */
+    .tooltip {
+        position: relative;
+        display: inline-block;
+    }
 
-        .nav-links {
-            display: flex;
-            list-style: none;
-        }
+    .tooltip .tooltiptext {
+        visibility: hidden;
+        width: 120px;
+        background-color: #555;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%;
+        left: 50%;
+        margin-left: -60px;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
 
-        .nav-links li {
-            margin-left: 30px;
-        }
+    .tooltip:hover .tooltiptext {
+        visibility: visible;
+        opacity: 1;
+    }
 
-        .nav-links a {
-            text-decoration: none;
-            color: #555;
-            font-weight: 500;
-            font-size: 16px;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: #6c63ff;
-        }
-
-        .user-badge {
-            background-color: #6c63ff;
-            color: white;
-            padding: 8px 20px;
-            border-radius: 30px;
-            font-weight: 600;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .user-badge i {
-            font-size: 16px;
-        }
-
-        /* Page Header */
-        .page-header {
-            background: linear-gradient(135deg, #6c63ff, #5d5fef);
-            color: white;
-            padding: 120px 0 60px;
-            text-align: center;
-            position: relative;
-        }
-
-        .page-header h1 {
-            font-size: 42px;
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
-
-        .page-header p {
-            font-size: 18px;
-            opacity: 0.9;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        /* Back to Dashboard Button in Header */
-        .header-dashboard-btn {
-            position: absolute;
-            top: 120px;
-            left: 30px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            padding: 12px 25px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 16px;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(5px);
-        }
-
-        .header-dashboard-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateX(-5px);
-        }
-
-        /* Booking Section */
-        .booking-section {
-            padding: 60px 0;
-            background: linear-gradient(135deg, #f5f7ff 0%, #f0f2ff 100%);
-            min-height: calc(100vh - 300px);
-        }
-
-        /* Dashboard Button Container */
-        .dashboard-btn-container {
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: flex-start;
-        }
-
-        .btn-dashboard {
-            background: white;
-            color: #6c63ff;
-            border: 2px solid #6c63ff;
-            padding: 12px 30px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 16px;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 4px 10px rgba(108, 99, 255, 0.1);
-        }
-
-        .btn-dashboard:hover {
-            background: #6c63ff;
-            color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(108, 99, 255, 0.3);
-        }
-
-        .btn-dashboard i {
-            font-size: 18px;
-        }
-
-        /* Specialization Filter */
-        .filter-section {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 40px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03);
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        .filter-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .filter-header h2 {
-            font-size: 24px;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .filter-header h2 i {
-            color: #6c63ff;
-        }
-
-        .selected-filter {
-            background: #6c63ff;
-            color: white;
-            padding: 8px 20px;
-            border-radius: 30px;
-            font-size: 14px;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            animation: slideIn 0.3s ease;
-        }
-
-        .specialization-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            justify-content: center;
+    /* Responsive */
+    @media (max-width: 992px) {
+        .experts-grid {
+            grid-template-columns: 1fr;
         }
 
         .specialization-card {
-            background: white;
-            border: 2px solid #e0e0e0;
-            border-radius: 15px;
-            padding: 20px 25px;
-            cursor: pointer;
-            transition: all 0.3s;
-            flex: 0 0 auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            min-width: 160px;
+            min-width: 140px;
+            padding: 15px 20px;
         }
+    }
 
-        .specialization-card:hover {
-            border-color: #6c63ff;
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(108, 99, 255, 0.1);
-        }
-
-        .specialization-card.active {
-            border-color: #6c63ff;
-            background: linear-gradient(135deg, #6c63ff, #5d5fef);
-            color: white;
-        }
-
-        .specialization-card.active i,
-        .specialization-card.active h3,
-        .specialization-card.active p {
-            color: white;
-        }
-
-        .specialization-icon {
+    @media (max-width: 768px) {
+        .page-header h1 {
             font-size: 32px;
-            color: #6c63ff;
-            margin-bottom: 12px;
-        }
-
-        .specialization-card h3 {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 5px;
-            color: #333;
-        }
-
-        .specialization-card p {
-            font-size: 13px;
-            color: #777;
-        }
-
-        .clear-filter {
-            background: #f0f2ff;
-            color: #6c63ff;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 30px;
-            font-weight: 600;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s;
-            text-decoration: none;
-        }
-
-        .clear-filter:hover {
-            background: #6c63ff;
-            color: white;
-        }
-
-        /* Experts Grid */
-        .experts-section {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 40px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03);
-            animation: fadeIn 0.5s ease-out 0.2s both;
-        }
-
-        .experts-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .experts-header h2 {
-            font-size: 24px;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .experts-header h2 i {
-            color: #6c63ff;
-        }
-
-        .expert-count {
-            background: #f0f2ff;
-            color: #6c63ff;
-            padding: 8px 20px;
-            border-radius: 30px;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .experts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 25px;
-        }
-
-        .expert-card {
-            background: white;
-            border: 2px solid #edf2f7;
-            border-radius: 20px;
-            padding: 25px;
-            transition: all 0.3s;
-            position: relative;
-            animation: cardFadeIn 0.5s ease-out;
-        }
-
-        .expert-card:hover {
-            border-color: #6c63ff;
-            box-shadow: 0 10px 30px rgba(108, 99, 255, 0.1);
-            transform: translateY(-5px);
-        }
-
-        .expert-card.verified::after {
-            content: '✓ Verified';
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: #4CAF50;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .expert-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-right: 80px;
+            flex-direction: column;
+            text-align: center;
+            padding-right: 0;
         }
 
         .expert-avatar {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, #6c63ff, #5d5fef);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 28px;
-            font-weight: 600;
-            margin-right: 20px;
-            flex-shrink: 0;
-            box-shadow: 0 5px 15px rgba(108, 99, 255, 0.2);
-        }
-
-        .expert-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .expert-info h3 {
-            font-size: 18px;
-            font-weight: 700;
-            color: #333;
-            margin-bottom: 5px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .expert-title {
-            color: #6c63ff;
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 5px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .expert-rating {
-            display: flex;
-            align-items: center;
-            gap: 2px;
-            color: #FFD700;
-            font-size: 14px;
-            flex-wrap: wrap;
-        }
-
-        .expert-rating span {
-            color: #666;
-            margin-left: 5px;
-            white-space: nowrap;
-        }
-
-        .expert-details {
-            margin: 20px 0;
-            padding: 15px 0;
-            border-top: 1px solid #edf2f7;
-            border-bottom: 1px solid #edf2f7;
-        }
-
-        .expert-specialization {
-            display: inline-block;
-            background: #f0f2ff;
-            color: #6c63ff;
-            padding: 6px 15px;
-            border-radius: 30px;
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-
-        .expert-bio {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 10px;
-            line-height: 1.6;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .expert-meta {
-            display: flex;
-            gap: 20px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-        }
-
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            color: #777;
-            font-size: 13px;
-        }
-
-        .meta-item i {
-            color: #6c63ff;
-        }
-
-        /* Time Slots Styles */
-        .time-slots-section {
-            margin-top: 20px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 12px;
-            border: 1px solid #e0e0e0;
-        }
-
-        .time-slots-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            margin-right: 0;
             margin-bottom: 15px;
-            cursor: pointer;
-            padding: 10px;
-            background: white;
-            border-radius: 8px;
-            transition: all 0.3s;
-        }
-
-        .time-slots-header:hover {
-            background: #f0f2ff;
-        }
-
-        .time-slots-header h4 {
-            color: #333;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .time-slots-header h4 i {
-            color: #6c63ff;
-        }
-
-        .toggle-icon {
-            color: #6c63ff;
-            transition: transform 0.3s;
-        }
-
-        .time-slots-container {
-            display: none;
-            animation: slideDown 0.3s ease;
-        }
-
-        .time-slots-container.expanded {
-            display: block;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .date-group {
-            margin-bottom: 20px;
-            border-bottom: 1px solid #e0e0e0;
-            padding-bottom: 15px;
-        }
-
-        .date-group:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
-
-        .date-title {
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 12px;
-            font-size: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .date-title i {
-            color: #6c63ff;
-        }
-
-        .slots-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            gap: 10px;
-        }
-
-        .time-slot {
-            background: white;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            padding: 10px 8px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 13px;
-            font-weight: 500;
-            color: #333;
-            position: relative;
-        }
-
-        .time-slot:hover:not(.disabled) {
-            border-color: #6c63ff;
-            background: #f0f2ff;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(108, 99, 255, 0.1);
-        }
-
-        .time-slot.selected {
-            border-color: #6c63ff;
-            background: linear-gradient(135deg, #6c63ff, #5d5fef);
-            color: white;
-        }
-
-        .time-slot.disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            background: #f5f5f5;
-        }
-
-        .slot-time {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 3px;
-        }
-
-        .slot-duration {
-            font-size: 11px;
-            opacity: 0.8;
-        }
-
-        .no-slots-message {
-            text-align: center;
-            padding: 20px;
-            color: #777;
-            background: #f5f5f5;
-            border-radius: 10px;
-            font-size: 14px;
-        }
-
-        .selected-slot-info {
-            background: #e8f5e9;
-            border: 1px solid #4CAF50;
-            border-radius: 10px;
-            padding: 12px 15px;
-            margin: 15px 0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .selected-slot-info span {
-            color: #2e7d32;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .selected-slot-info i {
-            color: #4CAF50;
-        }
-
-        .clear-slot-btn {
-            background: none;
-            border: none;
-            color: #f44336;
-            cursor: pointer;
-            font-size: 14px;
-            padding: 5px 10px;
-            border-radius: 5px;
-            transition: all 0.3s;
-        }
-
-        .clear-slot-btn:hover {
-            background: #ffebee;
-        }
-
-        .slot-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: #4CAF50;
-            color: white;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            font-size: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-
-        /* Booking Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(5px);
-        }
-
-        .modal.active {
-            display: flex;
         }
 
         .modal-content {
-            background: white;
-            border-radius: 25px;
-            padding: 40px;
-            max-width: 550px;
-            width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-            animation: modalSlideIn 0.3s ease;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 25px;
         }
 
-        @keyframes modalSlideIn {
-            from {
-                transform: translateY(-50px);
-                opacity: 0;
-            }
-
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+        .expert-meta {
+            justify-content: center;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .expert-rating {
+            justify-content: center;
         }
 
-        @keyframes cardFadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .specialization-grid {
+            justify-content: center;
         }
 
-        @keyframes slideIn {
-            from {
-                transform: translateX(20px);
-                opacity: 0;
-            }
-
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
+        .filter-header {
+            flex-direction: column;
+            align-items: flex-start;
         }
 
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
+        .slots-grid {
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        }
+    }
+
+    @media (max-width: 480px) {
+        .page-header {
+            padding: 100px 0 40px;
         }
 
-        .modal-header h3 {
+        .page-header h1 {
+            font-size: 28px;
+        }
+
+        .expert-card {
+            padding: 20px;
+        }
+
+        .expert-avatar {
+            width: 60px;
+            height: 60px;
             font-size: 24px;
-            color: #333;
-            display: flex;
-            align-items: center;
+        }
+
+        .detail-item {
+            font-size: 13px;
+        }
+
+        .specialization-card {
+            min-width: 120px;
+            padding: 12px 15px;
+        }
+
+        .specialization-icon {
+            font-size: 24px;
+        }
+
+        .specialization-card h3 {
+            font-size: 14px;
+        }
+
+        .specialization-card p {
+            font-size: 12px;
+        }
+
+        .expert-meta {
             gap: 10px;
         }
 
-        .modal-header h3 i {
-            color: #6c63ff;
+        .slots-grid {
+            grid-template-columns: repeat(2, 1fr);
         }
-
-        .close-modal {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: #999;
-            transition: color 0.3s;
-        }
-
-        .close-modal:hover {
-            color: #f44336;
-        }
-
-        .therapist-summary {
-            background: linear-gradient(135deg, #f8f9fa, #f0f2ff);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            border: 1px solid #e0e0e0;
-        }
-
-        .summary-avatar {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #6c63ff, #5d5fef);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 24px;
-            font-weight: 600;
-            box-shadow: 0 5px 15px rgba(108, 99, 255, 0.2);
-        }
-
-        .summary-info h4 {
-            font-size: 18px;
-            color: #333;
-            margin-bottom: 5px;
-        }
-
-        .summary-info p {
-            color: #6c63ff;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .btn {
-            padding: 14px 30px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
-            display: inline-block;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #6c63ff, #5d5fef);
-            color: white;
-            width: 100%;
-        }
-
-        .btn-primary:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(108, 99, 255, 0.2);
-        }
-
-        .btn-primary:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        .btn-secondary {
-            background: white;
-            color: #6c63ff;
-            border: 2px solid #6c63ff;
-        }
-
-        .btn-secondary:hover {
-            background: #6c63ff;
-            color: white;
-        }
-
-        .btn-book {
-            background: #6c63ff;
-            color: white;
-            width: 100%;
-            padding: 12px;
-            border-radius: 10px;
-            font-size: 15px;
-            margin-top: 15px;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .btn-book:hover {
-            background: #5d5fef;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(108, 99, 255, 0.3);
-        }
-
-        .btn-book:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .alert {
-            padding: 16px 20px;
-            border-radius: 12px;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            animation: slideIn 0.3s ease;
-        }
-
-        .alert-success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .alert-info {
-            background: #d1ecf1;
-            color: #0c5460;
-            border: 1px solid #bee5eb;
-        }
-
-        .alert-warning {
-            background: #fff3cd;
-            color: #856404;
-            border: 1px solid #ffeeba;
-        }
-
-        .alert-error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        .alert i {
-            font-size: 20px;
-        }
-
-        .booking-status {
-            background: #fff3cd;
-            color: #856404;
-            padding: 12px 15px;
-            border-radius: 10px;
-            font-size: 13px;
-            font-weight: 600;
-            margin: 20px 0;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border-left: 4px solid #ffc107;
-        }
-
-        .booking-status i {
-            font-size: 16px;
-            color: #ffc107;
-        }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            background: #f8f9fa;
-            border-radius: 20px;
-            grid-column: 1 / -1;
-            border: 2px dashed #e0e0e0;
-        }
-
-        .empty-state i {
-            font-size: 60px;
-            color: #6c63ff;
-            margin-bottom: 20px;
-            opacity: 0.5;
-        }
-
-        .empty-state h3 {
-            font-size: 20px;
-            color: #333;
-            margin-bottom: 10px;
-        }
-
-        .empty-state p {
-            color: #777;
-            margin-bottom: 25px;
-            max-width: 400px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* Footer */
-        .footer {
-            background-color: #2a2a3c;
-            color: white;
-            padding: 30px 0;
-            margin-top: 60px;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            color: #bbb;
-            font-size: 14px;
-        }
-
-        /* Form Styles */
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #333;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 15px;
-            transition: all 0.3s;
-        }
-
-        .form-control:focus {
-            border-color: #6c63ff;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
-        }
-
-        textarea.form-control {
-            min-height: 100px;
-            resize: vertical;
-        }
-
-        /* Loading Spinner */
-        .fa-spinner {
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* Tooltip */
-        .tooltip {
-            position: relative;
-            display: inline-block;
-        }
-
-        .tooltip .tooltiptext {
-            visibility: hidden;
-            width: 120px;
-            background-color: #555;
-            color: #fff;
-            text-align: center;
-            border-radius: 6px;
-            padding: 5px;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            margin-left: -60px;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .tooltip:hover .tooltiptext {
-            visibility: visible;
-            opacity: 1;
-        }
-
-        /* Responsive */
-        @media (max-width: 992px) {
-            .nav-links {
-                display: none;
-            }
-
-            .experts-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .specialization-card {
-                min-width: 140px;
-                padding: 15px 20px;
-            }
-
-            .header-dashboard-btn {
-                position: relative;
-                top: 0;
-                left: 0;
-                margin-top: 20px;
-                display: inline-block;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .page-header h1 {
-                font-size: 32px;
-            }
-
-            .expert-header {
-                flex-direction: column;
-                text-align: center;
-                padding-right: 0;
-            }
-
-            .expert-avatar {
-                margin-right: 0;
-                margin-bottom: 15px;
-            }
-
-            .modal-content {
-                padding: 25px;
-            }
-
-            .expert-meta {
-                justify-content: center;
-            }
-
-            .expert-rating {
-                justify-content: center;
-            }
-
-            .specialization-grid {
-                justify-content: center;
-            }
-
-            .filter-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .slots-grid {
-                grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-            }
-        }
-
-        @media (max-width: 480px) {
-            .page-header {
-                padding: 100px 0 40px;
-            }
-
-            .page-header h1 {
-                font-size: 28px;
-            }
-
-            .expert-card {
-                padding: 20px;
-            }
-
-            .expert-avatar {
-                width: 60px;
-                height: 60px;
-                font-size: 24px;
-            }
-
-            .detail-item {
-                font-size: 13px;
-            }
-
-            .specialization-card {
-                min-width: 120px;
-                padding: 12px 15px;
-            }
-
-            .specialization-icon {
-                font-size: 24px;
-            }
-
-            .specialization-card h3 {
-                font-size: 14px;
-            }
-
-            .specialization-card p {
-                font-size: 12px;
-            }
-
-            .expert-meta {
-                gap: 10px;
-            }
-
-            .slots-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-    </style>
-</head>
-
-<body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="container nav-container">
-            <a href="{% url 'accounts:index' %}" class="logo">
-                <i class="fas fa-heart"></i> EmpathyQ
-            </a>
-
-            <ul class="nav-links">
-                <li><a href="{% url 'accounts:index' %}#home">Home</a></li>
-                <li><a href="{% url 'accounts:index' %}#about">About Us</a></li>
-                <li><a href="{% url 'accounts:index' %}#features">Features</a></li>
-                <li><a href="{% url 'accounts:index' %}#testimonials">Testimonials</a></li>
-                <li><a href="{% url 'accounts:index' %}#contact">Contact</a></li>
-            </ul>
-
-            <span class="user-badge">
-                <i class="fas fa-user-circle"></i> {{ request.user.get_full_name|default:request.user.username }}
-            </span>
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header">
+    <div class="container">
+        <h1>Book a Session</h1>
+        <p>Connect with our verified mental health professionals in a confidential, compassionate space</p>
+    </div>
+</section>
+
+<!-- Booking Section -->
+<section class="booking-section">
+    <div class="container">
+        <!-- Messages -->
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            <i
+                class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-circle{% elif message.tags == 'warning' %}exclamation-triangle{% else %}info-circle{% endif %}"></i>
+            {{ message }}
         </div>
-    </nav>
+        {% endfor %}
+        {% endif %}
 
-    <!-- Page Header -->
-    <section class="page-header">
-        <!-- Back to Dashboard Button in Header -->
-        <a href="{% url 'accounts:user_dashboard' %}" class="header-dashboard-btn">
-            <i class="fas fa-arrow-left"></i>
-            <i class="fas fa-tachometer-alt"></i>
-            Back to Dashboard
-        </a>
+        <!-- Specialization Filter Section -->
+        <div class="filter-section">
+            <div class="filter-header">
+                <h2>
+                    <i class="fas fa-filter"></i>
+                    Filter by Specialization
+                </h2>
+                {% if selected_specialization %}
+                <span class="selected-filter">
+                    <i class="fas fa-check-circle"></i>
+                    {{ selected_specialization.name }}
+                </span>
+                {% endif %}
+            </div>
 
-        <div class="container">
-            <h1>Book a Session</h1>
-            <p>Connect with our verified mental health professionals in a confidential, compassionate space</p>
-        </div>
-    </section>
+            <div class="specialization-grid">
+                <div class="specialization-card {% if not selected_specialization %}active{% endif %}"
+                    onclick="window.location.href='{% url 'user:book_session' %}'">
+                    <div class="specialization-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>All Experts</h3>
+                    <p>{{ total_experts }} Available</p>
+                </div>
 
-    <!-- Booking Section -->
-    <section class="booking-section">
-        <div class="container">
-            <!-- Dashboard Button at Top of Content -->
-            <div class="dashboard-btn-container">
-                <a href="{% url 'accounts:user_dashboard' %}" class="btn-dashboard">
-                    <i class="fas fa-arrow-left"></i>
-                    <i class="fas fa-tachometer-alt"></i>
-                    Back to Dashboard
+                {% for specialization in specializations %}
+                <div class="specialization-card {% if selected_specialization.id == specialization.id %}active{% endif %}"
+                    onclick="window.location.href='{% url 'user:book_session' %}?specialization={{ specialization.id|urlencode }}'">
+                    <div class="specialization-icon">
+                        <i class="{{ specialization.icon }}"></i>
+                    </div>
+                    <h3>{{ specialization.name }}</h3>
+                    <p>{{ specialization.expert_count }} Expert{% if specialization.expert_count != 1 %}s{% endif %}
+                    </p>
+                </div>
+                {% empty %}
+                <p style="color: #777; text-align: center; width: 100%;">No specializations available</p>
+                {% endfor %}
+            </div>
+
+            {% if selected_specialization %}
+            <div style="margin-top: 20px; text-align: right;">
+                <a href="{% url 'user:book_session' %}" class="clear-filter">
+                    <i class="fas fa-times-circle"></i>
+                    Clear Filter
                 </a>
             </div>
-
-            <!-- Messages -->
-            {% if messages %}
-            {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">
-                <i
-                    class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-circle{% elif message.tags == 'warning' %}exclamation-triangle{% else %}info-circle{% endif %}"></i>
-                {{ message }}
-            </div>
-            {% endfor %}
             {% endif %}
-
-            <!-- Specialization Filter Section -->
-            <div class="filter-section">
-                <div class="filter-header">
-                    <h2>
-                        <i class="fas fa-filter"></i>
-                        Filter by Specialization
-                    </h2>
-                    {% if selected_specialization %}
-                    <span class="selected-filter">
-                        <i class="fas fa-check-circle"></i>
-                        {{ selected_specialization.name }}
-                    </span>
-                    {% endif %}
-                </div>
-
-                <div class="specialization-grid">
-                    <div class="specialization-card {% if not selected_specialization %}active{% endif %}"
-                        onclick="window.location.href='{% url 'user:book_session' %}'">
-                        <div class="specialization-icon">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <h3>All Experts</h3>
-                        <p>{{ total_experts }} Available</p>
-                    </div>
-
-                    {% for specialization in specializations %}
-                    <div class="specialization-card {% if selected_specialization.id == specialization.id %}active{% endif %}"
-                        onclick="window.location.href='{% url 'user:book_session' %}?specialization={{ specialization.id|urlencode }}'">
-                        <div class="specialization-icon">
-                            <i class="{{ specialization.icon }}"></i>
-                        </div>
-                        <h3>{{ specialization.name }}</h3>
-                        <p>{{ specialization.expert_count }} Expert{% if specialization.expert_count != 1 %}s{% endif %}
-                        </p>
-                    </div>
-                    {% empty %}
-                    <p style="color: #777; text-align: center; width: 100%;">No specializations available</p>
-                    {% endfor %}
-                </div>
-
-                {% if selected_specialization %}
-                <div style="margin-top: 20px; text-align: right;">
-                    <a href="{% url 'user:book_session' %}" class="clear-filter">
-                        <i class="fas fa-times-circle"></i>
-                        Clear Filter
-                    </a>
-                </div>
-                {% endif %}
-            </div>
-
-            <!-- Experts Section -->
-            <div class="experts-section">
-                <div class="experts-header">
-                    <h2>
-                        <i class="fas fa-user-md"></i>
-                        {% if selected_specialization %}
-                        {{ selected_specialization.name }} Specialists
-                        {% else %}
-                        All Verified Experts
-                        {% endif %}
-                    </h2>
-                    <span class="expert-count">
-                        <i class="fas fa-user-check"></i>
-                        {{ experts|length }} Expert{% if experts|length != 1 %}s{% endif %} Available
-                    </span>
-                </div>
-
-                {% if experts %}
-                <div class="experts-grid">
-                    {% for expert in experts %}
-                    <div class="expert-card verified" data-expert-id="{{ expert.id }}">
-                        <div class="expert-header">
-                            <div class="expert-avatar">
-                                {{ expert.name|first|upper }}
-                            </div>
-                            <div class="expert-info">
-                                <h3>Dr. {{ expert.name }}</h3>
-                                <div class="expert-title">
-                                    {% if expert.specialization == 'Mental Health Expert' or expert.specialization == 'Mental Health Professional' %}
-                                    Mental Health Professional
-                                    {% else %}
-                                    {{ expert.specialization|default:"Mental Health Professional" }}
-                                    {% endif %}
-                                </div>
-                                <div class="expert-rating">
-                                    {% with rating=expert.rating|default:4.8|floatformat:1 %}
-                                    {% for i in "12345"|make_list %}
-                                    {% if forloop.counter <= rating|add:"0" %} 
-                                        <i class="fas fa-star"></i>
-                                    {% elif forloop.counter <= rating|add:"0.5" %} 
-                                        <i class="fas fa-star-half-alt"></i>
-                                    {% else %}
-                                        <i class="far fa-star"></i>
-                                    {% endif %}
-                                    {% endfor %}
-                                    {% endwith %}
-                                    <span>{{ expert.rating|default:"4.8" }} ({{ expert.total_sessions|default:"120" }}+ sessions)</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="expert-details">
-                            <span class="expert-specialization">
-                                <i class="fas fa-tag"></i>
-                                {% if expert.specialization == 'Mental Health Expert' or expert.specialization == 'Mental Health Professional' %}
-                                General Practice
-                                {% else %}
-                                {{ expert.specialization|default:"General Practice" }}
-                                {% endif %}
-                            </span>
-                            <p class="expert-bio">
-                                {{ expert.bio|default:"Experienced mental health professional dedicated to providing compassionate care and evidence-based treatment approaches." }}
-                            </p>
-                            <div class="expert-meta">
-                                <div class="meta-item">
-                                    <i class="fas fa-briefcase"></i>
-                                    {{ expert.experience_years|default:"10" }} years exp.
-                                </div>
-                                <div class="meta-item">
-                                    <i class="fas fa-video"></i>
-                                    Video sessions
-                                </div>
-                                <div class="meta-item">
-                                    <i class="fas fa-clock"></i>
-                                    60 min
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Enhanced Time Slots Section -->
-                        <div class="time-slots-section">
-                            <div class="time-slots-header" onclick="toggleTimeSlots({{ expert.id }})">
-                                <h4>
-                                    <i class="fas fa-clock"></i>
-                                    Available Time Slots
-                                    <span style="background: {% if expert.available_slots_count > 0 %}#4CAF50{% else %}#f44336{% endif %}; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px; margin-left: 8px;">
-                                        {{ expert.available_slots_count }} available
-                                    </span>
-                                </h4>
-                                <i class="fas fa-chevron-down toggle-icon" id="toggle-icon-{{ expert.id }}"></i>
-                            </div>
-                            
-                            <!-- Selected Slot Info (hidden by default) -->
-                            <div id="selected-slot-info-{{ expert.id }}" class="selected-slot-info" style="display: none;"></div>
-                            
-                            <div id="time-slots-{{ expert.id }}" class="time-slots-container">
-                                {% if expert.slots_by_date %}
-                                    {% for date_str, slots in expert.slots_by_date.items %}
-                                    <div class="date-group">
-                                        <div class="date-title">
-                                            <i class="fas fa-calendar-day"></i>
-                                            {{ date_str|date:"l, F j, Y" }}
-                                        </div>
-                                        <div class="slots-grid">
-                                            {% for slot in slots %}
-                                            <div class="time-slot" 
-                                                 data-slot-id="{{ slot.id }}"
-                                                 data-expert-id="{{ expert.id }}"
-                                                 data-date="{{ slot.date|date:'Y-m-d' }}"
-                                                 data-time="{{ slot.start_time|time:'H:i' }}"
-                                                 onclick="selectTimeSlot({{ expert.id }}, '{{ slot.date|date:'Y-m-d' }}', '{{ slot.start_time|time:'H:i' }}', {{ slot.id }})">
-                                                <span class="slot-time">{{ slot.start_time|time:"g:i A" }}</span>
-                                                <span class="slot-duration">60 min</span>
-                                                {% if forloop.first and forloop.parentloop.first %}
-                                                <span class="slot-badge">✓</span>
-                                                {% endif %}
-                                            </div>
-                                            {% endfor %}
-                                        </div>
-                                    </div>
-                                    {% endfor %}
-                                {% else %}
-                                    <div class="no-slots-message">
-                                        <i class="fas fa-calendar-times"></i>
-                                        No available slots at the moment
-                                    </div>
-                                {% endif %}
-                            </div>
-                        </div>
-
-                        <!-- Action Buttons -->
-                        <div style="display: flex; gap: 10px; margin-top: 15px;">
-                            <a href="{% url 'expert:public_profile' expert.id %}" class="btn-book" style="flex: 1; background: #6c63ff; color: white; padding: 12px; border-radius: 10px; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                                <i class="fas fa-user-md"></i> View Profile
-                            </a>
-                            <button class="btn-book" 
-                                onclick="openBookingModal({{ expert.id }}, '{{ expert.name|escapejs }}', '{{ expert.specialization|default:"Mental Health Professional"|escapejs }}')" 
-                                style="flex: 1; background: #4CAF50; {% if expert.available_slots_count == 0 %}opacity: 0.5; cursor: not-allowed;{% endif %}"
-                                {% if expert.available_slots_count == 0 %}disabled{% endif %}>
-                                <i class="fas fa-calendar-plus"></i> Book
-                            </button>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-                {% else %}
-                <div class="empty-state">
-                    <i class="fas fa-user-md"></i>
-                    <h3>No Experts Found</h3>
-                    <p>No experts available in this specialization at the moment. Please try a different specialization or check back later.</p>
-                    <a href="{% url 'user:book_session' %}" class="btn btn-secondary" style="margin-top: 20px;">
-                        <i class="fas fa-arrow-left"></i>
-                        View All Experts
-                    </a>
-                </div>
-                {% endif %}
-            </div>
         </div>
-    </section>
 
-    <!-- Booking Modal - Updated with hidden category field and removed dropdown -->
-    <div id="bookingModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>
-                    <i class="fas fa-calendar-check"></i>
-                    Book Session
-                </h3>
-                <button class="close-modal" onclick="closeBookingModal()">&times;</button>
+        <!-- Experts Section -->
+        <div class="experts-section">
+            <div class="experts-header">
+                <h2>
+                    <i class="fas fa-user-md"></i>
+                    {% if selected_specialization %}
+                    {{ selected_specialization.name }} Specialists
+                    {% else %}
+                    All Verified Experts
+                    {% endif %}
+                </h2>
+                <span class="expert-count">
+                    <i class="fas fa-user-check"></i>
+                    {{ experts|length }} Expert{% if experts|length != 1 %}s{% endif %} Available
+                </span>
             </div>
 
-            <div id="therapistSummary" class="therapist-summary">
-                <!-- Will be filled by JavaScript -->
+            {% if experts %}
+            <div class="experts-grid">
+                {% for expert in experts %}
+                <div class="expert-card verified" data-expert-id="{{ expert.id }}">
+                    <div class="expert-header">
+                        <div class="expert-avatar">
+                            {{ expert.name|first|upper }}
+                        </div>
+                        <div class="expert-info">
+                            <h3>Dr. {{ expert.name }}</h3>
+                            <div class="expert-title">
+                                {% if expert.specialization == 'Mental Health Expert' or expert.specialization == 'Mental Health Professional' %}
+                                Mental Health Professional
+                                {% else %}
+                                {{ expert.specialization|default:"Mental Health Professional" }}
+                                {% endif %}
+                            </div>
+                            <div class="expert-rating">
+                                {% with rating=expert.rating|default:4.8|floatformat:1 %}
+                                {% for i in "12345"|make_list %}
+                                {% if forloop.counter <= rating|add:"0" %} 
+                                    <i class="fas fa-star"></i>
+                                {% elif forloop.counter <= rating|add:"0.5" %} 
+                                    <i class="fas fa-star-half-alt"></i>
+                                {% else %}
+                                    <i class="far fa-star"></i>
+                                {% endif %}
+                                {% endfor %}
+                                {% endwith %}
+                                <span>{{ expert.rating|default:"4.8" }} ({{ expert.total_sessions|default:"120" }}+ sessions)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="expert-details">
+                        <span class="expert-specialization">
+                            <i class="fas fa-tag"></i>
+                            {% if expert.specialization == 'Mental Health Expert' or expert.specialization == 'Mental Health Professional' %}
+                            General Practice
+                            {% else %}
+                            {{ expert.specialization|default:"General Practice" }}
+                            {% endif %}
+                        </span>
+                        <p class="expert-bio">
+                            {{ expert.bio|default:"Experienced mental health professional dedicated to providing compassionate care and evidence-based treatment approaches." }}
+                        </p>
+                        <div class="expert-meta">
+                            <div class="meta-item">
+                                <i class="fas fa-briefcase"></i>
+                                {{ expert.experience_years|default:"10" }} years exp.
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-video"></i>
+                                Video sessions
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-clock"></i>
+                                60 min
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Enhanced Time Slots Section -->
+                    <div class="time-slots-section">
+                        <div class="time-slots-header" onclick="toggleTimeSlots({{ expert.id }})">
+                            <h4>
+                                <i class="fas fa-clock"></i>
+                                Available Time Slots
+                                <span style="background: {% if expert.available_slots_count > 0 %}#4CAF50{% else %}#f44336{% endif %}; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px; margin-left: 8px;">
+                                    {{ expert.available_slots_count }} available
+                                </span>
+                            </h4>
+                            <i class="fas fa-chevron-down toggle-icon" id="toggle-icon-{{ expert.id }}"></i>
+                        </div>
+                        
+                        <!-- Selected Slot Info (hidden by default) -->
+                        <div id="selected-slot-info-{{ expert.id }}" class="selected-slot-info" style="display: none;"></div>
+                        
+                        <div id="time-slots-{{ expert.id }}" class="time-slots-container">
+                            {% if expert.slots_by_date %}
+                                {% for date_str, slots in expert.slots_by_date.items %}
+                                <div class="date-group">
+                                    <div class="date-title">
+                                        <i class="fas fa-calendar-day"></i>
+                                        {{ date_str|date:"l, F j, Y" }}
+                                    </div>
+                                    <div class="slots-grid">
+                                        {% for slot in slots %}
+                                        <div class="time-slot" 
+                                             data-slot-id="{{ slot.id }}"
+                                             data-expert-id="{{ expert.id }}"
+                                             data-date="{{ slot.date|date:'Y-m-d' }}"
+                                             data-time="{{ slot.start_time|time:'H:i' }}"
+                                             onclick="selectTimeSlot({{ expert.id }}, '{{ slot.date|date:'Y-m-d' }}', '{{ slot.start_time|time:'H:i' }}', {{ slot.id }})">
+                                            <span class="slot-time">{{ slot.start_time|time:"g:i A" }}</span>
+                                            <span class="slot-duration">60 min</span>
+                                            {% if forloop.first and forloop.parentloop.first %}
+                                            <span class="slot-badge">✓</span>
+                                            {% endif %}
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="no-slots-message">
+                                    <i class="fas fa-calendar-times"></i>
+                                    No available slots at the moment
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div style="display: flex; gap: 10px; margin-top: 15px;">
+                        <a href="{% url 'expert:public_profile' expert.id %}" class="btn-book" style="flex: 1; background: #6c63ff; color: white; padding: 12px; border-radius: 10px; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <i class="fas fa-user-md"></i> View Profile
+                        </a>
+                        <button class="btn-book" 
+                            onclick="openBookingModal({{ expert.id }}, '{{ expert.name|escapejs }}', '{{ expert.specialization|default:"Mental Health Professional"|escapejs }}')" 
+                            style="flex: 1; background: #4CAF50; {% if expert.available_slots_count == 0 %}opacity: 0.5; cursor: not-allowed;{% endif %}"
+                            {% if expert.available_slots_count == 0 %}disabled{% endif %}>
+                            <i class="fas fa-calendar-plus"></i> Book
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
             </div>
-
-            <form id="bookingForm" method="post" action="{% url 'user:create_booking' %}">
-                {% csrf_token %}
-                <input type="hidden" id="expert_id" name="expert_id" value="">
-                <input type="hidden" id="slot_id" name="slot_id" value="">
-                <!-- Hidden category field - will be set automatically by the backend based on expert specialization -->
-                <input type="hidden" id="category" name="category" value="auto">
-
-                <!-- Session Type dropdown has been removed - category is now automatically determined by expert specialization -->
-
-                <div class="form-group">
-                    <label for="booking_date">Preferred Date</label>
-                    <input type="date" id="booking_date" name="booking_date" class="form-control"
-                        min="{{ current_date|date:'Y-m-d' }}" max="2026-12-31" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="booking_time">Preferred Time</label>
-                    <input type="time" id="booking_time" name="booking_time" class="form-control" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="notes">Notes for Expert (Optional)</label>
-                    <textarea id="notes" name="notes" class="form-control"
-                        placeholder="Share any specific concerns or topics you'd like to discuss..."
-                        rows="3"></textarea>
-                </div>
-
-                <div class="booking-status">
-                    <i class="fas fa-info-circle"></i>
-                    Your booking request will be sent to the expert for approval. You'll receive a confirmation once they accept.
-                </div>
-
-                <button type="submit" class="btn-primary" id="submitBooking">
-                    <i class="fas fa-paper-plane"></i>
-                    Send Booking Request
-                </button>
-            </form>
+            {% else %}
+            <div class="empty-state">
+                <i class="fas fa-user-md"></i>
+                <h3>No Experts Found</h3>
+                <p>No experts available in this specialization at the moment. Please try a different specialization or check back later.</p>
+                <a href="{% url 'user:book_session' %}" class="btn btn-secondary" style="margin-top: 20px;">
+                    <i class="fas fa-arrow-left"></i>
+                    View All Experts
+                </a>
+            </div>
+            {% endif %}
         </div>
     </div>
+</section>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-bottom">
-                <p>&copy; 2025 EmpathyQ. All rights reserved. | Mental health support, anytime, anywhere.</p>
-            </div>
+<!-- Booking Modal - Updated with hidden category field and removed dropdown -->
+<div id="bookingModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>
+                <i class="fas fa-calendar-check"></i>
+                Book Session
+            </h3>
+            <button class="close-modal" onclick="closeBookingModal()">&times;</button>
         </div>
-    </footer>
 
-    <script>
-        // Set minimum date to today
-        document.addEventListener('DOMContentLoaded', function () {
-            const dateInput = document.getElementById('booking_date');
-            if (dateInput) {
-                const today = new Date().toISOString().split('T')[0];
-                dateInput.setAttribute('min', today);
-            }
+        <div id="therapistSummary" class="therapist-summary">
+            <!-- Will be filled by JavaScript -->
+        </div>
 
-            // Set default time to next hour
-            const timeInput = document.getElementById('booking_time');
-            if (timeInput) {
-                const now = new Date();
-                const hours = now.getHours();
-                const minutes = now.getMinutes();
-                const nextHour = minutes > 30 ? hours + 1 : hours;
-                const formattedHour = nextHour < 10 ? '0' + nextHour : nextHour;
-                timeInput.value = `${formattedHour}:00`;
-            }
+        <form id="bookingForm" method="post" action="{% url 'user:create_booking' %}">
+            {% csrf_token %}
+            <input type="hidden" id="expert_id" name="expert_id" value="">
+            <input type="hidden" id="slot_id" name="slot_id" value="">
+            <!-- Hidden category field - will be set automatically by the backend based on expert specialization -->
+            <input type="hidden" id="category" name="category" value="auto">
 
-            // Check for preselected values from URL parameters
-            const urlParams = new URLSearchParams(window.location.search);
-            const preselectedExpert = urlParams.get('expert');
-            const preselectedDate = urlParams.get('date');
-            const preselectedTime = urlParams.get('time');
-            
-            // If there's a preselected expert, date, and time, automatically open booking modal
-            if (preselectedExpert && preselectedDate && preselectedTime) {
-                // Find the expert card and get expert details
-                const expertCards = document.querySelectorAll('.expert-card');
-                expertCards.forEach(card => {
-                    const bookBtn = card.querySelector('button[onclick*="openBookingModal"]');
-                    if (bookBtn) {
-                        // Extract expert details from the onclick attribute
-                        const onclickAttr = bookBtn.getAttribute('onclick');
-                        const match = onclickAttr.match(/openBookingModal\((\d+),\s*'([^']*)',\s*'([^']*)'\)/);
-                        if (match && match[1] === preselectedExpert) {
-                            // Open modal with expert details
-                            openBookingModal(match[1], match[2], match[3]);
-                            
-                            // Set the date and time in the modal
-                            setTimeout(() => {
-                                const dateInput = document.getElementById('booking_date');
-                                const timeInput = document.getElementById('booking_time');
-                                if (dateInput && timeInput) {
-                                    dateInput.value = preselectedDate;
-                                    timeInput.value = preselectedTime;
-                                }
-                            }, 100);
-                        }
+            <!-- Session Type dropdown has been removed - category is now automatically determined by expert specialization -->
+
+            <div class="form-group">
+                <label for="booking_date">Preferred Date</label>
+                <input type="date" id="booking_date" name="booking_date" class="form-control"
+                    min="{{ current_date|date:'Y-m-d' }}" max="2026-12-31" required>
+            </div>
+
+            <div class="form-group">
+                <label for="booking_time">Preferred Time</label>
+                <input type="time" id="booking_time" name="booking_time" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="notes">Notes for Expert (Optional)</label>
+                <textarea id="notes" name="notes" class="form-control"
+                    placeholder="Share any specific concerns or topics you'd like to discuss..."
+                    rows="3"></textarea>
+            </div>
+
+            <div class="booking-status">
+                <i class="fas fa-info-circle"></i>
+                Your booking request will be sent to the expert for approval. You'll receive a confirmation once they accept.
+            </div>
+
+            <button type="submit" class="btn-primary" id="submitBooking">
+                <i class="fas fa-paper-plane"></i>
+                Send Booking Request
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Set minimum date to today
+    document.addEventListener('DOMContentLoaded', function () {
+        const dateInput = document.getElementById('booking_date');
+        if (dateInput) {
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.setAttribute('min', today);
+        }
+
+        // Set default time to next hour
+        const timeInput = document.getElementById('booking_time');
+        if (timeInput) {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const nextHour = minutes > 30 ? hours + 1 : hours;
+            const formattedHour = nextHour < 10 ? '0' + nextHour : nextHour;
+            timeInput.value = `${formattedHour}:00`;
+        }
+
+        // Check for preselected values from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const preselectedExpert = urlParams.get('expert');
+        const preselectedDate = urlParams.get('date');
+        const preselectedTime = urlParams.get('time');
+        
+        // If there's a preselected expert, date, and time, automatically open booking modal
+        if (preselectedExpert && preselectedDate && preselectedTime) {
+            // Find the expert card and get expert details
+            const expertCards = document.querySelectorAll('.expert-card');
+            expertCards.forEach(card => {
+                const bookBtn = card.querySelector('button[onclick*="openBookingModal"]');
+                if (bookBtn) {
+                    // Extract expert details from the onclick attribute
+                    const onclickAttr = bookBtn.getAttribute('onclick');
+                    const match = onclickAttr.match(/openBookingModal\((\d+),\s*'([^']*)',\s*'([^']*)'\)/);
+                    if (match && match[1] === preselectedExpert) {
+                        // Open modal with expert details
+                        openBookingModal(match[1], match[2], match[3]);
+                        
+                        // Set the date and time in the modal
+                        setTimeout(() => {
+                            const dateInput = document.getElementById('booking_date');
+                            const timeInput = document.getElementById('booking_time');
+                            if (dateInput && timeInput) {
+                                dateInput.value = preselectedDate;
+                                timeInput.value = preselectedTime;
+                            }
+                        }, 100);
                     }
-                });
+                }
+            });
+        }
+    });
+
+    // Toggle time slots visibility
+    function toggleTimeSlots(expertId) {
+        const container = document.getElementById(`time-slots-${expertId}`);
+        const icon = document.getElementById(`toggle-icon-${expertId}`);
+        
+        if (container) {
+            container.classList.toggle('expanded');
+            if (icon) {
+                icon.style.transform = container.classList.contains('expanded') ? 'rotate(180deg)' : 'rotate(0)';
+            }
+        }
+    }
+
+    // Select a time slot
+    function selectTimeSlot(expertId, date, time, slotId) {
+        // Remove selected class from all slots of this expert
+        document.querySelectorAll(`.time-slot[data-expert-id="${expertId}"]`).forEach(slot => {
+            slot.classList.remove('selected');
+        });
+        
+        // Add selected class to clicked slot
+        const selectedSlot = document.querySelector(`.time-slot[data-slot-id="${slotId}"]`);
+        if (selectedSlot) {
+            selectedSlot.classList.add('selected');
+        }
+        
+        // Format time for display
+        const formattedTime = formatTime(time);
+        const formattedDate = formatDate(date);
+        
+        // Show selected slot info
+        const selectedSlotInfo = document.getElementById(`selected-slot-info-${expertId}`);
+        if (selectedSlotInfo) {
+            selectedSlotInfo.innerHTML = `
+                <span>
+                    <i class="fas fa-check-circle"></i>
+                    Selected: ${formattedDate} at ${formattedTime}
+                </span>
+                <button class="clear-slot-btn" onclick="clearSelectedSlot(${expertId})">
+                    <i class="fas fa-times"></i> Clear
+                </button>
+            `;
+            selectedSlotInfo.style.display = 'flex';
+        }
+        
+        // Open booking modal with preselected values
+        const expertName = document.querySelector(`.expert-card[data-expert-id="${expertId}"] .expert-info h3`).textContent.replace('Dr. ', '');
+        const specialization = document.querySelector(`.expert-card[data-expert-id="${expertId}"] .expert-title`).textContent;
+        
+        openBookingModal(expertId, expertName, specialization);
+        
+        // Set the date, time, and slot ID in the modal
+        setTimeout(() => {
+            const dateInput = document.getElementById('booking_date');
+            const timeInput = document.getElementById('booking_time');
+            const slotIdInput = document.getElementById('slot_id');
+            if (dateInput && timeInput && slotIdInput) {
+                dateInput.value = date;
+                timeInput.value = time;
+                slotIdInput.value = slotId;
+            }
+        }, 100);
+    }
+
+    // Clear selected slot
+    function clearSelectedSlot(expertId) {
+        // Remove selected class from all slots
+        document.querySelectorAll(`.time-slot[data-expert-id="${expertId}"]`).forEach(slot => {
+            slot.classList.remove('selected');
+        });
+        
+        // Hide selected slot info
+        const selectedSlotInfo = document.getElementById(`selected-slot-info-${expertId}`);
+        if (selectedSlotInfo) {
+            selectedSlotInfo.style.display = 'none';
+        }
+        
+        // Clear slot ID in modal
+        const slotIdInput = document.getElementById('slot_id');
+        if (slotIdInput) {
+            slotIdInput.value = '';
+        }
+    }
+
+    // Format date for display
+    function formatDate(dateString) {
+        const options = { weekday: 'short', month: 'short', day: 'numeric' };
+        return new Date(dateString).toLocaleDateString('en-US', options);
+    }
+
+    // Format time for display
+    function formatTime(timeString) {
+        const [hours, minutes] = timeString.split(':');
+        const hour = parseInt(hours);
+        const ampm = hour >= 12 ? 'PM' : 'AM';
+        const hour12 = hour % 12 || 12;
+        return `${hour12}:${minutes} ${ampm}`;
+    }
+
+    // Booking Modal Functions
+    function openBookingModal(expertId, expertName, specialization) {
+        const modal = document.getElementById('bookingModal');
+        const expertIdInput = document.getElementById('expert_id');
+        const summaryDiv = document.getElementById('therapistSummary');
+
+        expertIdInput.value = expertId;
+
+        // Format specialization for display
+        let displaySpecialization = specialization;
+        if (specialization === 'Mental Health Expert' || specialization === 'Mental Health Professional') {
+            displaySpecialization = 'Mental Health Professional';
+        }
+
+        summaryDiv.innerHTML = `
+            <div class="summary-avatar">${expertName.charAt(0).toUpperCase()}</div>
+            <div class="summary-info">
+                <h4>Dr. ${expertName}</h4>
+                <p>${displaySpecialization}</p>
+            </div>
+        `;
+
+        // Category is now handled automatically by the backend
+        // We just set a placeholder value
+        const categoryInput = document.getElementById('category');
+        if (categoryInput) {
+            categoryInput.value = 'auto';
+        }
+
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeBookingModal() {
+        const modal = document.getElementById('bookingModal');
+        modal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+
+        // Reset form
+        const form = document.getElementById('bookingForm');
+        form.reset();
+        
+        // Reset hidden fields
+        document.getElementById('expert_id').value = '';
+        document.getElementById('slot_id').value = '';
+        document.getElementById('category').value = 'auto';
+        
+        const submitBtn = document.getElementById('submitBooking');
+        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Booking Request';
+        submitBtn.disabled = false;
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function (event) {
+        const modal = document.getElementById('bookingModal');
+        if (event.target === modal) {
+            closeBookingModal();
+        }
+    }
+
+    // Validate form before submission - updated to remove category validation
+    document.getElementById('bookingForm').addEventListener('submit', function (e) {
+        const expertId = document.getElementById('expert_id').value;
+        const date = document.getElementById('booking_date').value;
+        const time = document.getElementById('booking_time').value;
+
+        if (!expertId || !date || !time) {
+            e.preventDefault();
+            alert('Please fill in all required fields');
+            return false;
+        }
+
+        // Validate date is not in past
+        const selectedDate = new Date(date);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        if (selectedDate < today) {
+            e.preventDefault();
+            alert('Please select a future date');
+            return false;
+        }
+
+        // Validate time format
+        const timePattern = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/;
+        if (!timePattern.test(time)) {
+            e.preventDefault();
+            alert('Please enter a valid time in HH:MM format');
+            return false;
+        }
+
+        // Show loading state
+        const submitBtn = document.getElementById('submitBooking');
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending Request...';
+        submitBtn.disabled = true;
+    });
+
+    // Auto-hide messages after 5 seconds
+    setTimeout(function () {
+        document.querySelectorAll('.alert').forEach(function (alert) {
+            if (alert) {
+                alert.style.transition = 'opacity 0.5s';
+                alert.style.opacity = '0';
+                setTimeout(() => alert.remove(), 500);
             }
         });
+    }, 5000);
 
-        // Toggle time slots visibility
-        function toggleTimeSlots(expertId) {
-            const container = document.getElementById(`time-slots-${expertId}`);
-            const icon = document.getElementById(`toggle-icon-${expertId}`);
-            
-            if (container) {
-                container.classList.toggle('expanded');
-                if (icon) {
-                    icon.style.transform = container.classList.contains('expanded') ? 'rotate(180deg)' : 'rotate(0)';
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            const href = this.getAttribute('href');
+            if (href.startsWith('#') && href !== '#') {
+                e.preventDefault();
+                const targetElement = document.querySelector(href);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
                 }
             }
-        }
+        });
+    });
 
-        // Select a time slot
-        function selectTimeSlot(expertId, date, time, slotId) {
-            // Remove selected class from all slots of this expert
-            document.querySelectorAll(`.time-slot[data-expert-id="${expertId}"]`).forEach(slot => {
-                slot.classList.remove('selected');
-            });
-            
-            // Add selected class to clicked slot
-            const selectedSlot = document.querySelector(`.time-slot[data-slot-id="${slotId}"]`);
-            if (selectedSlot) {
-                selectedSlot.classList.add('selected');
-            }
-            
-            // Format time for display
-            const formattedTime = formatTime(time);
-            const formattedDate = formatDate(date);
-            
-            // Show selected slot info
-            const selectedSlotInfo = document.getElementById(`selected-slot-info-${expertId}`);
-            if (selectedSlotInfo) {
-                selectedSlotInfo.innerHTML = `
-                    <span>
-                        <i class="fas fa-check-circle"></i>
-                        Selected: ${formattedDate} at ${formattedTime}
-                    </span>
-                    <button class="clear-slot-btn" onclick="clearSelectedSlot(${expertId})">
-                        <i class="fas fa-times"></i> Clear
-                    </button>
-                `;
-                selectedSlotInfo.style.display = 'flex';
-            }
-            
-            // Open booking modal with preselected values
-            const expertName = document.querySelector(`.expert-card[data-expert-id="${expertId}"] .expert-info h3`).textContent.replace('Dr. ', '');
-            const specialization = document.querySelector(`.expert-card[data-expert-id="${expertId}"] .expert-title`).textContent;
-            
-            openBookingModal(expertId, expertName, specialization);
-            
-            // Set the date, time, and slot ID in the modal
-            setTimeout(() => {
-                const dateInput = document.getElementById('booking_date');
-                const timeInput = document.getElementById('booking_time');
-                const slotIdInput = document.getElementById('slot_id');
-                if (dateInput && timeInput && slotIdInput) {
-                    dateInput.value = date;
-                    timeInput.value = time;
-                    slotIdInput.value = slotId;
-                }
-            }, 100);
-        }
+    // Add hover animation for cards
+    document.querySelectorAll('.expert-card').forEach(card => {
+        card.addEventListener('mouseenter', function () {
+            this.style.transition = 'all 0.3s ease';
+        });
+    });
 
-        // Clear selected slot
-        function clearSelectedSlot(expertId) {
-            // Remove selected class from all slots
-            document.querySelectorAll(`.time-slot[data-expert-id="${expertId}"]`).forEach(slot => {
-                slot.classList.remove('selected');
-            });
-            
-            // Hide selected slot info
-            const selectedSlotInfo = document.getElementById(`selected-slot-info-${expertId}`);
-            if (selectedSlotInfo) {
-                selectedSlotInfo.style.display = 'none';
-            }
-            
-            // Clear slot ID in modal
-            const slotIdInput = document.getElementById('slot_id');
-            if (slotIdInput) {
-                slotIdInput.value = '';
-            }
-        }
-
-        // Format date for display
-        function formatDate(dateString) {
-            const options = { weekday: 'short', month: 'short', day: 'numeric' };
-            return new Date(dateString).toLocaleDateString('en-US', options);
-        }
-
-        // Format time for display
-        function formatTime(timeString) {
-            const [hours, minutes] = timeString.split(':');
-            const hour = parseInt(hours);
-            const ampm = hour >= 12 ? 'PM' : 'AM';
-            const hour12 = hour % 12 || 12;
-            return `${hour12}:${minutes} ${ampm}`;
-        }
-
-        // Booking Modal Functions
-        function openBookingModal(expertId, expertName, specialization) {
+    // Keyboard support for modal
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
             const modal = document.getElementById('bookingModal');
-            const expertIdInput = document.getElementById('expert_id');
-            const summaryDiv = document.getElementById('therapistSummary');
-
-            expertIdInput.value = expertId;
-
-            // Format specialization for display
-            let displaySpecialization = specialization;
-            if (specialization === 'Mental Health Expert' || specialization === 'Mental Health Professional') {
-                displaySpecialization = 'Mental Health Professional';
-            }
-
-            summaryDiv.innerHTML = `
-                <div class="summary-avatar">${expertName.charAt(0).toUpperCase()}</div>
-                <div class="summary-info">
-                    <h4>Dr. ${expertName}</h4>
-                    <p>${displaySpecialization}</p>
-                </div>
-            `;
-
-            // Category is now handled automatically by the backend
-            // We just set a placeholder value
-            const categoryInput = document.getElementById('category');
-            if (categoryInput) {
-                categoryInput.value = 'auto';
-            }
-
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeBookingModal() {
-            const modal = document.getElementById('bookingModal');
-            modal.classList.remove('active');
-            document.body.style.overflow = 'auto';
-
-            // Reset form
-            const form = document.getElementById('bookingForm');
-            form.reset();
-            
-            // Reset hidden fields
-            document.getElementById('expert_id').value = '';
-            document.getElementById('slot_id').value = '';
-            document.getElementById('category').value = 'auto';
-            
-            const submitBtn = document.getElementById('submitBooking');
-            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Booking Request';
-            submitBtn.disabled = false;
-        }
-
-        // Close modal when clicking outside
-        window.onclick = function (event) {
-            const modal = document.getElementById('bookingModal');
-            if (event.target === modal) {
+            if (modal.classList.contains('active')) {
                 closeBookingModal();
             }
         }
-
-        // Validate form before submission - updated to remove category validation
-        document.getElementById('bookingForm').addEventListener('submit', function (e) {
-            const expertId = document.getElementById('expert_id').value;
-            const date = document.getElementById('booking_date').value;
-            const time = document.getElementById('booking_time').value;
-
-            if (!expertId || !date || !time) {
-                e.preventDefault();
-                alert('Please fill in all required fields');
-                return false;
-            }
-
-            // Validate date is not in past
-            const selectedDate = new Date(date);
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-
-            if (selectedDate < today) {
-                e.preventDefault();
-                alert('Please select a future date');
-                return false;
-            }
-
-            // Validate time format
-            const timePattern = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/;
-            if (!timePattern.test(time)) {
-                e.preventDefault();
-                alert('Please enter a valid time in HH:MM format');
-                return false;
-            }
-
-            // Show loading state
-            const submitBtn = document.getElementById('submitBooking');
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending Request...';
-            submitBtn.disabled = true;
-        });
-
-        // Auto-hide messages after 5 seconds
-        setTimeout(function () {
-            document.querySelectorAll('.alert').forEach(function (alert) {
-                if (alert) {
-                    alert.style.transition = 'opacity 0.5s';
-                    alert.style.opacity = '0';
-                    setTimeout(() => alert.remove(), 500);
-                }
-            });
-        }, 5000);
-
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                const href = this.getAttribute('href');
-                if (href.startsWith('#') && href !== '#') {
-                    e.preventDefault();
-                    const targetElement = document.querySelector(href);
-                    if (targetElement) {
-                        window.scrollTo({
-                            top: targetElement.offsetTop - 80,
-                            behavior: 'smooth'
-                        });
-                    }
-                }
-            });
-        });
-
-        // Add hover animation for cards
-        document.querySelectorAll('.expert-card').forEach(card => {
-            card.addEventListener('mouseenter', function () {
-                this.style.transition = 'all 0.3s ease';
-            });
-        });
-
-        // Keyboard support for modal
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape') {
-                const modal = document.getElementById('bookingModal');
-                if (modal.classList.contains('active')) {
-                    closeBookingModal();
-                }
-            }
-        });
-    </script>
-</body>
-
-</html>
+    });
+</script>
+{% endblock %}

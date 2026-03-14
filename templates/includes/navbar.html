@@ -1,0 +1,313 @@
+{% load static %}
+<nav class="navbar">
+    <div class="container nav-container">
+        <!-- Logo -->
+        <a href="{% url 'accounts:index' %}" class="logo">
+            <i class="fas fa-heart"></i> EmpathyQ
+        </a>
+        
+        <!-- Navigation Links -->
+        <ul class="nav-links">
+            <li><a href="{% url 'accounts:index' %}#home">Home</a></li>
+            <li><a href="{% url 'accounts:index' %}#about">About Us</a></li>
+            <li><a href="{% url 'accounts:index' %}#features">Features</a></li>
+            <li><a href="{% url 'accounts:index' %}#testimonials">Testimonials</a></li>
+            <li><a href="{% url 'accounts:index' %}#contact">Contact</a></li>
+        </ul>
+        
+        <!-- User Actions -->
+        <div class="user-actions">
+            {% if user.is_authenticated %}
+                {% if user.is_superuser %}
+                <span class="user-badge">
+                    <i class="fas fa-user-shield"></i> {{ user.username }}
+                </span>
+                <a href="{% url 'accounts:admin_dashboard' %}" class="btn btn-outline btn-sm">Dashboard</a>
+                {% elif user.role == 'expert' %}
+                <span class="user-badge">
+                    <i class="fas fa-user-md"></i> Dr. {{ user.get_full_name|default:user.username }}
+                </span>
+                <a href="{% url 'accounts:expert_dashboard' %}" class="btn btn-outline btn-sm">Dashboard</a>
+                {% elif user.role == 'user' %}
+                <span class="user-badge">
+                    <i class="fas fa-user-circle"></i> {{ user.username }}
+                </span>
+                <a href="{% url 'accounts:user_dashboard' %}" class="btn btn-outline btn-sm">Dashboard</a>
+                {% endif %}
+                <a href="{% url 'accounts:logout' %}" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            {% else %}
+                <a href="{% url 'accounts:login' %}" class="btn btn-outline">Login</a>
+                <a href="{% url 'accounts:user_register' %}" class="btn btn-primary">Get Started</a>
+            {% endif %}
+        </div>
+        
+        <!-- Mobile Menu Button -->
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+    
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <ul class="mobile-nav-links">
+            <li><a href="{% url 'accounts:index' %}#home">Home</a></li>
+            <li><a href="{% url 'accounts:index' %}#about">About Us</a></li>
+            <li><a href="{% url 'accounts:index' %}#features">Features</a></li>
+            <li><a href="{% url 'accounts:index' %}#testimonials">Testimonials</a></li>
+            <li><a href="{% url 'accounts:index' %}#contact">Contact</a></li>
+            
+            {% if user.is_authenticated %}
+                <li style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee;">
+                    {% if user.is_superuser %}
+                    <a href="{% url 'accounts:admin_dashboard' %}">Dashboard</a>
+                    {% elif user.role == 'expert' %}
+                    <a href="{% url 'accounts:expert_dashboard' %}">Dashboard</a>
+                    {% elif user.role == 'user' %}
+                    <a href="{% url 'accounts:user_dashboard' %}">Dashboard</a>
+                    {% endif %}
+                </li>
+                <li>
+                    <a href="{% url 'accounts:logout' %}">Logout</a>
+                </li>
+            {% else %}
+                <li style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee;">
+                    <a href="{% url 'accounts:login' %}">Login</a>
+                </li>
+                <li>
+                    <a href="{% url 'accounts:user_register' %}">Get Started</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+
+<style>
+    .navbar {
+        background-color: #ffffff;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+        padding: 15px 0;
+        transition: all 0.3s;
+    }
+
+    .nav-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .logo {
+        font-size: 28px;
+        font-weight: 700;
+        color: #5d5fef;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+    }
+
+    .logo i {
+        margin-right: 10px;
+        color: #6c63ff;
+    }
+
+    .nav-links {
+        display: flex;
+        list-style: none;
+        gap: 25px;
+        margin: 0;
+        padding: 0;
+    }
+
+    .nav-links li {
+        list-style: none;
+    }
+
+    .nav-links a {
+        text-decoration: none;
+        color: #555;
+        font-weight: 500;
+        font-size: 15px;
+        transition: color 0.3s;
+        padding: 8px 0;
+        position: relative;
+    }
+
+    .nav-links a::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(135deg, #6c63ff, #5d5fef);
+        transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover {
+        color: #6c63ff;
+    }
+
+    .nav-links a:hover::after {
+        width: 100%;
+    }
+
+    .user-actions {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .user-badge {
+        background: linear-gradient(135deg, #6c63ff, #5d5fef);
+        color: white;
+        padding: 8px 20px;
+        border-radius: 30px;
+        font-weight: 600;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 10px rgba(108, 99, 255, 0.2);
+    }
+
+    .logout-btn {
+        background-color: #dc3545;
+        color: white;
+        padding: 8px 20px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s;
+    }
+
+    .logout-btn:hover {
+        background-color: #c82333;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+    }
+
+    .btn {
+        padding: 8px 20px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s;
+        display: inline-block;
+        border: none;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #6c63ff, #5d5fef);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(108, 99, 255, 0.2);
+    }
+
+    .btn-outline {
+        border: 2px solid #6c63ff;
+        color: #6c63ff;
+        background: transparent;
+    }
+
+    .btn-outline:hover {
+        background: #6c63ff;
+        color: white;
+    }
+
+    .btn-sm {
+        padding: 6px 15px;
+        font-size: 13px;
+    }
+
+    .mobile-menu-btn {
+        display: none;
+        background: none;
+        border: none;
+        font-size: 24px;
+        color: #6c63ff;
+        cursor: pointer;
+    }
+
+    .mobile-menu {
+        display: none;
+        padding: 20px;
+        background: white;
+        border-top: 1px solid #eee;
+    }
+
+    .mobile-menu.active {
+        display: block;
+    }
+
+    .mobile-nav-links {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .mobile-nav-links li {
+        margin-bottom: 15px;
+    }
+
+    .mobile-nav-links a {
+        text-decoration: none;
+        color: #555;
+        font-weight: 500;
+        font-size: 16px;
+        display: block;
+        padding: 10px;
+        border-radius: 8px;
+        transition: all 0.3s;
+    }
+
+    .mobile-nav-links a:hover {
+        background: #f0f2ff;
+        color: #6c63ff;
+    }
+
+    @media (max-width: 992px) {
+        .nav-links {
+            display: none;
+        }
+        
+        .mobile-menu-btn {
+            display: block;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .user-actions .btn-outline,
+        .user-actions .btn-primary,
+        .user-actions .logout-btn {
+            display: none;
+        }
+        
+        .user-badge {
+            margin-right: 10px;
+        }
+    }
+</style>
+
+<script>
+    function toggleMobileMenu() {
+        const menu = document.getElementById('mobileMenu');
+        menu.classList.toggle('active');
+    }
+</script>

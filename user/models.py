@@ -5,6 +5,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils import timezone
 import uuid
 import json
+from decimal import Decimal
 
 User = settings.AUTH_USER_MODEL
 
@@ -228,6 +229,7 @@ class SessionBooking(models.Model):
     STATUS_CHOICES = [
         ('pending', 'Pending'),
         ('confirmed', 'Confirmed'),
+        ('paid', 'Paid'),  # ADD THIS LINE
         ('completed', 'Completed'),
         ('cancelled', 'Cancelled'),
         ('no_show', 'No Show'),
@@ -339,10 +341,10 @@ class SessionBooking(models.Model):
     
     def save(self, *args, **kwargs):
         """Override save to handle meeting link generation and timestamps"""
-        # Generate meeting link when status changes to confirmed
-        if self.status == 'confirmed' and not self.meeting_link:
+        # Generate meeting link when status changes to confirmed or paid
+        if self.status in ['confirmed', 'paid'] and not self.meeting_link:
             self.generate_meeting_link()
-            if not self.confirmed_at:
+            if self.status == 'confirmed' and not self.confirmed_at:
                 self.confirmed_at = timezone.now()
         
         # Set completed_at when status changes to completed
@@ -363,7 +365,7 @@ class SessionBooking(models.Model):
         
         session_datetime = datetime.combine(self.booking_date, self.booking_time)
         session_datetime = timezone.make_aware(session_datetime)
-        return session_datetime > timezone.now() and self.status == 'confirmed'
+        return session_datetime > timezone.now() and self.status in ['confirmed', 'paid']
     
     @property
     def can_join(self):
@@ -371,7 +373,8 @@ class SessionBooking(models.Model):
         from django.utils import timezone
         from datetime import datetime, timedelta
         
-        if self.status != 'confirmed':
+        # Allow joining for confirmed OR paid sessions
+        if self.status not in ['confirmed', 'paid']:
             return False
         
         session_datetime = datetime.combine(self.booking_date, self.booking_time)
@@ -390,7 +393,8 @@ class SessionBooking(models.Model):
         from django.utils import timezone
         from datetime import datetime
         
-        if self.status != 'confirmed':
+        # Allow for confirmed OR paid sessions
+        if self.status not in ['confirmed', 'paid']:
             return None
         
         session_datetime = datetime.combine(self.booking_date, self.booking_time)
@@ -526,6 +530,7 @@ class SessionBooking(models.Model):
             'cancelled': 'emails/session_cancelled.html',
             'reminder': 'emails/session_reminder.html',
             'completed': 'emails/session_completed.html',
+            'paid': 'emails/payment_confirmation.html',  # ADD THIS
         }
         
         subjects = {
@@ -533,6 +538,7 @@ class SessionBooking(models.Model):
             'cancelled': f'❌ Session Cancelled - {self.booking_date}',
             'reminder': f'⏰ Reminder: Your Session with Dr. {self.therapist.name}',
             'completed': f'✨ Session Completed - Share Your Feedback',
+            'paid': f'💰 Payment Confirmed for Session with Dr. {self.therapist.name}',  # ADD THIS
         }
         
         if notification_type in templates:
@@ -553,6 +559,44 @@ class SessionBooking(models.Model):
                 html_message=html_message,
                 fail_silently=True,
             )
+    
+  # In user/models.py - Fix the confirm_booking method (around line 600)
+def confirm_booking(self):
+    """Confirm booking after expert approval - sets fee from therapist settings"""
+    self.status = 'confirmed'
+    self.confirmed_at = timezone.now()
+    
+    # Get therapist's fee from settings
+    from expert.models import TherapistSettings, ExpertProfileSettings
+    
+    fee = Decimal('500.00')  # Default
+    
+    # ===== FIXED: Prioritize ExpertProfileSettings =====
+    try:
+        # Try ExpertProfileSettings FIRST
+        profile_settings = ExpertProfileSettings.objects.get(therapist=self.therapist)
+        if profile_settings.consultation_fee:
+            fee = profile_settings.consultation_fee
+            print(f"Confirm booking using fee from ExpertProfileSettings: {fee}")
+    except ExpertProfileSettings.DoesNotExist:
+        try:
+            # Try TherapistSettings SECOND
+            therapist_settings = TherapistSettings.objects.get(therapist=self.therapist)
+            if therapist_settings.consultation_fee:
+                fee = therapist_settings.consultation_fee
+                print(f"Confirm booking using fee from TherapistSettings: {fee}")
+        except TherapistSettings.DoesNotExist:
+            # Try therapist model's session_fee if exists
+            if hasattr(self.therapist, 'session_fee') and self.therapist.session_fee:
+                fee = self.therapist.session_fee
+                print(f"Confirm booking using fee from therapist.session_fee: {fee}")
+    
+    # FIXED: Remove total_amount, only set consultation_fee
+    self.consultation_fee = fee
+    self.save()
+    print(f"Booking {self.id} confirmed with fee: {fee}")
+    
+    return self
 
 class ProgressTracker(models.Model):
     """Track user's progress over time"""
@@ -1026,3 +1070,58 @@ class Review(models.Model):
         if avg_rating:
             self.therapist.rating = round(avg_rating, 1)
             self.therapist.save()
+
+
+
+
+
+class Payment(models.Model):
+    """Payment model for tracking Razorpay payments"""
+    PAYMENT_STATUS = [
+        ('created', 'Created'),
+        ('attempted', 'Attempted'),
+        ('paid', 'Paid'),
+        ('failed', 'Failed'),
+        ('refunded', 'Refunded'),
+    ]
+    
+    booking = models.OneToOneField(
+        'SessionBooking',
+        on_delete=models.CASCADE,
+        related_name='payment'
+    )
+    
+    # Razorpay fields
+    razorpay_order_id = models.CharField(max_length=100, unique=True)
+    razorpay_payment_id = models.CharField(max_length=100, blank=True, null=True)
+    razorpay_signature = models.CharField(max_length=200, blank=True, null=True)
+    
+    # Payment details
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    currency = models.CharField(max_length=10, default='INR')
+    status = models.CharField(max_length=20, choices=PAYMENT_STATUS, default='created')
+    
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    paid_at = models.DateTimeField(null=True, blank=True)
+    
+    class Meta:
+        verbose_name_plural = "Payments"
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return f"Payment {self.razorpay_order_id} - {self.status}"
+    
+    def mark_as_paid(self, payment_id, signature):
+        """Mark payment as paid"""
+        self.razorpay_payment_id = payment_id
+        self.razorpay_signature = signature
+        self.status = 'paid'
+        self.paid_at = timezone.now()
+        self.save()
+        
+        # Update booking payment status and set to paid status
+        self.booking.payment_status = 'paid'
+        self.booking.status = 'paid'  # Change from 'confirmed' to 'paid'
+        self.booking.save()

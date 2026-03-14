@@ -53,4 +53,7 @@ urlpatterns = [
 
 # expert/urls.py
 path('complete-session/<int:booking_id>/', views.complete_session, name='complete_session'),
+
+# Analytics
+path('analytics/', views.analytics, name='analytics'),
 ]

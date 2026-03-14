@@ -1,1044 +1,976 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Session Requests - EmpathyQ</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+{% extends 'base.html' %}
 
-        body {
-            background: #f0f2f5;
-            padding: 30px 20px;
-            min-height: 100vh;
-        }
+{% block title %}Session Requests - EmpathyQ{% endblock %}
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
+{% block extra_css %}
+<style>
+    /* Header Section */
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        background: white;
+        padding: 20px 30px;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    }
 
-        /* Header Section */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            background: white;
-            padding: 20px 30px;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-        }
+    .header h1 {
+        color: #1a1f36;
+        font-size: 28px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
 
-        .header h1 {
-            color: #1a1f36;
-            font-size: 28px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+    .header h1 i {
+        color: #6c63ff;
+        background: #f0f2ff;
+        padding: 12px;
+        border-radius: 12px;
+        font-size: 24px;
+    }
 
-        .header h1 i {
-            color: #6c63ff;
-            background: #f0f2ff;
-            padding: 12px;
-            border-radius: 12px;
-            font-size: 24px;
-        }
+    .btn {
+        padding: 12px 28px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 15px;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: #6c63ff;
+        color: white;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(108, 99, 255, 0.2);
+    }
 
-        .btn {
-            padding: 12px 28px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 15px;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: #6c63ff;
-            color: white;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(108, 99, 255, 0.2);
-        }
+    .btn:hover {
+        background: #5a52d5;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(108, 99, 255, 0.3);
+    }
 
-        .btn:hover {
-            background: #5a52d5;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(108, 99, 255, 0.3);
-        }
+    .btn i {
+        font-size: 16px;
+    }
 
-        .btn i {
-            font-size: 16px;
-        }
+    .btn-secondary {
+        background: white;
+        color: #6c63ff;
+        border: 2px solid #6c63ff;
+        box-shadow: none;
+    }
 
-        .btn-secondary {
-            background: white;
-            color: #6c63ff;
-            border: 2px solid #6c63ff;
-            box-shadow: none;
-        }
+    .btn-secondary:hover {
+        background: #6c63ff;
+        color: white;
+    }
 
-        .btn-secondary:hover {
-            background: #6c63ff;
-            color: white;
-        }
+    /* Stats Cards */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
 
-        /* Stats Cards */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
+    .stat-card {
+        background: white;
+        padding: 24px;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        transition: transform 0.3s ease;
+        cursor: pointer;
+    }
 
-        .stat-card {
-            background: white;
-            padding: 24px;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            transition: transform 0.3s ease;
-            cursor: pointer;
-        }
+    .stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+    }
 
-        .stat-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
-        }
+    .stat-icon {
+        width: 55px;
+        height: 55px;
+        background: #f0f2ff;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-        .stat-icon {
-            width: 55px;
-            height: 55px;
-            background: #f0f2ff;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+    .stat-icon i {
+        font-size: 26px;
+        color: #6c63ff;
+    }
 
-        .stat-icon i {
-            font-size: 26px;
-            color: #6c63ff;
-        }
+    .stat-info h3 {
+        color: #64748b;
+        font-size: 14px;
+        font-weight: 500;
+        margin-bottom: 6px;
+        letter-spacing: 0.3px;
+    }
 
-        .stat-info h3 {
-            color: #64748b;
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 6px;
-            letter-spacing: 0.3px;
-        }
+    .stat-info p {
+        color: #1a1f36;
+        font-size: 28px;
+        font-weight: 700;
+    }
 
-        .stat-info p {
-            color: #1a1f36;
-            font-size: 28px;
-            font-weight: 700;
-        }
+    /* Tabs */
+    .tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 25px;
+        background: white;
+        padding: 15px;
+        border-radius: 50px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    }
 
-        /* Tabs */
-        .tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
-            background: white;
-            padding: 15px;
-            border-radius: 50px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
-        }
+    .tab {
+        padding: 12px 25px;
+        border-radius: 40px;
+        cursor: pointer;
+        font-weight: 600;
+        color: #64748b;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
 
-        .tab {
-            padding: 12px 25px;
-            border-radius: 40px;
-            cursor: pointer;
-            font-weight: 600;
-            color: #64748b;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+    .tab:hover {
+        background: #f0f2ff;
+        color: #6c63ff;
+    }
 
-        .tab:hover {
-            background: #f0f2ff;
-            color: #6c63ff;
-        }
+    .tab.active {
+        background: #6c63ff;
+        color: white;
+    }
 
-        .tab.active {
-            background: #6c63ff;
-            color: white;
-        }
+    .tab i {
+        font-size: 16px;
+    }
 
-        .tab i {
-            font-size: 16px;
-        }
+    .tab-count {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 2px 8px;
+        border-radius: 20px;
+        font-size: 12px;
+        margin-left: 5px;
+    }
 
-        .tab-count {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 2px 8px;
-            border-radius: 20px;
-            font-size: 12px;
-            margin-left: 5px;
-        }
+    .tab.active .tab-count {
+        background: rgba(255, 255, 255, 0.3);
+    }
 
-        .tab.active .tab-count {
-            background: rgba(255, 255, 255, 0.3);
-        }
+    /* Table Section */
+    .table-container {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+        margin-bottom: 25px;
+        display: none;
+    }
 
-        /* Table Section */
+    .table-container.active {
+        display: block;
+        animation: fadeIn 0.5s ease-out;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th {
+        background: #f8fafd;
+        color: #1e293b;
+        font-weight: 600;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 18px 20px;
+        text-align: left;
+        border-bottom: 2px solid #e9edf2;
+    }
+
+    td {
+        padding: 18px 20px;
+        border-bottom: 1px solid #edf2f7;
+        color: #334155;
+        font-size: 15px;
+    }
+
+    tr:last-child td {
+        border-bottom: none;
+    }
+
+    tr:hover td {
+        background-color: #fafbff;
+    }
+
+    /* User Info */
+    .user-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .user-avatar {
+        width: 45px;
+        height: 45px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 600;
+        font-size: 18px;
+    }
+
+    .user-details {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .user-name {
+        font-weight: 600;
+        color: #1a1f36;
+        font-size: 15px;
+    }
+
+    .user-email {
+        font-size: 13px;
+        color: #64748b;
+        margin-top: 2px;
+    }
+
+    /* Category */
+    .category-badge {
+        background: #f0f2ff;
+        color: #6c63ff;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        display: inline-block;
+    }
+
+    /* Date & Time */
+    .datetime {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .date {
+        font-weight: 600;
+        color: #1a1f36;
+    }
+
+    .time {
+        font-size: 13px;
+        color: #64748b;
+        margin-top: 4px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .time i {
+        font-size: 12px;
+        color: #94a3b8;
+    }
+
+    /* Notes Preview */
+    .notes-preview {
+        max-width: 200px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: #64748b;
+        font-size: 13px;
+        cursor: help;
+    }
+
+    .notes-preview i {
+        color: #6c63ff;
+        margin-right: 5px;
+    }
+
+    /* Status Badges - UPDATED to include paid */
+    .status-badge {
+        padding: 6px 14px;
+        border-radius: 30px;
+        font-size: 13px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        width: fit-content;
+    }
+
+    .status-pending {
+        background: #fff3e0;
+        color: #ef6c00;
+    }
+
+    .status-confirmed {
+        background: #e3f2fd;
+        color: #1976d2;
+    }
+
+    .status-paid {
+        background: #cce5ff;
+        color: #004085;
+    }
+
+    .status-completed {
+        background: #e8f5e9;
+        color: #2e7d32;
+    }
+
+    .status-cancelled {
+        background: #ffebee;
+        color: #c62828;
+    }
+
+    /* Action Buttons */
+    .action-buttons {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .action-btn {
+        padding: 8px 16px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-approve {
+        background: #10b981;
+        color: white;
+    }
+
+    .btn-approve:hover {
+        background: #059669;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-reject {
+        background: #ef4444;
+        color: white;
+    }
+
+    .btn-reject:hover {
+        background: #dc2626;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
+    }
+
+    .btn-complete {
+        background: #6c63ff;
+        color: white;
+    }
+
+    .btn-complete:hover {
+        background: #5a52d5;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(108, 99, 255, 0.3);
+    }
+
+    .btn-start {
+        background: #3b82f6;
+        color: white;
+    }
+
+    .btn-start:hover {
+        background: #2563eb;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+    }
+
+    .btn-view {
+        background: #6c757d;
+        color: white;
+    }
+
+    .btn-view:hover {
+        background: #5a6268;
+    }
+
+    /* Meeting Link */
+    .meeting-link {
+        color: #6c63ff;
+        text-decoration: none;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .meeting-link:hover {
+        text-decoration: underline;
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 70px 20px;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+    }
+
+    .empty-state i {
+        font-size: 70px;
+        color: #cbd5e1;
+        margin-bottom: 20px;
+    }
+
+    .empty-state h3 {
+        color: #1a1f36;
+        font-size: 22px;
+        margin-bottom: 10px;
+        font-weight: 600;
+    }
+
+    .empty-state p {
+        color: #64748b;
+        font-size: 15px;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    .empty-state .btn {
+        margin-top: 25px;
+        display: inline-flex;
+    }
+
+    /* Animation */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .header, .stats-grid, .table-container.active {
+        animation: fadeIn 0.5s ease-out;
+    }
+
+    /* Messages - Override base styles for these specific alerts */
+    .alert {
+        padding: 16px 20px;
+        border-radius: 12px;
+        margin-bottom: 25px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateY(-20px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .alert-success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    .alert-info {
+        background: #d1ecf1;
+        color: #0c5460;
+        border: 1px solid #bee5eb;
+    }
+
+    .alert-warning {
+        background: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffeeba;
+    }
+
+    .alert-error {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+
+    .alert i {
+        font-size: 20px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
         .table-container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
-            overflow: hidden;
-            margin-bottom: 25px;
-            display: none;
-        }
-
-        .table-container.active {
-            display: block;
-            animation: fadeIn 0.5s ease-out;
+            overflow-x: auto;
         }
 
         table {
-            width: 100%;
-            border-collapse: collapse;
+            min-width: 1000px;
         }
+    }
 
-        th {
-            background: #f8fafd;
-            color: #1e293b;
-            font-weight: 600;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            padding: 18px 20px;
-            text-align: left;
-            border-bottom: 2px solid #e9edf2;
-        }
-
-        td {
-            padding: 18px 20px;
-            border-bottom: 1px solid #edf2f7;
-            color: #334155;
-            font-size: 15px;
-        }
-
-        tr:last-child td {
-            border-bottom: none;
-        }
-
-        tr:hover td {
-            background-color: #fafbff;
-        }
-
-        /* User Info */
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .user-avatar {
-            width: 45px;
-            height: 45px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-            font-size: 18px;
-        }
-
-        .user-details {
-            display: flex;
+    @media (max-width: 768px) {
+        .header {
             flex-direction: column;
+            gap: 15px;
+            text-align: center;
+            padding: 20px;
         }
 
-        .user-name {
-            font-weight: 600;
-            color: #1a1f36;
-            font-size: 15px;
+        .header h1 {
+            font-size: 24px;
         }
 
-        .user-email {
-            font-size: 13px;
-            color: #64748b;
-            margin-top: 2px;
-        }
-
-        /* Category */
-        .category-badge {
-            background: #f0f2ff;
-            color: #6c63ff;
-            padding: 4px 10px;
+        .tabs {
+            flex-direction: column;
             border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            display: inline-block;
+            padding: 10px;
         }
 
-        /* Date & Time */
-        .datetime {
-            display: flex;
-            flex-direction: column;
+        .tab {
+            width: 100%;
+            justify-content: center;
         }
 
-        .date {
-            font-weight: 600;
-            color: #1a1f36;
+        .stats-grid {
+            grid-template-columns: 1fr;
+            gap: 15px;
         }
 
-        .time {
-            font-size: 13px;
-            color: #64748b;
-            margin-top: 4px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
+        .stat-card {
+            padding: 18px;
         }
 
-        .time i {
-            font-size: 12px;
-            color: #94a3b8;
-        }
-
-        /* Notes Preview */
-        .notes-preview {
-            max-width: 200px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            color: #64748b;
-            font-size: 13px;
-            cursor: help;
-        }
-
-        .notes-preview i {
-            color: #6c63ff;
-            margin-right: 5px;
-        }
-
-        /* Status Badges */
-        .status-badge {
-            padding: 6px 14px;
-            border-radius: 30px;
-            font-size: 13px;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            width: fit-content;
-        }
-
-        .status-pending {
-            background: #fff3e0;
-            color: #ef6c00;
-        }
-
-        .status-pending i {
-            color: #ef6c00;
-        }
-
-        .status-confirmed {
-            background: #e3f2fd;
-            color: #1976d2;
-        }
-
-        .status-confirmed i {
-            color: #1976d2;
-        }
-
-        .status-completed {
-            background: #e8f5e9;
-            color: #2e7d32;
-        }
-
-        .status-completed i {
-            color: #2e7d32;
-        }
-
-        .status-cancelled {
-            background: #ffebee;
-            color: #c62828;
-        }
-
-        .status-cancelled i {
-            color: #c62828;
-        }
-
-        /* Action Buttons */
         .action-buttons {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
+            flex-direction: column;
         }
 
         .action-btn {
-            padding: 8px 16px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 600;
-            transition: all 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            border: none;
-            cursor: pointer;
+            width: 100%;
+            justify-content: center;
         }
+    }
 
-        .btn-approve {
-            background: #10b981;
-            color: white;
-        }
-
-        .btn-approve:hover {
-            background: #059669;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
-        }
-
-        .btn-reject {
-            background: #ef4444;
-            color: white;
-        }
-
-        .btn-reject:hover {
-            background: #dc2626;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
-        }
-
-        .btn-complete {
-            background: #6c63ff;
-            color: white;
-        }
-
-        .btn-complete:hover {
-            background: #5a52d5;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(108, 99, 255, 0.3);
-        }
-
-        .btn-start {
-            background: #3b82f6;
-            color: white;
-        }
-
-        .btn-start:hover {
-            background: #2563eb;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
-        }
-
-        .btn-view {
-            background: #6c757d;
-            color: white;
-        }
-
-        .btn-view:hover {
-            background: #5a6268;
-        }
-
-        /* Meeting Link */
-        .meeting-link {
-            color: #6c63ff;
-            text-decoration: none;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .meeting-link:hover {
-            text-decoration: underline;
-        }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 70px 20px;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
-        }
-
-        .empty-state i {
-            font-size: 70px;
-            color: #cbd5e1;
-            margin-bottom: 20px;
-        }
-
-        .empty-state h3 {
-            color: #1a1f36;
-            font-size: 22px;
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
-
-        .empty-state p {
-            color: #64748b;
-            font-size: 15px;
-            max-width: 400px;
-            margin: 0 auto;
-        }
-
-        .empty-state .btn {
-            margin-top: 25px;
-            display: inline-flex;
-        }
-
-        /* Back Link */
-        .back-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            color: #6c63ff;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 15px;
-            padding: 10px 20px;
-            border-radius: 10px;
-            transition: all 0.3s ease;
-            background: white;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
-            margin-top: 20px;
-        }
-
-        .back-link:hover {
-            background: #f0f2ff;
-            transform: translateX(-3px);
-        }
-
-        .back-link i {
-            font-size: 14px;
-        }
-
-        /* Animation */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .header, .stats-grid, .table-container.active {
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        /* Messages */
-        .alert {
-            padding: 16px 20px;
-            border-radius: 12px;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            animation: slideIn 0.3s ease;
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateY(-20px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        .alert-success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .alert-info {
-            background: #d1ecf1;
-            color: #0c5460;
-            border: 1px solid #bee5eb;
-        }
-
-        .alert-warning {
-            background: #fff3cd;
-            color: #856404;
-            border: 1px solid #ffeeba;
-        }
-
-        .alert-error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        .alert i {
+    @media (max-width: 480px) {
+        .header h1 {
             font-size: 20px;
         }
 
-        /* Responsive Design */
-        @media (max-width: 1024px) {
-            .table-container {
-                overflow-x: auto;
-            }
-
-            table {
-                min-width: 1000px;
-            }
+        .btn {
+            width: 100%;
+            justify-content: center;
         }
 
-        @media (max-width: 768px) {
-            body {
-                padding: 15px;
-            }
-
-            .header {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-                padding: 20px;
-            }
-
-            .header h1 {
-                font-size: 24px;
-            }
-
-            .tabs {
-                flex-direction: column;
-                border-radius: 20px;
-                padding: 10px;
-            }
-
-            .tab {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-
-            .stat-card {
-                padding: 18px;
-            }
-
-            .action-buttons {
-                flex-direction: column;
-            }
-
-            .action-btn {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .back-link {
-                display: flex;
-                justify-content: center;
-            }
+        .stat-card {
+            flex-direction: column;
+            text-align: center;
         }
 
-        @media (max-width: 480px) {
-            .header h1 {
-                font-size: 20px;
-            }
-
-            .btn {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .stat-card {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .stat-icon {
-                margin: 0 auto;
-            }
+        .stat-icon {
+            margin: 0 auto;
         }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <h1>
-                <i class="fas fa-calendar-alt"></i>
-                Session Management
-            </h1>
-            <div>
-                <a href="{% url 'expert:today_sessions' %}" class="btn btn-secondary" style="margin-right: 10px;">
-                    <i class="fas fa-calendar-day"></i> Today's Sessions
-                </a>
-                <a href="{% url 'expert:manage_availability' %}" class="btn btn-secondary" style="margin-right: 10px;">
-                    <i class="fas fa-clock"></i> Availability
-                </a>
-                <a href="{% url 'accounts:expert_dashboard' %}" class="btn">
-                    <i class="fas fa-tachometer-alt"></i> Dashboard
-                </a>
-            </div>
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 30px;">
+    <!-- Header -->
+    <div class="header">
+        <h1>
+            <i class="fas fa-calendar-alt"></i>
+            Session Management
+        </h1>
+        <div>
+            <a href="{% url 'expert:today_sessions' %}" class="btn btn-secondary" style="margin-right: 10px;">
+                <i class="fas fa-calendar-day"></i> Today's Sessions
+            </a>
+            <a href="{% url 'expert:manage_availability' %}" class="btn btn-secondary" style="margin-right: 10px;">
+                <i class="fas fa-clock"></i> Availability
+            </a>
+            <a href="{% url 'accounts:expert_dashboard' %}" class="btn">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
         </div>
-
-        <!-- Messages -->
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}">
-                    <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-circle{% elif message.tags == 'warning' %}exclamation-triangle{% else %}info-circle{% endif %}"></i>
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endif %}
-
-        <!-- Stats Cards -->
-        <div class="stats-grid">
-            <div class="stat-card" onclick="showTab('pending')">
-                <div class="stat-icon">
-                    <i class="fas fa-clock"></i>
-                </div>
-                <div class="stat-info">
-                    <h3>Pending Requests</h3>
-                    <p>{{ pending_requests|length }}</p>
-                </div>
-            </div>
-            <div class="stat-card" onclick="showTab('upcoming')">
-                <div class="stat-icon">
-                    <i class="fas fa-check-circle"></i>
-                </div>
-                <div class="stat-info">
-                    <h3>Upcoming Sessions</h3>
-                    <p>{{ upcoming_sessions|length }}</p>
-                </div>
-            </div>
-            <div class="stat-card" onclick="showTab('past')">
-                <div class="stat-icon">
-                    <i class="fas fa-history"></i>
-                </div>
-                <div class="stat-info">
-                    <h3>Past Sessions</h3>
-                    <p>{{ past_sessions|length }}</p>
-                </div>
-            </div>
-            <div class="stat-card" onclick="window.location.href='{% url 'expert:today_sessions' %}'">
-                <div class="stat-icon">
-                    <i class="fas fa-calendar-day"></i>
-                </div>
-                <div class="stat-info">
-                    <h3>Today's Sessions</h3>
-                    <p>
-                        <i class="fas fa-arrow-right" style="font-size: 14px;"></i>
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Tabs -->
-        <div class="tabs">
-            <div class="tab active" onclick="showTab('pending')">
-                <i class="fas fa-clock"></i>
-                Pending Requests
-                <span class="tab-count">{{ pending_requests|length }}</span>
-            </div>
-            <div class="tab" onclick="showTab('upcoming')">
-                <i class="fas fa-calendar-check"></i>
-                Upcoming Sessions
-                <span class="tab-count">{{ upcoming_sessions|length }}</span>
-            </div>
-            <div class="tab" onclick="showTab('past')">
-                <i class="fas fa-history"></i>
-                Past Sessions
-                <span class="tab-count">{{ past_sessions|length }}</span>
-            </div>
-        </div>
-
-        <!-- Pending Requests Table -->
-        <div id="pending-table" class="table-container active">
-            {% if pending_requests %}
-            <table>
-                <thead>
-                    <tr>
-                        <th>Client</th>
-                        <th>Session Type</th>
-                        <th>Date & Time</th>
-                        <th>Notes</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for booking in pending_requests %}
-                    <tr>
-                        <td>
-                            <div class="user-info">
-                                <div class="user-avatar">
-                                    {{ booking.user.get_full_name|default:booking.user.username|make_list|first|upper }}
-                                </div>
-                                <div class="user-details">
-                                    <span class="user-name">{{ booking.user.get_full_name|default:booking.user.username }}</span>
-                                    <span class="user-email">{{ booking.user.email }}</span>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <span class="category-badge">
-                                <i class="fas fa-tag"></i>
-                                {{ booking.category.name }}
-                            </span>
-                        </td>
-                        <td>
-                            <div class="datetime">
-                                <span class="date">{{ booking.booking_date|date:"M d, Y" }}</span>
-                                <span class="time">
-                                    <i class="far fa-clock"></i>
-                                    {{ booking.booking_time|time:"g:i A" }}
-                                </span>
-                            </div>
-                        </td>
-                        <!-- Notes Column -->
-                        <td>
-                            {% if booking.notes %}
-                                <div class="notes-preview" title="{{ booking.notes }}">
-                                    <i class="fas fa-sticky-note"></i>
-                                    {{ booking.notes|truncatechars:30 }}
-                                </div>
-                            {% else %}
-                                <span style="color: #94a3b8;">—</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            <div class="action-buttons">
-                                <a href="{% url 'expert:approve_session' booking.id %}" class="action-btn btn-approve" onclick="return confirm('Approve this session request? A meeting link will be generated automatically.')">
-                                    <i class="fas fa-check"></i> Approve
-                                </a>
-                                <a href="{% url 'expert:reject_session' booking.id %}" class="action-btn btn-reject" onclick="return confirm('Reject this session request? The time slot will be released.')">
-                                    <i class="fas fa-times"></i> Reject
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            {% else %}
-            <div class="empty-state">
-                <i class="fas fa-inbox"></i>
-                <h3>No Pending Requests</h3>
-                <p>You don't have any pending session requests at the moment.</p>
-            </div>
-            {% endif %}
-        </div>
-
-        <!-- Upcoming Sessions Table -->
-        <div id="upcoming-table" class="table-container">
-            {% if upcoming_sessions %}
-            <table>
-                <thead>
-                    <tr>
-                        <th>Client</th>
-                        <th>Session Type</th>
-                        <th>Date & Time</th>
-                        <th>Meeting</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for booking in upcoming_sessions %}
-                    <tr>
-                        <td>
-                            <div class="user-info">
-                                <div class="user-avatar">
-                                    {{ booking.user.get_full_name|default:booking.user.username|make_list|first|upper }}
-                                </div>
-                                <div class="user-details">
-                                    <span class="user-name">{{ booking.user.get_full_name|default:booking.user.username }}</span>
-                                    <span class="user-email">{{ booking.user.email }}</span>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <span class="category-badge">
-                                <i class="fas fa-tag"></i>
-                                {{ booking.category.name }}
-                            </span>
-                        </td>
-                        <td>
-                            <div class="datetime">
-                                <span class="date">{{ booking.booking_date|date:"M d, Y" }}</span>
-                                <span class="time">
-                                    <i class="far fa-clock"></i>
-                                    {{ booking.booking_time|time:"g:i A" }}
-                                </span>
-                            </div>
-                        </td>
-                        <td>
-                            {% if booking.meeting_link %}
-                                <a href="{{ booking.meeting_link }}" target="_blank" class="meeting-link">
-                                    <i class="fas fa-video"></i> Join Meeting
-                                </a>
-                            {% else %}
-                                <span style="color: #94a3b8;">Not generated</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            <div class="action-buttons">
-                                <a href="{% url 'expert:start_session' booking.id %}" class="action-btn btn-start" target="_blank">
-                                    <i class="fas fa-video"></i> Start
-                                </a>
-                                <a href="{% url 'expert:complete_session' booking.id %}" class="action-btn btn-complete" onclick="return confirm('Mark this session as completed?')">
-                                    <i class="fas fa-check-double"></i> Complete
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            {% else %}
-            <div class="empty-state">
-                <i class="fas fa-calendar"></i>
-                <h3>No Upcoming Sessions</h3>
-                <p>You don't have any upcoming confirmed sessions.</p>
-            </div>
-            {% endif %}
-        </div>
-
-        <!-- Past Sessions Table -->
-        <div id="past-table" class="table-container">
-            {% if past_sessions %}
-            <table>
-                <thead>
-                    <tr>
-                        <th>Client</th>
-                        <th>Session Type</th>
-                        <th>Date & Time</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for booking in past_sessions %}
-                    <tr>
-                        <td>
-                            <div class="user-info">
-                                <div class="user-avatar">
-                                    {{ booking.user.get_full_name|default:booking.user.username|make_list|first|upper }}
-                                </div>
-                                <div class="user-details">
-                                    <span class="user-name">{{ booking.user.get_full_name|default:booking.user.username }}</span>
-                                    <span class="user-email">{{ booking.user.email }}</span>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <span class="category-badge">
-                                <i class="fas fa-tag"></i>
-                                {{ booking.category.name }}
-                            </span>
-                        </td>
-                        <td>
-                            <div class="datetime">
-                                <span class="date">{{ booking.booking_date|date:"M d, Y" }}</span>
-                                <span class="time">
-                                    <i class="far fa-clock"></i>
-                                    {{ booking.booking_time|time:"g:i A" }}
-                                </span>
-                            </div>
-                        </td>
-                        <td>
-                            <span class="status-badge status-{{ booking.status }}">
-                                <i class="fas 
-                                    {% if booking.status == 'completed' %}fa-check-double
-                                    {% elif booking.status == 'cancelled' %}fa-ban
-                                    {% else %}fa-times-circle
-                                    {% endif %}">
-                                </i>
-                                {{ booking.get_status_display }}
-                            </span>
-                        </td>
-                        <td>
-                            <a href="#" class="action-btn btn-view" onclick="alert('Session details:\n\nDate: {{ booking.booking_date|date:'M d, Y' }}\nTime: {{ booking.booking_time|time:'g:i A' }}\nClient: {{ booking.user.get_full_name|default:booking.user.username }}\n\nNotes: {{ booking.notes|default:'No notes provided' }}')">
-                                <i class="fas fa-info-circle"></i> Details
-                            </a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            {% else %}
-            <div class="empty-state">
-                <i class="fas fa-history"></i>
-                <h3>No Past Sessions</h3>
-                <p>You haven't completed any sessions yet.</p>
-            </div>
-            {% endif %}
-        </div>
-
-        <!-- Back Link -->
-        <a href="{% url 'accounts:expert_dashboard' %}" class="back-link">
-            <i class="fas fa-arrow-left"></i> Back to Dashboard
-        </a>
     </div>
 
-    <script>
-        // Tab switching function
-        function showTab(tabName) {
-            // Hide all tables
-            document.getElementById('pending-table').classList.remove('active');
-            document.getElementById('upcoming-table').classList.remove('active');
-            document.getElementById('past-table').classList.remove('active');
-            
-            // Remove active class from all tabs
-            const tabs = document.querySelectorAll('.tab');
-            tabs.forEach(tab => tab.classList.remove('active'));
-            
-            // Show selected table
-            if (tabName === 'pending') {
-                document.getElementById('pending-table').classList.add('active');
-                tabs[0].classList.add('active');
-            } else if (tabName === 'upcoming') {
-                document.getElementById('upcoming-table').classList.add('active');
-                tabs[1].classList.add('active');
-            } else if (tabName === 'past') {
-                document.getElementById('past-table').classList.add('active');
-                tabs[2].classList.add('active');
-            }
+    <!-- Messages -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-circle{% elif message.tags == 'warning' %}exclamation-triangle{% else %}info-circle{% endif %}"></i>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+        <div class="stat-card" onclick="showTab('pending')">
+            <div class="stat-icon">
+                <i class="fas fa-clock"></i>
+            </div>
+            <div class="stat-info">
+                <h3>Pending Requests</h3>
+                <p>{{ pending_requests|length }}</p>
+            </div>
+        </div>
+        <div class="stat-card" onclick="showTab('upcoming')">
+            <div class="stat-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stat-info">
+                <h3>Upcoming Sessions</h3>
+                <p>{{ upcoming_sessions|length }}</p>
+            </div>
+        </div>
+        <div class="stat-card" onclick="showTab('past')">
+            <div class="stat-icon">
+                <i class="fas fa-history"></i>
+            </div>
+            <div class="stat-info">
+                <h3>Past Sessions</h3>
+                <p>{{ past_sessions|length }}</p>
+            </div>
+        </div>
+        <div class="stat-card" onclick="window.location.href='{% url 'expert:today_sessions' %}'">
+            <div class="stat-icon">
+                <i class="fas fa-calendar-day"></i>
+            </div>
+            <div class="stat-info">
+                <h3>Today's Sessions</h3>
+                <p>
+                    <i class="fas fa-arrow-right" style="font-size: 14px;"></i>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+        <div class="tab active" onclick="showTab('pending')">
+            <i class="fas fa-clock"></i>
+            Pending Requests
+            <span class="tab-count">{{ pending_requests|length }}</span>
+        </div>
+        <div class="tab" onclick="showTab('upcoming')">
+            <i class="fas fa-calendar-check"></i>
+            Upcoming Sessions
+            <span class="tab-count">{{ upcoming_sessions|length }}</span>
+        </div>
+        <div class="tab" onclick="showTab('past')">
+            <i class="fas fa-history"></i>
+            Past Sessions
+            <span class="tab-count">{{ past_sessions|length }}</span>
+        </div>
+    </div>
+
+    <!-- Pending Requests Table -->
+    <div id="pending-table" class="table-container active">
+        {% if pending_requests %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Client</th>
+                    <th>Session Type</th>
+                    <th>Date & Time</th>
+                    <th>Notes</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in pending_requests %}
+                <tr>
+                    <td>
+                        <div class="user-info">
+                            <div class="user-avatar">
+                                {{ booking.user.get_full_name|default:booking.user.username|make_list|first|upper }}
+                            </div>
+                            <div class="user-details">
+                                <span class="user-name">{{ booking.user.get_full_name|default:booking.user.username }}</span>
+                                <span class="user-email">{{ booking.user.email }}</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="category-badge">
+                            <i class="fas fa-tag"></i>
+                            {{ booking.category.name }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="datetime">
+                            <span class="date">{{ booking.booking_date|date:"M d, Y" }}</span>
+                            <span class="time">
+                                <i class="far fa-clock"></i>
+                                {{ booking.booking_time|time:"g:i A" }}
+                            </span>
+                        </div>
+                    </td>
+                    <!-- Notes Column -->
+                    <td>
+                        {% if booking.notes %}
+                            <div class="notes-preview" title="{{ booking.notes }}">
+                                <i class="fas fa-sticky-note"></i>
+                                {{ booking.notes|truncatechars:30 }}
+                            </div>
+                        {% else %}
+                            <span style="color: #94a3b8;">—</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <a href="{% url 'expert:approve_session' booking.id %}" class="action-btn btn-approve" onclick="return confirm('Approve this session request? A meeting link will be generated automatically.')">
+                                <i class="fas fa-check"></i> Approve
+                            </a>
+                            <a href="{% url 'expert:reject_session' booking.id %}" class="action-btn btn-reject" onclick="return confirm('Reject this session request? The time slot will be released.')">
+                                <i class="fas fa-times"></i> Reject
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-inbox"></i>
+            <h3>No Pending Requests</h3>
+            <p>You don't have any pending session requests at the moment.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Upcoming Sessions Table - UPDATED to show both confirmed AND paid -->
+    <div id="upcoming-table" class="table-container">
+        {% if upcoming_sessions %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Client</th>
+                    <th>Session Type</th>
+                    <th>Date & Time</th>
+                    <th>Status</th>
+                    <th>Meeting</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in upcoming_sessions %}
+                <tr>
+                    <td>
+                        <div class="user-info">
+                            <div class="user-avatar">
+                                {{ booking.user.get_full_name|default:booking.user.username|make_list|first|upper }}
+                            </div>
+                            <div class="user-details">
+                                <span class="user-name">{{ booking.user.get_full_name|default:booking.user.username }}</span>
+                                <span class="user-email">{{ booking.user.email }}</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="category-badge">
+                            <i class="fas fa-tag"></i>
+                            {{ booking.category.name }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="datetime">
+                            <span class="date">{{ booking.booking_date|date:"M d, Y" }}</span>
+                            <span class="time">
+                                <i class="far fa-clock"></i>
+                                {{ booking.booking_time|time:"g:i A" }}
+                            </span>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="status-badge status-{{ booking.status }}">
+                            <i class="fas 
+                                {% if booking.status == 'confirmed' %}fa-check-circle
+                                {% elif booking.status == 'paid' %}fa-credit-card
+                                {% endif %}">
+                            </i>
+                            {{ booking.get_status_display }}
+                            {% if booking.status == 'paid' %}
+                                <span style="margin-left: 5px;">✓ Paid</span>
+                            {% endif %}
+                        </span>
+                    </td>
+                    <td>
+                        {% if booking.meeting_link %}
+                            <a href="{{ booking.meeting_link }}" target="_blank" class="meeting-link">
+                                <i class="fas fa-video"></i> Join Meeting
+                            </a>
+                        {% else %}
+                            <span style="color: #94a3b8;">Not generated</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <a href="{% url 'expert:start_session' booking.id %}" class="action-btn btn-start" target="_blank">
+                                <i class="fas fa-video"></i> Start
+                            </a>
+                            <a href="{% url 'expert:complete_session' booking.id %}" class="action-btn btn-complete" onclick="return confirm('Mark this session as completed?')">
+                                <i class="fas fa-check-double"></i> Complete
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-calendar"></i>
+            <h3>No Upcoming Sessions</h3>
+            <p>You don't have any upcoming confirmed or paid sessions.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Past Sessions Table -->
+    <div id="past-table" class="table-container">
+        {% if past_sessions %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Client</th>
+                    <th>Session Type</th>
+                    <th>Date & Time</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in past_sessions %}
+                <tr>
+                    <td>
+                        <div class="user-info">
+                            <div class="user-avatar">
+                                {{ booking.user.get_full_name|default:booking.user.username|make_list|first|upper }}
+                            </div>
+                            <div class="user-details">
+                                <span class="user-name">{{ booking.user.get_full_name|default:booking.user.username }}</span>
+                                <span class="user-email">{{ booking.user.email }}</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="category-badge">
+                            <i class="fas fa-tag"></i>
+                            {{ booking.category.name }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="datetime">
+                            <span class="date">{{ booking.booking_date|date:"M d, Y" }}</span>
+                            <span class="time">
+                                <i class="far fa-clock"></i>
+                                {{ booking.booking_time|time:"g:i A" }}
+                            </span>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="status-badge status-{{ booking.status }}">
+                            <i class="fas 
+                                {% if booking.status == 'completed' %}fa-check-double
+                                {% elif booking.status == 'cancelled' %}fa-ban
+                                {% else %}fa-times-circle
+                                {% endif %}">
+                            </i>
+                            {{ booking.get_status_display }}
+                        </span>
+                    </td>
+                    <td>
+                        <a href="#" class="action-btn btn-view" onclick="alert('Session details:\n\nDate: {{ booking.booking_date|date:'M d, Y' }}\nTime: {{ booking.booking_time|time:'g:i A' }}\nClient: {{ booking.user.get_full_name|default:booking.user.username }}\n\nNotes: {{ booking.notes|default:'No notes provided' }}')">
+                            <i class="fas fa-info-circle"></i> Details
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-history"></i>
+            <h3>No Past Sessions</h3>
+            <p>You haven't completed any sessions yet.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    // Tab switching function
+    function showTab(tabName) {
+        // Hide all tables
+        document.getElementById('pending-table').classList.remove('active');
+        document.getElementById('upcoming-table').classList.remove('active');
+        document.getElementById('past-table').classList.remove('active');
+        
+        // Remove active class from all tabs
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => tab.classList.remove('active'));
+        
+        // Show selected table
+        if (tabName === 'pending') {
+            document.getElementById('pending-table').classList.add('active');
+            tabs[0].classList.add('active');
+        } else if (tabName === 'upcoming') {
+            document.getElementById('upcoming-table').classList.add('active');
+            tabs[1].classList.add('active');
+        } else if (tabName === 'past') {
+            document.getElementById('past-table').classList.add('active');
+            tabs[2].classList.add('active');
         }
+    }
 
-        // Auto-hide messages after 5 seconds
-        setTimeout(function() {
-            document.querySelectorAll('.alert').forEach(function(alert) {
-                if (alert) {
-                    alert.style.transition = 'opacity 0.5s';
-                    alert.style.opacity = '0';
-                    setTimeout(() => alert.remove(), 500);
-                }
-            });
-        }, 5000);
-
-        // Check URL hash for initial tab
-        window.addEventListener('load', function() {
-            if (window.location.hash === '#upcoming') {
-                showTab('upcoming');
-            } else if (window.location.hash === '#past') {
-                showTab('past');
-            }
-        });
-    </script>
-</body>
-</html>
+    // Check URL hash for initial tab
+    window.addEventListener('load', function() {
+        if (window.location.hash === '#upcoming') {
+            showTab('upcoming');
+        } else if (window.location.hash === '#past') {
+            showTab('past');
+        }
+    });
+</script>
+{% endblock %}
